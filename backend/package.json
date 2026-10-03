@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node --experimental-strip-types src/server.ts",
-    "test": "node --experimental-strip-types --test tests/**/*.test.ts"
+    "test": "node --experimental-strip-types --test tests/**/*.test.ts",
+    "diagnose": "node --experimental-strip-types src/diagnose.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.2"

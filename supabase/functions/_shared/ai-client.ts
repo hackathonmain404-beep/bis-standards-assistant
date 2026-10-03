@@ -12,9 +12,64 @@ import { BackendConfig } from './config.ts';
 
 const logger = new Logger(undefined, 'ai-client');
 
+export interface CircuitBreakerOptions {
+  failureThreshold?: number;
+  cooldownPeriodMs?: number;
+}
+
+export type CircuitBreakerState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
+
+export class AICircuitBreaker {
+  private state: CircuitBreakerState = 'CLOSED';
+  private failureCount = 0;
+  private lastFailureTime = 0;
+  private readonly failureThreshold: number;
+  private readonly cooldownPeriodMs: number;
+
+  constructor(options?: CircuitBreakerOptions) {
+    this.failureThreshold = options?.failureThreshold ?? 5;
+    this.cooldownPeriodMs = options?.cooldownPeriodMs ?? 30000;
+  }
+
+  getState(): CircuitBreakerState {
+    if (this.state === 'OPEN') {
+      const now = Date.now();
+      if (now - this.lastFailureTime >= this.cooldownPeriodMs) {
+        this.state = 'HALF_OPEN';
+      }
+    }
+    return this.state;
+  }
+
+  canExecute(): boolean {
+    const currentState = this.getState();
+    return currentState === 'CLOSED' || currentState === 'HALF_OPEN';
+  }
+
+  recordSuccess(): void {
+    this.failureCount = 0;
+    this.state = 'CLOSED';
+  }
+
+  recordFailure(): void {
+    this.failureCount++;
+    this.lastFailureTime = Date.now();
+    if (this.failureCount >= this.failureThreshold) {
+      this.state = 'OPEN';
+    }
+  }
+
+  reset(): void {
+    this.state = 'CLOSED';
+    this.failureCount = 0;
+    this.lastFailureTime = 0;
+  }
+}
+
 export interface AIServiceClient {
   queryAssistant(request: AIServiceRequest, requestId: string): Promise<AIServiceResponse>;
   healthCheck(): Promise<boolean>;
+  getCircuitBreaker?(): AICircuitBreaker;
 }
 
 /**
@@ -163,6 +218,12 @@ export class MockAIServiceClient implements AIServiceClient {
     };
   }
 
+  private circuitBreaker = new AICircuitBreaker();
+
+  getCircuitBreaker(): AICircuitBreaker {
+    return this.circuitBreaker;
+  }
+
   async healthCheck(): Promise<boolean> {
     return true;
   }
@@ -177,15 +238,32 @@ export class RealAIServiceClient implements AIServiceClient {
   private serviceKey: string;
   private timeoutMs: number;
   private maxRetries: number;
+  private circuitBreaker: AICircuitBreaker;
 
-  constructor(serviceUrl: string, serviceKey: string, timeoutMs = 30000, maxRetries = 2) {
+  constructor(
+    serviceUrl: string,
+    serviceKey: string,
+    timeoutMs = 30000,
+    maxRetries = 2,
+    circuitBreakerOptions?: CircuitBreakerOptions
+  ) {
     this.serviceUrl = serviceUrl.replace(/\/+$/, '');
     this.serviceKey = serviceKey;
     this.timeoutMs = timeoutMs;
     this.maxRetries = maxRetries;
+    this.circuitBreaker = new AICircuitBreaker(circuitBreakerOptions);
+  }
+
+  getCircuitBreaker(): AICircuitBreaker {
+    return this.circuitBreaker;
   }
 
   async queryAssistant(request: AIServiceRequest, requestId: string): Promise<AIServiceResponse> {
+    if (!this.circuitBreaker.canExecute()) {
+      logger.warn('AI circuit breaker OPEN — short-circuiting request', { request_id: requestId });
+      throw AppError.aiUnavailable('AI service circuit breaker open due to repeated outages.');
+    }
+
     let lastError: unknown = null;
 
     for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
@@ -231,10 +309,12 @@ export class RealAIServiceClient implements AIServiceClient {
             request_id: requestId,
             details: { status, body: errorBody },
           });
+          this.circuitBreaker.recordFailure();
           throw AppError.aiUnavailable('Assistant engine error.');
         }
 
         const rawJson = await response.json();
+        this.circuitBreaker.recordSuccess();
         return validateAiServiceResponse(rawJson);
       } catch (err: unknown) {
         clearTimeout(timeoutId);
@@ -242,6 +322,7 @@ export class RealAIServiceClient implements AIServiceClient {
 
         if (err instanceof Error && err.name === 'AbortError') {
           logger.error(`AI service request timed out after ${this.timeoutMs}ms`, { request_id: requestId });
+          this.circuitBreaker.recordFailure();
           throw AppError.timeout();
         }
 
@@ -253,6 +334,7 @@ export class RealAIServiceClient implements AIServiceClient {
       }
     }
 
+    this.circuitBreaker.recordFailure();
     logger.error('Exhausted all retries connecting to AI service', {
       request_id: requestId,
       details: { error: lastError instanceof Error ? lastError.message : String(lastError) },

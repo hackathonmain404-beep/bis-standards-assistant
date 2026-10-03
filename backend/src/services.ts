@@ -53,7 +53,7 @@ export class AssistantQueryService {
         throw AppError.sessionNotFound(activeSessionId);
       }
 
-      if (caller && session.user_id && session.user_id !== caller.id) {
+      if (session.user_id && (!caller || session.user_id !== caller.id)) {
         throw AppError.forbidden('You do not have access to this conversation session.');
       }
     } else {
@@ -81,9 +81,40 @@ export class AssistantQueryService {
       }
 
       activeSessionId = newSession.id;
+
+      try {
+        await this.supabase.from('audit_logs').insert({
+          event_type: 'CONVERSATION_CREATED',
+          user_id: caller?.id || null,
+          resource_type: 'sessions',
+          resource_id: activeSessionId,
+          payload: { title },
+        });
+      } catch {
+        // Non-blocking audit log
+      }
     }
 
-    // 2. Idempotency check with client_request_id
+    // 2. Request tracking state initialization (Sections 26 & 27)
+    let trackingId: string | null = null;
+    try {
+      const { data: tracker } = await this.supabase
+        .from('assistant_requests')
+        .insert({
+          client_request_id: chatReq.client_request_id || null,
+          user_id: caller?.id || null,
+          session_id: activeSessionId,
+          status: 'AUTHORIZED',
+          started_at: new Date(startTime).toISOString(),
+        })
+        .select('id')
+        .single();
+      if (tracker) trackingId = tracker.id;
+    } catch {
+      // Non-blocking request tracking
+    }
+
+    // 3. Idempotency check with client_request_id
     if (chatReq.client_request_id) {
       const { data: existingUserMsg } = await this.supabase
         .from('messages')
@@ -179,7 +210,15 @@ export class AssistantQueryService {
         content: r.content,
       }));
 
-    // 5. Invoke AI/RAG Service
+    // 5. Invoke AI/RAG Service (State: AI_PENDING)
+    if (trackingId) {
+      try {
+        await this.supabase.from('assistant_requests').update({ status: 'AI_PENDING' }).eq('id', trackingId);
+      } catch {
+        // Non-blocking tracking
+      }
+    }
+
     const aiResponse = await this.aiClient.queryAssistant(
       {
         session_id: activeSessionId,
@@ -189,6 +228,17 @@ export class AssistantQueryService {
       },
       requestId
     );
+
+    if (trackingId) {
+      try {
+        await this.supabase.from('assistant_requests').update({
+          status: 'AI_COMPLETED',
+          evidence_status: aiResponse.citations && aiResponse.citations.length > 0 ? 'HAS_CITATIONS' : 'NO_CITATIONS',
+        }).eq('id', trackingId);
+      } catch {
+        // Non-blocking tracking
+      }
+    }
 
     // 6. Persist assistant message
     const { data: assistantMsg, error: assistantErr } = await this.supabase
@@ -245,7 +295,36 @@ export class AssistantQueryService {
       .update({ updated_at: new Date().toISOString() })
       .eq('id', activeSessionId);
 
-    // 9. Format response per API_CONTRACT.md
+    // 9. Update tracking and record audit log
+    if (trackingId) {
+      try {
+        await this.supabase.from('assistant_requests').update({
+          status: 'COMPLETED',
+          completed_at: new Date().toISOString(),
+          latency_ms: Date.now() - startTime,
+        }).eq('id', trackingId);
+      } catch {
+        // Non-blocking tracking
+      }
+    }
+
+    try {
+      await this.supabase.from('audit_logs').insert({
+        event_type: 'ASSISTANT_COMPLETED',
+        user_id: caller?.id || null,
+        resource_type: 'messages',
+        resource_id: assistantMsg.id,
+        payload: {
+          session_id: activeSessionId,
+          latency_ms: Date.now() - startTime,
+          intent: aiResponse.intent,
+        },
+      });
+    } catch {
+      // Non-blocking audit log
+    }
+
+    // 10. Format response per API_CONTRACT.md
     return {
       session_id: activeSessionId,
       message_id: assistantMsg.id,
@@ -325,7 +404,7 @@ export class ConversationService {
       throw AppError.sessionNotFound(sessionId);
     }
 
-    if (caller && session.user_id && session.user_id !== caller.id) {
+    if (session.user_id && (!caller || session.user_id !== caller.id)) {
       throw AppError.forbidden('You do not have permission to view this conversation session.');
     }
 
@@ -398,7 +477,7 @@ export class ConversationService {
       throw AppError.sessionNotFound(sessionId);
     }
 
-    if (caller && session.user_id && session.user_id !== caller.id) {
+    if (session.user_id && (!caller || session.user_id !== caller.id)) {
       throw AppError.forbidden('You do not have permission to delete this conversation session.');
     }
 
@@ -410,6 +489,17 @@ export class ConversationService {
     if (deleteErr) {
       logger.error('Failed to delete session', { details: { error: deleteErr.message } });
       throw AppError.internal('Failed to delete conversation session.');
+    }
+
+    try {
+      await this.supabase.from('audit_logs').insert({
+        event_type: 'CONVERSATION_DELETED',
+        user_id: caller?.id || null,
+        resource_type: 'sessions',
+        resource_id: sessionId,
+      });
+    } catch {
+      // Non-blocking audit log
     }
 
     return {
@@ -460,6 +550,41 @@ export class HealthService {
         ai_service: aiStatus,
         vector_store: 'healthy',
       },
+    };
+  }
+
+  async readiness(): Promise<{
+    ready: boolean;
+    status: string;
+    database: string;
+    ai_service: string;
+    version: string;
+  }> {
+    let dbStatus = 'connected';
+    let aiStatus = 'ready (mock)';
+
+    try {
+      const { error } = await this.supabase.from('app_config').select('key').limit(1);
+      if (error) dbStatus = 'disconnected';
+    } catch {
+      dbStatus = 'disconnected';
+    }
+
+    try {
+      const aiHealthy = await this.aiClient.healthCheck();
+      if (!aiHealthy) aiStatus = 'degraded';
+    } catch {
+      aiStatus = 'degraded';
+    }
+
+    const ready = dbStatus === 'connected';
+
+    return {
+      ready,
+      status: ready ? 'ready' : 'not_ready',
+      database: dbStatus,
+      ai_service: aiStatus,
+      version: '0.1.0',
     };
   }
 }

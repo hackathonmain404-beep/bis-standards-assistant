@@ -43,22 +43,23 @@ export class AssistantQueryService {
     requestId: string
   ): Promise<ChatResponse> {
     const startTime = Date.now();
-    let sessionId = chatReq.session_id;
+    let activeSessionId: string;
 
-    // 1. Session ownership check or creation
-    if (sessionId) {
+    // 1. Session check or creation
+    if (chatReq.session_id) {
+      activeSessionId = chatReq.session_id;
       const { data: session, error: sessionErr } = await this.supabase
         .from('sessions')
         .select('id, user_id, is_active')
-        .eq('id', sessionId)
+        .eq('id', activeSessionId)
         .single();
 
       if (sessionErr || !session) {
-        throw AppError.sessionNotFound(sessionId);
+        throw AppError.sessionNotFound(activeSessionId);
       }
 
       // Check session ownership if caller is authenticated and session is bound to a user
-      if (caller && session.user_id && session.user_id !== caller.id) {
+      if (session.user_id && (!caller || session.user_id !== caller.id)) {
         throw AppError.forbidden('You do not have access to this conversation session.');
       }
     } else {
@@ -86,15 +87,46 @@ export class AssistantQueryService {
         throw AppError.internal('Failed to initialize conversation session.');
       }
 
-      sessionId = newSession.id;
+      activeSessionId = newSession.id;
+
+      try {
+        await this.supabase.from('audit_logs').insert({
+          event_type: 'CONVERSATION_CREATED',
+          user_id: caller?.id || null,
+          resource_type: 'sessions',
+          resource_id: activeSessionId,
+          payload: { title },
+        });
+      } catch {
+        // Non-blocking audit log
+      }
     }
 
-    // 2. Idempotency check with client_request_id
+    // 2. Request tracking state initialization
+    let trackingId: string | null = null;
+    try {
+      const { data: tracker } = await this.supabase
+        .from('assistant_requests')
+        .insert({
+          client_request_id: chatReq.client_request_id || null,
+          user_id: caller?.id || null,
+          session_id: activeSessionId,
+          status: 'AUTHORIZED',
+          started_at: new Date(startTime).toISOString(),
+        })
+        .select('id')
+        .single();
+      if (tracker) trackingId = tracker.id;
+    } catch {
+      // Non-blocking request tracking
+    }
+
+    // 3. Idempotency check with client_request_id
     if (chatReq.client_request_id) {
       const { data: existingUserMsg } = await this.supabase
         .from('messages')
         .select('id, created_at')
-        .eq('session_id', sessionId)
+        .eq('session_id', activeSessionId)
         .eq('client_request_id', chatReq.client_request_id)
         .single();
 
@@ -108,7 +140,7 @@ export class AssistantQueryService {
         const { data: existingAssistantMsg } = await this.supabase
           .from('messages')
           .select('id, content, intent, metadata, created_at')
-          .eq('session_id', sessionId)
+          .eq('session_id', activeSessionId)
           .eq('role', 'assistant')
           .gt('created_at', existingUserMsg.created_at)
           .order('created_at', { ascending: true })
@@ -136,7 +168,7 @@ export class AssistantQueryService {
           const meta = existingAssistantMsg.metadata as Record<string, unknown> || {};
 
           return {
-            session_id: sessionId,
+            session_id: activeSessionId,
             message_id: existingAssistantMsg.id,
             response: {
               text: existingAssistantMsg.content,
@@ -155,9 +187,9 @@ export class AssistantQueryService {
       }
     }
 
-    // 3. Persist incoming user message
+    // 4. Persist incoming user message
     const { error: userMsgErr } = await this.supabase.from('messages').insert({
-      session_id: sessionId,
+      session_id: activeSessionId,
       role: 'user',
       content: chatReq.message,
       language: chatReq.language || 'en',
@@ -172,11 +204,11 @@ export class AssistantQueryService {
       throw AppError.internal('Failed to persist user message.');
     }
 
-    // 4. Load recent conversation history (bounded to 10 most recent turns)
+    // 5. Load recent conversation history (bounded to 10 most recent turns)
     const { data: historyRows } = await this.supabase
       .from('messages')
       .select('role, content')
-      .eq('session_id', sessionId)
+      .eq('session_id', activeSessionId)
       .order('created_at', { ascending: false })
       .limit(10);
 
@@ -187,10 +219,20 @@ export class AssistantQueryService {
         content: r.content,
       }));
 
-    // 5. Invoke AI/RAG Service
+    // 6. Invoke AI/RAG Service
+    if (trackingId) {
+      try {
+        await this.supabase.from('assistant_requests').update({
+          status: 'AI_PENDING',
+        }).eq('id', trackingId);
+      } catch {
+        // Non-blocking
+      }
+    }
+
     const aiResponse = await this.aiClient.queryAssistant(
       {
-        session_id: sessionId,
+        session_id: activeSessionId,
         query: chatReq.message,
         conversation_history: history,
         language: chatReq.language || 'en',
@@ -198,11 +240,22 @@ export class AssistantQueryService {
       requestId
     );
 
-    // 6. Persist assistant message
+    if (trackingId) {
+      try {
+        await this.supabase.from('assistant_requests').update({
+          status: 'AI_COMPLETED',
+          evidence_status: aiResponse.citations && aiResponse.citations.length > 0 ? 'HAS_CITATIONS' : 'NO_CITATIONS',
+        }).eq('id', trackingId);
+      } catch {
+        // Non-blocking
+      }
+    }
+
+    // 7. Persist assistant message
     const { data: assistantMsg, error: assistantErr } = await this.supabase
       .from('messages')
       .insert({
-        session_id: sessionId,
+        session_id: activeSessionId,
         role: 'assistant',
         content: aiResponse.response_text,
         intent: aiResponse.intent,
@@ -225,7 +278,7 @@ export class AssistantQueryService {
       throw AppError.internal('Failed to persist assistant response.');
     }
 
-    // 7. Persist citations if present
+    // 8. Persist citations if present
     if (aiResponse.citations && aiResponse.citations.length > 0) {
       const citationRows = aiResponse.citations.map((c, i) => ({
         message_id: assistantMsg.id,
@@ -247,15 +300,44 @@ export class AssistantQueryService {
       }
     }
 
-    // 8. Update session timestamp
+    // 9. Update session timestamp
     await this.supabase
       .from('sessions')
       .update({ updated_at: new Date().toISOString() })
-      .eq('id', sessionId);
+      .eq('id', activeSessionId);
 
-    // 9. Format response per API_CONTRACT.md
+    // 10. Update tracking and record audit log
+    if (trackingId) {
+      try {
+        await this.supabase.from('assistant_requests').update({
+          status: 'COMPLETED',
+          completed_at: new Date().toISOString(),
+          latency_ms: Date.now() - startTime,
+        }).eq('id', trackingId);
+      } catch {
+        // Non-blocking
+      }
+    }
+
+    try {
+      await this.supabase.from('audit_logs').insert({
+        event_type: 'ASSISTANT_COMPLETED',
+        user_id: caller?.id || null,
+        resource_type: 'messages',
+        resource_id: assistantMsg.id,
+        payload: {
+          session_id: activeSessionId,
+          latency_ms: Date.now() - startTime,
+          intent: aiResponse.intent,
+        },
+      });
+    } catch {
+      // Non-blocking
+    }
+
+    // 11. Format response per API_CONTRACT.md
     return {
-      session_id: sessionId,
+      session_id: activeSessionId,
       message_id: assistantMsg.id,
       response: {
         text: aiResponse.response_text,
@@ -312,7 +394,7 @@ export class ConversationService {
       language: r.language,
       created_at: r.created_at,
       updated_at: r.updated_at,
-      message_count: 0, // Calculated or aggregated
+      message_count: 0,
     }));
 
     return {
@@ -337,8 +419,8 @@ export class ConversationService {
       throw AppError.sessionNotFound(sessionId);
     }
 
-    // Ownership check
-    if (caller && session.user_id && session.user_id !== caller.id) {
+    // Ownership check: if session is owned by a user, caller must match
+    if (session.user_id && (!caller || session.user_id !== caller.id)) {
       throw AppError.forbidden('You do not have permission to view this conversation session.');
     }
 
@@ -413,7 +495,7 @@ export class ConversationService {
       throw AppError.sessionNotFound(sessionId);
     }
 
-    if (caller && session.user_id && session.user_id !== caller.id) {
+    if (session.user_id && (!caller || session.user_id !== caller.id)) {
       throw AppError.forbidden('You do not have permission to delete this conversation session.');
     }
 
@@ -425,6 +507,17 @@ export class ConversationService {
     if (deleteErr) {
       logger.error('Failed to delete session', { details: { error: deleteErr.message } });
       throw AppError.internal('Failed to delete conversation session.');
+    }
+
+    try {
+      await this.supabase.from('audit_logs').insert({
+        event_type: 'CONVERSATION_DELETED',
+        user_id: caller?.id || null,
+        resource_type: 'sessions',
+        resource_id: sessionId,
+      });
+    } catch {
+      // Non-blocking
     }
 
     return {
@@ -479,6 +572,41 @@ export class HealthService {
         ai_service: aiStatus,
         vector_store: 'healthy',
       },
+    };
+  }
+
+  async readiness(): Promise<{
+    ready: boolean;
+    status: string;
+    database: string;
+    ai_service: string;
+    version: string;
+  }> {
+    let dbStatus = 'connected';
+    let aiStatus = 'ready (mock)';
+
+    try {
+      const { error } = await this.supabase.from('app_config').select('key').limit(1);
+      if (error) dbStatus = 'disconnected';
+    } catch {
+      dbStatus = 'disconnected';
+    }
+
+    try {
+      const aiHealthy = await this.aiClient.healthCheck();
+      if (!aiHealthy) aiStatus = 'degraded';
+    } catch {
+      aiStatus = 'degraded';
+    }
+
+    const ready = dbStatus === 'connected';
+
+    return {
+      ready,
+      status: ready ? 'ready' : 'not_ready',
+      database: dbStatus,
+      ai_service: aiStatus,
+      version: '0.1.0',
     };
   }
 }

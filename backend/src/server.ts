@@ -65,6 +65,23 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // Route: /ready
+    if (rootRoute === 'ready') {
+      if (req.method !== 'GET') {
+        throw new AppError('INVALID_REQUEST', 'Method not allowed for /ready. Use GET.', 405);
+      }
+      const healthService = new HealthService(supabase, aiClient);
+      const readiness = await healthService.readiness();
+
+      res.writeHead(readiness.ready ? 200 : 503, {
+        'Content-Type': 'application/json',
+        'X-Request-ID': requestId,
+        ...corsHeaders,
+      });
+      res.end(JSON.stringify(readiness));
+      return;
+    }
+
     // Route: /chat
     if (rootRoute === 'chat') {
       if (req.method !== 'POST') {

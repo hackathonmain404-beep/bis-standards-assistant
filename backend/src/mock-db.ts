@@ -57,6 +57,9 @@ export function createInMemorySupabaseClient(): any {
     },
   ];
 
+  const assistantRequests: any[] = [];
+  const auditLogs: any[] = [];
+
   const appConfig: any[] = [
     { key: 'app_name', value: 'BIS Intelligent Assistant' },
     { key: 'app_version', value: '0.1.0' },
@@ -67,7 +70,7 @@ export function createInMemorySupabaseClient(): any {
   }
 
   return {
-    _db: { sessions, messages, citations, appConfig },
+    _db: { sessions, messages, citations, appConfig, assistantRequests, auditLogs },
     auth: {
       async getUser(_token: string) {
         return { data: { user: null }, error: null };
@@ -79,6 +82,8 @@ export function createInMemorySupabaseClient(): any {
       else if (tableName === 'messages') currentTable = messages;
       else if (tableName === 'citations') currentTable = citations;
       else if (tableName === 'app_config') currentTable = appConfig;
+      else if (tableName === 'assistant_requests') currentTable = assistantRequests;
+      else if (tableName === 'audit_logs') currentTable = auditLogs;
       else currentTable = [];
 
       let filters: ((item: any) => boolean)[] = [];

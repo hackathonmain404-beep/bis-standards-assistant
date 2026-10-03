@@ -64,3 +64,23 @@ test('RLS & Schema - Seed script (seed.sql) verification', () => {
   assert.ok(content.includes('[DEMO TEST RESPONSE]'), 'Demo messages are clearly labeled');
   assert.ok(content.includes('[DEMO SNIPPET]'), 'Demo citations are clearly labeled');
 });
+
+test('RLS & Schema - Migration 3 (audit_and_request_tracking.sql) verification', () => {
+  const migPath = path.resolve('../supabase/migrations/20261004000000_audit_and_request_tracking.sql');
+  assert.equal(fs.existsSync(migPath), true, 'Audit and tracking migration must exist');
+
+  const content = fs.readFileSync(migPath, 'utf8');
+
+  // Verify assistant_requests table & RLS
+  assert.ok(content.includes('CREATE TABLE IF NOT EXISTS public.assistant_requests'), 'assistant_requests exists');
+  assert.ok(content.includes('ALTER TABLE public.assistant_requests ENABLE ROW LEVEL SECURITY;'), 'RLS enabled on assistant_requests');
+  assert.ok(content.includes('assistant_requests_select_own'), 'assistant_requests has user ownership policy');
+
+  // Verify audit_logs table & RLS immutability
+  assert.ok(content.includes('CREATE TABLE IF NOT EXISTS public.audit_logs'), 'audit_logs exists');
+  assert.ok(content.includes('ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;'), 'RLS enabled on audit_logs');
+  assert.ok(content.includes('audit_logs_deny_public_select'), 'audit_logs denies public select');
+  assert.ok(content.includes('audit_logs_deny_public_insert'), 'audit_logs denies public insert');
+  assert.ok(content.includes('audit_logs_deny_public_update'), 'audit_logs denies public update');
+  assert.ok(content.includes('audit_logs_deny_public_delete'), 'audit_logs denies public delete');
+});
