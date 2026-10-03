@@ -1,0 +1,464 @@
+openapi: 3.1.0
+info:
+  title: BIS Intelligent Assistant API
+  version: 0.1.0
+  description: >-
+    Backend application API for AI-Powered Intelligent Assistant for Indian
+    Standards and BIS Services for Industries and Consumers.
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local Development Server
+  - url: /functions/v1
+    description: Supabase Edge Functions Base URL
+
+paths:
+  /chat:
+    post:
+      summary: Send user query to assistant
+      description: Processes a user message, detects intent, and generates a grounded response with source citations.
+      operationId: sendChatMessage
+      parameters:
+        - in: header
+          name: X-Request-ID
+          schema:
+            type: string
+            format: uuid
+          required: false
+          description: Client correlation ID. Generated if not supplied.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Successful assistant response with citations
+          headers:
+            X-Request-ID:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          description: Validation error or empty query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - unauthorized access to conversation session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limited
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: AI/RAG downstream service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /sessions:
+    get:
+      summary: List conversation sessions
+      description: Retrieves a paginated list of conversation sessions for the caller.
+      operationId: listSessions
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Maximum number of sessions to return
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          description: Number of sessions to skip
+      responses:
+        '200':
+          description: Paginated sessions list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionListResponse'
+        '400':
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /sessions/{session_id}:
+    get:
+      summary: Get full conversation history
+      description: Returns conversation messages and citations for a specific session.
+      operationId: getSessionHistory
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Unique session UUID
+      responses:
+        '200':
+          description: Conversation session details with messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionDetailResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete conversation session
+      description: Deletes a conversation session and all its messages and citations.
+      operationId: deleteSession
+      parameters:
+        - in: path
+          name: session_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Unique session UUID
+      responses:
+        '200':
+          description: Session successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteSessionResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /health:
+    get:
+      summary: Backend health check
+      description: Assesses application status and readiness of dependent services.
+      operationId: getHealth
+      responses:
+        '200':
+          description: All components healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: One or more components degraded or unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        session_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Existing session ID or null to create a new session
+        message:
+          type: string
+          minLength: 1
+          maxLength: 5000
+          description: User query text
+        language:
+          type: string
+          default: en
+          enum: [en, hi]
+          description: Target language code
+        client_request_id:
+          type: string
+          maxLength: 128
+          nullable: true
+          description: Client-provided idempotency key
+
+    CitationItem:
+      type: object
+      required:
+        - index
+      properties:
+        index:
+          type: integer
+          description: Citation marker reference number in text [N]
+        standard_id:
+          type: string
+          nullable: true
+          example: 'IS 14543:2016'
+        document_title:
+          type: string
+          nullable: true
+        section:
+          type: string
+          nullable: true
+        clause:
+          type: string
+          nullable: true
+        snippet:
+          type: string
+          nullable: true
+        source_document_id:
+          type: string
+          nullable: true
+
+    AssistantResponsePayload:
+      type: object
+      required:
+        - text
+        - intent
+        - citations
+        - needs_clarification
+      properties:
+        text:
+          type: string
+          description: Grounded assistant answer with inline citation tags
+        intent:
+          type: string
+          example: PRODUCT_DISCOVERY
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CitationItem'
+        needs_clarification:
+          type: boolean
+        clarification_questions:
+          type: array
+          items:
+            type: string
+        follow_up_suggestions:
+          type: array
+          items:
+            type: string
+
+    ChatResponse:
+      type: object
+      required:
+        - session_id
+        - message_id
+        - response
+        - metadata
+      properties:
+        session_id:
+          type: string
+          format: uuid
+        message_id:
+          type: string
+          format: uuid
+        response:
+          $ref: '#/components/schemas/AssistantResponsePayload'
+        metadata:
+          type: object
+          properties:
+            processing_time_ms:
+              type: integer
+            created_at:
+              type: string
+              format: date-time
+
+    SessionSummary:
+      type: object
+      required:
+        - id
+        - language
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          nullable: true
+        language:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        message_count:
+          type: integer
+
+    SessionListResponse:
+      type: object
+      required:
+        - sessions
+        - total
+        - limit
+        - offset
+      properties:
+        sessions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionSummary'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    ChatMessageDetail:
+      type: object
+      required:
+        - id
+        - role
+        - content
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        role:
+          type: string
+          enum: [user, assistant, system]
+        content:
+          type: string
+        intent:
+          type: string
+          nullable: true
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CitationItem'
+        created_at:
+          type: string
+          format: date-time
+
+    SessionDetailResponse:
+      type: object
+      required:
+        - session
+        - messages
+      properties:
+        session:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            title:
+              type: string
+              nullable: true
+            language:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessageDetail'
+
+    DeleteSessionResponse:
+      type: object
+      required:
+        - deleted
+        - session_id
+      properties:
+        deleted:
+          type: boolean
+        session_id:
+          type: string
+          format: uuid
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - version
+        - components
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        version:
+          type: string
+        components:
+          type: object
+          properties:
+            database:
+              type: string
+              enum: [healthy, unhealthy]
+            ai_service:
+              type: string
+              enum: [healthy, unhealthy]
+            vector_store:
+              type: string
+              enum: [healthy, unhealthy]
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              example: INVALID_REQUEST
+            message:
+              type: string
+              example: Please enter a valid question.
+            details:
+              type: object
+              additionalProperties: true

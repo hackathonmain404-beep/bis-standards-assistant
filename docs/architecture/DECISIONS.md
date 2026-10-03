@@ -404,3 +404,35 @@ Should the assistant stream responses token-by-token (like ChatGPT) or return co
 
 #### Notes
 - Recommendation: Complete response for MVP, streaming in Phase 2.
+
+---
+
+### ADR-016: Supabase as Primary Backend Platform
+
+**Status:** DECIDED
+**Date:** 2026-10-03
+**Deciders:** Full team / Backend Engineer
+
+#### Context
+The backend requires a secure, relational application data platform with integrated authentication, Row Level Security, migration tooling, and serverless Edge Functions to orchestrate client requests and AI service integrations.
+
+#### Options
+1. Traditional custom Python/FastAPI backend with SQLite/PostgreSQL
+2. Node/Express backend with manual auth and ORM
+3. Supabase Backend Stack (Supabase Auth + PostgreSQL + Row Level Security + Edge Functions + CLI/Migrations)
+
+#### Chosen Approach
+**Option 3: Supabase Backend Stack** with TypeScript Edge Functions and a standalone Node/TypeScript local dev runner.
+
+#### Reason
+- Provides enterprise-grade PostgreSQL with declarative SQL migrations and native Row Level Security (RLS) enforcing deny-by-default isolation.
+- Integrated Supabase Auth eliminating custom password/session vulnerability risks.
+- Edge Functions offer fast, serverless orchestration for client query validation, rate limiting, and external AI/RAG service connectivity.
+- Standalone runner ensures continuous local testing and frontend integration without requiring Docker.
+
+#### Consequences
+- Application schema and RLS policies are maintained in `supabase/migrations/`.
+- Edge Functions are maintained in `supabase/functions/`.
+- Backend testing and dev runner are maintained in `backend/`.
+- AI/RAG remains a cleanly decoupled downstream service communicating via HTTP.
+

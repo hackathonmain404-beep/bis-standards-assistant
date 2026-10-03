@@ -160,11 +160,13 @@ Application-level configuration stored in the database.
 
 ---
 
-## Open Decisions
+## Finalized Architecture Decisions
 
-| Decision | Status |
-|:---|:---|
-| Database engine (SQLite vs. PostgreSQL) | **STATUS: TBD** |
-| User authentication required for MVP? | **STATUS: TBD** |
-| Citations as separate table vs. embedded JSON? | **STATUS: TBD** |
-| ORM choice (SQLAlchemy, raw SQL, etc.) | **STATUS: TBD** |
+| Decision | Status | Resolution |
+|:---|:---|:---|
+| Database engine | **DECIDED** | PostgreSQL via Supabase (see ADR-016) |
+| User authentication | **DECIDED** | Supabase Auth with application profile linkage |
+| Citations storage | **DECIDED** | Dedicated relational `citations` table with parent message foreign key |
+| Migrations tooling | **DECIDED** | Declarative SQL migrations in `supabase/migrations/` |
+| Security model | **DECIDED** | PostgreSQL Row Level Security (RLS) with DENY BY DEFAULT |
+

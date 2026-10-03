@@ -1,0 +1,17 @@
+{
+  "name": "bis-backend",
+  "version": "0.1.0",
+  "description": "Supabase Backend and API Layer for BIS Intelligent Assistant",
+  "type": "module",
+  "scripts": {
+    "dev": "node --experimental-strip-types src/server.ts",
+    "test": "node --experimental-strip-types --test tests/**/*.test.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "typescript": "^7.0.2"
+  }
+}
