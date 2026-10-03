@@ -1,3 +1,4 @@
+/// <reference path="../deno.d.ts" />
 /**
  * Server-Side Authentication & Authorization — BIS Intelligent Assistant Backend
  * Follows Section 7, 8, 33, 34 of Master Implementation Prompt

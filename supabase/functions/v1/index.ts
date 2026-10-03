@@ -1,3 +1,4 @@
+/// <reference path="../deno.d.ts" />
 /**
  * Unified API v1 Gateway Edge Function — BIS Intelligent Assistant Backend
  * Routes:

@@ -1,3 +1,4 @@
+/// <reference path="../deno.d.ts" />
 /**
  * Supabase Client Factory — BIS Intelligent Assistant Backend
  * Follows Section 5 & 6: Separation of User-Scoped Client and Privileged Server Client

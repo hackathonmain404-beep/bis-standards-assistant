@@ -1,3 +1,4 @@
+/// <reference path="../deno.d.ts" />
 /**
  * Health Check Edge Function — BIS Intelligent Assistant Backend
  * Implements: GET /api/v1/health

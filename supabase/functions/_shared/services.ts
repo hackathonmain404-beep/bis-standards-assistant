@@ -1,3 +1,4 @@
+/// <reference path="../deno.d.ts" />
 /**
  * Application Services — BIS Intelligent Assistant Backend
  * Follows Section 24, 62, 63, 64, 65 of Master Implementation Prompt

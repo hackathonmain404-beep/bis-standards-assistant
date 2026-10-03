@@ -1,3 +1,4 @@
+/// <reference path="../deno.d.ts" />
 /**
  * Sessions Edge Function — BIS Intelligent Assistant Backend
  * Implements:

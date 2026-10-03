@@ -1,3 +1,4 @@
+/// <reference path="../deno.d.ts" />
 /**
  * Chat Edge Function — BIS Intelligent Assistant Backend
  * Implements: POST /api/v1/chat
