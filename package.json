@@ -1,0 +1,11 @@
+{
+  "name": "bis-intelligent-assistant",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-Powered Intelligent Assistant for Indian Standards and BIS Services",
+  "scripts": {
+    "dev": "npm --prefix backend run dev",
+    "test": "npm --prefix backend test",
+    "diagnose": "npm --prefix backend run diagnose"
+  }
+}
