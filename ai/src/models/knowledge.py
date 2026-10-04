@@ -84,8 +84,9 @@ class BISDocument(BaseModel):
             v = v.strip()
             if not v:
                 return None
-            if not v.upper().startswith("IS") and not v.upper().startswith("QCO") and not v.upper().startswith("SCHEME"):
-                raise ValueError(f"standard_number must typically begin with 'IS', 'QCO', or 'Scheme'. Got: '{v}'")
+            if not v.upper().startswith("IS") and not v.upper().startswith("QCO") and not v.upper().startswith("SCHEME") and not v.upper().startswith("SP"):
+                raise ValueError(f"standard_number must typically begin with 'IS', 'QCO', 'Scheme', or 'SP'. Got: '{v}'")
+
         return v
 
 

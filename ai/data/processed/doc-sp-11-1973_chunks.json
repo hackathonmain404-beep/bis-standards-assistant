@@ -1,0 +1,202 @@
+{
+  "document": {
+    "document_id": "doc-sp-11-1973",
+    "title": "Recommended SI Units for Textiles",
+    "standard_number": "SP 11:1973",
+    "standard_part": null,
+    "document_type": "bis_guideline",
+    "year": "1973",
+    "revision": null,
+    "status": "current",
+    "subject_area": null,
+    "product_categories": [
+      "Textiles",
+      "SI Units",
+      "Textile Testing",
+      "TDC 1"
+    ],
+    "source": "Bureau of Indian Standards",
+    "source_url": null,
+    "ingestion_date": "2026-10-04T18:33:05.539670Z",
+    "total_sections": null,
+    "total_chunks": 8
+  },
+  "chunks": [
+    {
+      "chunk_id": "chk-doc-sp-11-1973-0_0-000",
+      "document_id": "doc-sp-11-1973",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "0.0",
+      "content": "SP 11:1973\nRECOMMENDED SI UNITS FOR TEXTILES\n(Reaffirmed 2017, First Reprint 1984)",
+      "content_type": "text",
+      "char_count": 82,
+      "token_count": null,
+      "chunk_index": 0,
+      "standard_number": "SP 11:1973",
+      "document_title": "Recommended SI Units for Textiles",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Textiles",
+        "SI Units",
+        "Textile Testing",
+        "TDC 1"
+      ],
+      "section_title": "General"
+    },
+    {
+      "chunk_id": "chk-doc-sp-11-1973-1_1-001",
+      "document_id": "doc-sp-11-1973",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.1",
+      "content": "1.1 This special publication lists recommended SI units for use in the textile industry and trade, with metric equivalents and specific application fields.",
+      "content_type": "text",
+      "char_count": 155,
+      "token_count": null,
+      "chunk_index": 1,
+      "standard_number": "SP 11:1973",
+      "document_title": "Recommended SI Units for Textiles",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Textiles",
+        "SI Units",
+        "Textile Testing",
+        "TDC 1"
+      ],
+      "section_title": "1. SCOPE AND PURPOSE"
+    },
+    {
+      "chunk_id": "chk-doc-sp-11-1973-1_2-002",
+      "document_id": "doc-sp-11-1973",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.2",
+      "content": "1.2 Formulated under the Physical Methods of Test Sectional Committee, TDC 1, this document provides guidance for changing over to a unified SI system in textile trade and industry to support consistent interpretation of measured textile characteristics.",
+      "content_type": "text",
+      "char_count": 254,
+      "token_count": null,
+      "chunk_index": 2,
+      "standard_number": "SP 11:1973",
+      "document_title": "Recommended SI Units for Textiles",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Textiles",
+        "SI Units",
+        "Textile Testing",
+        "TDC 1"
+      ],
+      "section_title": "1. SCOPE AND PURPOSE"
+    },
+    {
+      "chunk_id": "chk-doc-sp-11-1973-2_1-003",
+      "document_id": "doc-sp-11-1973",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "2.1",
+      "content": "2.1 Table 1 maps textile characteristics to recommended SI units, metric equivalents, standard abbreviations, and fields of application.",
+      "content_type": "text",
+      "char_count": 136,
+      "token_count": null,
+      "chunk_index": 3,
+      "standard_number": "SP 11:1973",
+      "document_title": "Recommended SI Units for Textiles",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Textiles",
+        "SI Units",
+        "Textile Testing",
+        "TDC 1"
+      ],
+      "section_title": "2. UNITS AND CHARACTERISTICS TABLE"
+    },
+    {
+      "chunk_id": "chk-doc-sp-11-1973-2_2-004",
+      "document_id": "doc-sp-11-1973",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "2.2",
+      "content": "2.2 Measured characteristics include fabric and yarn dimensions, yarn counts, mass per unit area, mass per unit length, twist, test length, and breaking load.",
+      "content_type": "text",
+      "char_count": 158,
+      "token_count": null,
+      "chunk_index": 4,
+      "standard_number": "SP 11:1973",
+      "document_title": "Recommended SI Units for Textiles",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Textiles",
+        "SI Units",
+        "Textile Testing",
+        "TDC 1"
+      ],
+      "section_title": "2. UNITS AND CHARACTERISTICS TABLE"
+    },
+    {
+      "chunk_id": "chk-doc-sp-11-1973-2_3-005",
+      "document_id": "doc-sp-11-1973",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "2.3",
+      "content": "2.3 Examples of recommended SI units and abbreviations include millimetres (mm), centimetres (cm), grams per square metre (g/m2), grams per metre (g/m), turns per centimetre (turns/cm), turns per metre (turns/m), millinewtons (mN), and newtons (N).",
+      "content_type": "text",
+      "char_count": 248,
+      "token_count": null,
+      "chunk_index": 5,
+      "standard_number": "SP 11:1973",
+      "document_title": "Recommended SI Units for Textiles",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Textiles",
+        "SI Units",
+        "Textile Testing",
+        "TDC 1"
+      ],
+      "section_title": "2. UNITS AND CHARACTERISTICS TABLE"
+    },
+    {
+      "chunk_id": "chk-doc-sp-11-1973-3_1-006",
+      "document_id": "doc-sp-11-1973",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "3.1",
+      "content": "3.1 The publication defines and explains measurement terms and unit relations relevant to textile testing and physical evaluation.",
+      "content_type": "text",
+      "char_count": 130,
+      "token_count": null,
+      "chunk_index": 6,
+      "standard_number": "SP 11:1973",
+      "document_title": "Recommended SI Units for Textiles",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Textiles",
+        "SI Units",
+        "Textile Testing",
+        "TDC 1"
+      ],
+      "section_title": "3. TERMINOLOGY AND CONVERSION"
+    },
+    {
+      "chunk_id": "chk-doc-sp-11-1973-3_2-007",
+      "document_id": "doc-sp-11-1973",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "3.2",
+      "content": "3.2 For conversion between traditional yarn counts and the tex system, users are directed to the specific relevant Indian Standard.",
+      "content_type": "text",
+      "char_count": 131,
+      "token_count": null,
+      "chunk_index": 7,
+      "standard_number": "SP 11:1973",
+      "document_title": "Recommended SI Units for Textiles",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Textiles",
+        "SI Units",
+        "Textile Testing",
+        "TDC 1"
+      ],
+      "section_title": "3. TERMINOLOGY AND CONVERSION"
+    }
+  ]
+}

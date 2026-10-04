@@ -1,0 +1,20 @@
+SP 8:1970
+ISI HANDBOOK OF MATHEMATICAL, PHYSICAL, CHEMICAL AND ENGINEERING TABLES
+(Reaffirmed 2022)
+
+1. SCOPE AND PURPOSE
+1.1 A reference handbook containing mathematical, physical, chemical and engineering tables, intended as a quick reference for students and technical users. The handbook is designed as lookup and reference material rather than a narrative textbook.
+1.2 The handbook derives data from Indian Standards and industrial product references with symbols and nomenclature aligned with ISO references.
+1.3 Multiple reprints and amendment material are included, including Amendment No. 1 and addenda material.
+
+2. MATHEMATICAL TABLES
+2.1 Section 1 provides comprehensive mathematical tables including tables for logarithms, antilogarithms, natural logarithms, and exponential/hyperbolic functions.
+2.2 Tables are provided for trigonometric functions, natural functions, circular arcs, radians, powers/roots, reciprocals, and mathematical constants.
+
+3. PHYSICAL AND CHEMICAL TABLES
+3.1 Section 2 provides physical and chemical tables describing physical and chemical quantities, units, symbols, and nomenclature aligned with relevant ISO references.
+3.2 Physical constants, chemical properties, and standard values derived from Indian Standards and industrial reference data.
+
+4. ENGINEERING TABLES
+4.1 Section 3 contains engineering tables including structural steel and related tabular data such as steel sections, dimensions, weights, and engineering properties.
+4.2 Engineering tables also provide comparison and reference tables for wires and cables, as well as fabricated steel products.

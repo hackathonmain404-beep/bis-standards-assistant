@@ -1,0 +1,22 @@
+IS 5701 (Part 1):2025
+CODE FOR BREEDING, CARE, MANAGEMENT AND HOUSING OF LABORATORY ANIMALS — PART 1 LABORATORY MICE AND RATS
+(Second Revision, February 2025)
+
+1. SCOPE
+1.1 This standard lays down guidelines for the breeding, care, management, and housing of laboratory mice and rats so that laboratory animals of uniform quality can be maintained for biological and biomedical research.
+1.2 This standard is Part 1 of a ten-part laboratory-animal series under the Animal Husbandry and Equipment Sectional Committee, FAD 32, Food and Agriculture Division Council.
+1.3 The standard connects the revision with laboratory-animal facility practice and CPCSEA-related guidance cited by the standard.
+
+2. HEALTH MONITORING AND DISEASE CONTROL
+2.1 Disease-control procedures, regular health monitoring, and veterinary oversight shall be established across the facility.
+2.2 Diseased or suspect colonies may be isolated and quarantined according to the standard's health-management provisions.
+2.3 Documented health-monitoring reports and regular laboratory testing shall support animal-facility management.
+
+3. RECORDS AND MANAGEMENT
+3.1 Comprehensive records must be maintained by the facility, including breeding and mating records, stock and census, procurement, supply and sale, and culling records.
+3.2 The facility shall maintain feeding logs, environmental variable records (temperature, humidity, ventilation), mortality and necropsy records, health files, facility plans, and CCTV registers.
+3.3 The officer in charge of the laboratory animal facility is expected to be a qualified veterinarian according to the cited section.
+
+4. ANIMAL WELFARE AND HUMANE ENDPOINTS
+4.1 Animal welfare standards must be strictly followed, emphasizing the avoidance of unnecessary suffering under continuous veterinarian oversight.
+4.2 Specific provisions govern potentially painful and invasive procedures, with clearly defined humane endpoints in the animal-welfare framework.

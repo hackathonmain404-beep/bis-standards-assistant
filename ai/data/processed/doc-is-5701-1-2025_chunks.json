@@ -1,0 +1,290 @@
+{
+  "document": {
+    "document_id": "doc-is-5701-1-2025",
+    "title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+    "standard_number": "IS 5701 (Part 1):2025",
+    "standard_part": null,
+    "document_type": "indian_standard",
+    "year": "2025",
+    "revision": null,
+    "status": "current",
+    "subject_area": null,
+    "product_categories": [
+      "Laboratory Animals",
+      "Animal Husbandry",
+      "Biomedical Research",
+      "FAD 32"
+    ],
+    "source": "Bureau of Indian Standards",
+    "source_url": null,
+    "ingestion_date": "2026-10-04T18:33:05.532664Z",
+    "total_sections": null,
+    "total_chunks": 12
+  },
+  "chunks": [
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-0_0-000",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "0.0",
+      "content": "IS 5701 (Part 1):2025\nCODE FOR BREEDING, CARE, MANAGEMENT AND HOUSING OF LABORATORY ANIMALS - PART 1 LABORATORY MICE AND RATS\n(Second Revision, February 2025)",
+      "content_type": "text",
+      "char_count": 158,
+      "token_count": null,
+      "chunk_index": 0,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "General"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-1_1-001",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.1",
+      "content": "1.1 This standard lays down guidelines for the breeding, care, management, and housing of laboratory mice and rats so that laboratory animals of uniform quality can be maintained for biological and biomedical research.",
+      "content_type": "text",
+      "char_count": 218,
+      "token_count": null,
+      "chunk_index": 1,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "1. SCOPE"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-1_2-002",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.2",
+      "content": "1.2 This standard is Part 1 of a ten-part laboratory-animal series under the Animal Husbandry and Equipment Sectional Committee, FAD 32, Food and Agriculture Division Council.",
+      "content_type": "text",
+      "char_count": 175,
+      "token_count": null,
+      "chunk_index": 2,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "1. SCOPE"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-1_3-003",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.3",
+      "content": "1.3 The standard connects the revision with laboratory-animal facility practice and CPCSEA-related guidance cited by the standard.",
+      "content_type": "text",
+      "char_count": 130,
+      "token_count": null,
+      "chunk_index": 3,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "1. SCOPE"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-2_1-004",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "2.1",
+      "content": "2.1 Disease-control procedures, regular health monitoring, and veterinary oversight shall be established across the facility.",
+      "content_type": "text",
+      "char_count": 125,
+      "token_count": null,
+      "chunk_index": 4,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "2. HEALTH MONITORING AND DISEASE CONTROL"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-2_2-005",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "2.2",
+      "content": "2.2 Diseased or suspect colonies may be isolated and quarantined according to the standard's health-management provisions.",
+      "content_type": "text",
+      "char_count": 122,
+      "token_count": null,
+      "chunk_index": 5,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "2. HEALTH MONITORING AND DISEASE CONTROL"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-2_3-006",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "2.3",
+      "content": "2.3 Documented health-monitoring reports and regular laboratory testing shall support animal-facility management.",
+      "content_type": "text",
+      "char_count": 113,
+      "token_count": null,
+      "chunk_index": 6,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "2. HEALTH MONITORING AND DISEASE CONTROL"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-3_1-007",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "3.1",
+      "content": "3.1 Comprehensive records must be maintained by the facility, including breeding and mating records, stock and census, procurement, supply and sale, and culling records.",
+      "content_type": "text",
+      "char_count": 169,
+      "token_count": null,
+      "chunk_index": 7,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "3. RECORDS AND MANAGEMENT"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-3_2-008",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "3.2",
+      "content": "3.2 The facility shall maintain feeding logs, environmental variable records (temperature, humidity, ventilation), mortality and necropsy records, health files, facility plans, and CCTV registers.",
+      "content_type": "text",
+      "char_count": 196,
+      "token_count": null,
+      "chunk_index": 8,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "3. RECORDS AND MANAGEMENT"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-3_3-009",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "3.3",
+      "content": "3.3 The officer in charge of the laboratory animal facility is expected to be a qualified veterinarian according to the cited section.",
+      "content_type": "text",
+      "char_count": 134,
+      "token_count": null,
+      "chunk_index": 9,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "3. RECORDS AND MANAGEMENT"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-4_1-010",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "4.1",
+      "content": "4.1 Animal welfare standards must be strictly followed, emphasizing the avoidance of unnecessary suffering under continuous veterinarian oversight.",
+      "content_type": "text",
+      "char_count": 147,
+      "token_count": null,
+      "chunk_index": 10,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "4. ANIMAL WELFARE AND HUMANE ENDPOINTS"
+    },
+    {
+      "chunk_id": "chk-doc-is-5701-1-2025-4_2-011",
+      "document_id": "doc-is-5701-1-2025",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "4.2",
+      "content": "4.2 Specific provisions govern potentially painful and invasive procedures, with clearly defined humane endpoints in the animal-welfare framework.",
+      "content_type": "text",
+      "char_count": 146,
+      "token_count": null,
+      "chunk_index": 11,
+      "standard_number": "IS 5701 (Part 1):2025",
+      "document_title": "Code for Breeding, Care, Management and Housing of Laboratory Animals — Part 1 Laboratory Mice and Rats",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "Laboratory Animals",
+        "Animal Husbandry",
+        "Biomedical Research",
+        "FAD 32"
+      ],
+      "section_title": "4. ANIMAL WELFARE AND HUMANE ENDPOINTS"
+    }
+  ]
+}

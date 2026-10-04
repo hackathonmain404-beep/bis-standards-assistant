@@ -1,0 +1,16 @@
+SP 11:1973
+RECOMMENDED SI UNITS FOR TEXTILES
+(Reaffirmed 2017, First Reprint 1984)
+
+1. SCOPE AND PURPOSE
+1.1 This special publication lists recommended SI units for use in the textile industry and trade, with metric equivalents and specific application fields.
+1.2 Formulated under the Physical Methods of Test Sectional Committee, TDC 1, this document provides guidance for changing over to a unified SI system in textile trade and industry to support consistent interpretation of measured textile characteristics.
+
+2. UNITS AND CHARACTERISTICS TABLE
+2.1 Table 1 maps textile characteristics to recommended SI units, metric equivalents, standard abbreviations, and fields of application.
+2.2 Measured characteristics include fabric and yarn dimensions, yarn counts, mass per unit area, mass per unit length, twist, test length, and breaking load.
+2.3 Examples of recommended SI units and abbreviations include millimetres (mm), centimetres (cm), grams per square metre (g/m²), grams per metre (g/m), turns per centimetre (turns/cm), turns per metre (turns/m), millinewtons (mN), and newtons (N).
+
+3. TERMINOLOGY AND CONVERSION
+3.1 The publication defines and explains measurement terms and unit relations relevant to textile testing and physical evaluation.
+3.2 For conversion between traditional yarn counts and the tex system, users are directed to the specific relevant Indian Standard.

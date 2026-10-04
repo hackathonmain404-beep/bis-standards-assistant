@@ -1,0 +1,246 @@
+{
+  "document": {
+    "document_id": "doc-sp-8-1970",
+    "title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+    "standard_number": "SP 8:1970",
+    "standard_part": null,
+    "document_type": "bis_guideline",
+    "year": "1970",
+    "revision": null,
+    "status": "current",
+    "subject_area": null,
+    "product_categories": [
+      "Mathematical Tables",
+      "Physical and Chemical Tables",
+      "Engineering Tables",
+      "Reference Handbooks"
+    ],
+    "source": "Bureau of Indian Standards",
+    "source_url": null,
+    "ingestion_date": "2026-10-04T18:33:05.531591Z",
+    "total_sections": null,
+    "total_chunks": 10
+  },
+  "chunks": [
+    {
+      "chunk_id": "chk-doc-sp-8-1970-0_0-000",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "0.0",
+      "content": "SP 8:1970\nISI HANDBOOK OF MATHEMATICAL, PHYSICAL, CHEMICAL AND ENGINEERING TABLES\n(Reaffirmed 2022)",
+      "content_type": "text",
+      "char_count": 99,
+      "token_count": null,
+      "chunk_index": 0,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "General"
+    },
+    {
+      "chunk_id": "chk-doc-sp-8-1970-1_1-001",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.1",
+      "content": "1.1 A reference handbook containing mathematical, physical, chemical and engineering tables, intended as a quick reference for students and technical users. The handbook is designed as lookup and reference material rather than a narrative textbook.",
+      "content_type": "text",
+      "char_count": 248,
+      "token_count": null,
+      "chunk_index": 1,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "1. SCOPE AND PURPOSE"
+    },
+    {
+      "chunk_id": "chk-doc-sp-8-1970-1_2-002",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.2",
+      "content": "1.2 The handbook derives data from Indian Standards and industrial product references with symbols and nomenclature aligned with ISO references.",
+      "content_type": "text",
+      "char_count": 144,
+      "token_count": null,
+      "chunk_index": 2,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "1. SCOPE AND PURPOSE"
+    },
+    {
+      "chunk_id": "chk-doc-sp-8-1970-1_3-003",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.3",
+      "content": "1.3 Multiple reprints and amendment material are included, including Amendment No. 1 and addenda material.",
+      "content_type": "text",
+      "char_count": 106,
+      "token_count": null,
+      "chunk_index": 3,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "1. SCOPE AND PURPOSE"
+    },
+    {
+      "chunk_id": "chk-doc-sp-8-1970-2_1-004",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "2.1",
+      "content": "2.1 Section 1 provides comprehensive mathematical tables including tables for logarithms, antilogarithms, natural logarithms, and exponential/hyperbolic functions.",
+      "content_type": "text",
+      "char_count": 163,
+      "token_count": null,
+      "chunk_index": 4,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "2. MATHEMATICAL TABLES"
+    },
+    {
+      "chunk_id": "chk-doc-sp-8-1970-2_2-005",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "2.2",
+      "content": "2.2 Tables are provided for trigonometric functions, natural functions, circular arcs, radians, powers/roots, reciprocals, and mathematical constants.",
+      "content_type": "text",
+      "char_count": 150,
+      "token_count": null,
+      "chunk_index": 5,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "2. MATHEMATICAL TABLES"
+    },
+    {
+      "chunk_id": "chk-doc-sp-8-1970-3_1-006",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "3.1",
+      "content": "3.1 Section 2 provides physical and chemical tables describing physical and chemical quantities, units, symbols, and nomenclature aligned with relevant ISO references.",
+      "content_type": "text",
+      "char_count": 167,
+      "token_count": null,
+      "chunk_index": 6,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "3. PHYSICAL AND CHEMICAL TABLES"
+    },
+    {
+      "chunk_id": "chk-doc-sp-8-1970-3_2-007",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "3.2",
+      "content": "3.2 Physical constants, chemical properties, and standard values derived from Indian Standards and industrial reference data.",
+      "content_type": "text",
+      "char_count": 125,
+      "token_count": null,
+      "chunk_index": 7,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "3. PHYSICAL AND CHEMICAL TABLES"
+    },
+    {
+      "chunk_id": "chk-doc-sp-8-1970-4_1-008",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "4.1",
+      "content": "4.1 Section 3 contains engineering tables including structural steel and related tabular data such as steel sections, dimensions, weights, and engineering properties.",
+      "content_type": "text",
+      "char_count": 166,
+      "token_count": null,
+      "chunk_index": 8,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "4. ENGINEERING TABLES"
+    },
+    {
+      "chunk_id": "chk-doc-sp-8-1970-4_2-009",
+      "document_id": "doc-sp-8-1970",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "4.2",
+      "content": "4.2 Engineering tables also provide comparison and reference tables for wires and cables, as well as fabricated steel products.",
+      "content_type": "text",
+      "char_count": 127,
+      "token_count": null,
+      "chunk_index": 9,
+      "standard_number": "SP 8:1970",
+      "document_title": "ISI Handbook of Mathematical, Physical, Chemical and Engineering Tables",
+      "document_type": "bis_guideline",
+      "product_categories": [
+        "Mathematical Tables",
+        "Physical and Chemical Tables",
+        "Engineering Tables",
+        "Reference Handbooks"
+      ],
+      "section_title": "4. ENGINEERING TABLES"
+    }
+  ]
+}
