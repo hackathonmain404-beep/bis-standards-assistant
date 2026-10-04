@@ -14,6 +14,7 @@ import {
 import { useAssistant } from '../../state/AssistantContext';
 import { useLanguage } from '../../state/LanguageContext';
 import { useTheme } from '../../state/ThemeContext';
+import { MOCK_40_USERS, MockUser } from '../../mocks/mockUsers';
 
 export const AppHeader: React.FC = () => {
   const {
@@ -21,13 +22,15 @@ export const AppHeader: React.FC = () => {
     isEvidenceDrawerOpen,
     openEvidence,
     activeEvidence,
+    sendMessage,
   } = useAssistant();
-  const { t } = useLanguage();
+  const { t, setLanguage } = useLanguage();
   const { resolvedTheme, toggleTheme } = useTheme();
 
   const [isOverflowOpen, setIsOverflowOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<MockUser>(MOCK_40_USERS[0]);
   const overflowRef = useRef<HTMLDivElement>(null);
   const loginModalRef = useRef<HTMLDivElement>(null);
 
@@ -145,13 +148,13 @@ export const AppHeader: React.FC = () => {
             className={`bis-header-login-btn ${isLoggedIn ? 'bis-header-login-btn--active' : ''}`}
             id="bis-header-login-btn"
             onClick={() => setIsLoginModalOpen(true)}
-            aria-label={isLoggedIn ? 'Logged in as BIS Officer' : 'Login to BIS Copilot'}
-            title={isLoggedIn ? 'Officer Account' : 'Login to BIS Copilot'}
+            aria-label={isLoggedIn ? `Logged in as ${selectedUser.display_name}` : 'Login to BIS Copilot'}
+            title={isLoggedIn ? `${selectedUser.display_name} (${selectedUser.role})` : 'Login to BIS Copilot'}
           >
             {isLoggedIn ? (
               <>
                 <User size={15} className="bis-login-icon" />
-                <span>Officer</span>
+                <span>{selectedUser.display_name.split(' ')[0]}</span>
               </>
             ) : (
               <>
@@ -250,28 +253,48 @@ export const AppHeader: React.FC = () => {
                 <div className="bis-login-officer-card">
                   <CheckCircle2 size={24} className="bis-login-check-icon" />
                   <div className="bis-login-officer-info">
-                    <span className="bis-login-officer-name">BIS Compliance Officer</span>
-                    <span className="bis-login-officer-dept">Central Quality & Standards Wing</span>
-                    <span className="bis-login-officer-id">ID: BIS-NDLS-2026-8841</span>
+                    <span className="bis-login-officer-name">{selectedUser.display_name}</span>
+                    <span className="bis-login-officer-dept">{selectedUser.role} • {selectedUser.company}</span>
+                    <span className="bis-login-officer-id">{selectedUser.city}, {selectedUser.state} • Sector: {selectedUser.sector}</span>
                   </div>
                 </div>
-                <div className="bis-login-modal-actions">
+
+                <div style={{ marginTop: '14px', padding: '12px', background: 'var(--surface-sunken)', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px', textTransform: 'uppercase' }}>
+                    Sample Query for this Persona:
+                  </div>
+                  <div style={{ fontSize: '13px', color: 'var(--text-main)', marginBottom: '10px', fontStyle: 'italic' }}>
+                    "{selectedUser.sample_query}"
+                  </div>
+                  <button
+                    type="button"
+                    className="bis-login-btn-primary"
+                    style={{ width: '100%', padding: '8px 12px', fontSize: '12px' }}
+                    onClick={() => {
+                      sendMessage(selectedUser.sample_query);
+                      setIsLoginModalOpen(false);
+                    }}
+                  >
+                    Ask this question now
+                  </button>
+                </div>
+
+                <div className="bis-login-modal-actions" style={{ marginTop: '16px' }}>
                   <button
                     type="button"
                     className="bis-login-btn-secondary"
                     onClick={() => {
                       setIsLoggedIn(false);
-                      setIsLoginModalOpen(false);
                     }}
                   >
-                    Log Out
+                    Switch User / Logout
                   </button>
                   <button
                     type="button"
                     className="bis-login-btn-primary"
                     onClick={() => setIsLoginModalOpen(false)}
                   >
-                    Continue Session
+                    Continue
                   </button>
                 </div>
               </div>
@@ -281,43 +304,58 @@ export const AppHeader: React.FC = () => {
                 onSubmit={(e) => {
                   e.preventDefault();
                   setIsLoggedIn(true);
+                  if (selectedUser.preferred_language) {
+                    setLanguage(selectedUser.preferred_language);
+                  }
                   setIsLoginModalOpen(false);
                 }}
               >
                 <div className="bis-login-field-group">
+                  <label htmlFor="bis-demo-user-select" className="bis-login-field-label">
+                    Quick Select from 40 Test Personas
+                  </label>
+                  <select
+                    id="bis-demo-user-select"
+                    className="bis-login-text-input"
+                    value={selectedUser.id}
+                    onChange={(e) => {
+                      const user = MOCK_40_USERS.find((u) => u.id === e.target.value);
+                      if (user) setSelectedUser(user);
+                    }}
+                  >
+                    {MOCK_40_USERS.map((u, idx) => (
+                      <option key={u.id} value={u.id}>
+                        {idx + 1}. {u.display_name} ({u.role} — {u.sector})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="bis-login-field-group">
                   <label htmlFor="bis-login-input-user" className="bis-login-field-label">
-                    BIS ID or Official Email
+                    Email Address
                   </label>
                   <input
                     id="bis-login-input-user"
                     type="text"
                     className="bis-login-text-input"
-                    placeholder="officer.hq@bis.gov.in"
-                    defaultValue="officer.hq@bis.gov.in"
+                    value={selectedUser.email}
+                    onChange={(e) => {
+                      const found = MOCK_40_USERS.find((u) => u.email === e.target.value);
+                      if (found) setSelectedUser(found);
+                    }}
                     required
-                    autoFocus
                   />
                 </div>
 
                 <div className="bis-login-field-group">
-                  <label htmlFor="bis-login-input-pass" className="bis-login-field-label">
-                    Security Credentials
+                  <label className="bis-login-field-label">
+                    Persona Details
                   </label>
-                  <input
-                    id="bis-login-input-pass"
-                    type="password"
-                    className="bis-login-text-input"
-                    placeholder="••••••••••••"
-                    defaultValue="password123"
-                    required
-                  />
-                </div>
-
-                <div className="bis-login-remember-row">
-                  <label className="bis-login-checkbox-label">
-                    <input type="checkbox" defaultChecked />
-                    <span>Remember credentials on this workstation</span>
-                  </label>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                    🏢 <strong>{selectedUser.company}</strong> ({selectedUser.city}, {selectedUser.state})<br />
+                    🌐 Preferred Language: <strong>{selectedUser.preferred_language.toUpperCase()}</strong>
+                  </div>
                 </div>
 
                 <div className="bis-login-modal-actions">
@@ -333,7 +371,7 @@ export const AppHeader: React.FC = () => {
                     className="bis-login-btn-primary"
                     id="bis-modal-login-submit"
                   >
-                    Log in
+                    Log In as {selectedUser.display_name.split(' ')[0]}
                   </button>
                 </div>
               </form>

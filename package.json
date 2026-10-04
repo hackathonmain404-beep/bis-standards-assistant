@@ -8,6 +8,7 @@
     "dev:backend": "npm --prefix backend run dev",
     "dev:frontend": "npm --prefix frontend run dev",
     "test": "npm --prefix backend test",
+    "test:system": "npm --prefix backend run test:system",
     "diagnose": "npm --prefix backend run diagnose"
   }
 }
