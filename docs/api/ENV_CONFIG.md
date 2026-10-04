@@ -42,14 +42,24 @@ This document defines all environment variables used by the application. It serv
 
 > **Note:** Frontend environment variable naming depends on the chosen framework. Vite uses `VITE_` prefix. Create React App uses `REACT_APP_` prefix. Adjust accordingly.
 
-### Database
+### Supabase / Application Database
 
 | Variable | Purpose | Required | Example | Used By |
 |:---|:---|:---|:---|:---|
-| `DATABASE_URL` | Database connection string | Required | `sqlite:///./app.db` | Backend |
-| `DATABASE_ECHO` | Log SQL queries (debug only) | Optional | `false` | Backend |
+| `SUPABASE_URL` | Supabase API URL | Required | `http://127.0.0.1:54321` | Backend, Frontend |
+| `SUPABASE_ANON_KEY` | Public client anonymous key | Required | `your-anon-key` | Backend, Frontend |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-only privileged service-role key | Required (server) | `your-service-role-key` | Backend |
+| `SUPABASE_MOCK` | Fallback in-memory DB for offline/zero-Docker dev | Optional | `false` / `true` | Backend |
 
-> **Note:** For SQLite, the URL is a file path. For PostgreSQL, it would be `postgresql://user:pass@host:port/dbname`.
+### AI / RAG Orchestration Service Integration
+
+| Variable | Purpose | Required | Example | Used By |
+|:---|:---|:---|:---|:---|
+| `AI_SERVICE_URL` | Downstream AI/RAG engine endpoint | Required | `http://127.0.0.1:8001` | Backend |
+| `AI_SERVICE_KEY` | Server-to-server authorization bearer secret | Optional | `your-secret-token` | Backend |
+| `AI_MOCK_MODE` | Enable deterministic mock assistant responses | Optional | `true` / `false` | Backend |
+| `AI_TIMEOUT_MS` | AI HTTP query timeout in milliseconds | Optional | `30000` | Backend |
+
 
 ### LLM Provider
 
