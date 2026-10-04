@@ -17,11 +17,15 @@ describe('LaboratoryCard Component', () => {
     expect(screen.getByText(new RegExp(sampleLab.location.city, 'i'))).toBeInTheDocument();
     expect(screen.getByText(sampleLab.recognition_status)).toBeInTheDocument();
 
-    // Check capabilities rendered as chips
+    // Check capabilities rendered as chips with section heading
+    expect(screen.getByText('Key Capabilities')).toBeInTheDocument();
     expect(screen.getByText('Food & Water Microbiological Analysis')).toBeInTheDocument();
+    expect(screen.getByText('+1 more')).toBeInTheDocument();
 
-    // Check standards chips
+    // Check standards chips with section heading
+    expect(screen.getByText('Recognized Standards')).toBeInTheDocument();
     expect(screen.getByText('IS 14543:2016')).toBeInTheDocument();
+    expect(screen.getByText('+2 more')).toBeInTheDocument();
   });
 
   it('opens and closes the rich laboratory details modal', () => {
@@ -71,6 +75,45 @@ describe('LaboratoriesPage Component', () => {
 
     fireEvent.click(resetBtn);
     expect(searchInput).toHaveValue('');
+  });
+
+  it('filters by state and recognition status', async () => {
+    render(
+      <MemoryRouter>
+        <LaboratoriesPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/recognized test facilities/i)).toBeInTheDocument();
+    });
+
+    const stateSelect = screen.getByLabelText(/filter by state/i);
+    expect(stateSelect).toBeInTheDocument();
+
+    // Select Maharashtra
+    fireEvent.change(stateSelect, { target: { value: 'Maharashtra' } });
+    expect(stateSelect).toHaveValue('Maharashtra');
+
+    await waitFor(() => {
+      expect(screen.getByText('BIS Western Regional Laboratory (WRL)')).toBeInTheDocument();
+      expect(screen.queryByText('BIS Central Laboratory (CL)')).not.toBeInTheDocument();
+    });
+
+    // Recognition select
+    const statusSelect = screen.getByLabelText(/filter by recognition status/i);
+    expect(statusSelect).toBeInTheDocument();
+
+    // Select BIS Regional Lab
+    fireEvent.change(statusSelect, { target: { value: 'BIS Regional Lab' } });
+    expect(statusSelect).toHaveValue('BIS Regional Lab');
+
+    // Click Reset Filters
+    const resetBtn = screen.getByRole('button', { name: /reset filters/i });
+    fireEvent.click(resetBtn);
+
+    expect(stateSelect).toHaveValue('All');
+    expect(statusSelect).toHaveValue('All');
   });
 });
 

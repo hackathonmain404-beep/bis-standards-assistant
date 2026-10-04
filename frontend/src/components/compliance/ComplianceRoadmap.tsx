@@ -62,15 +62,49 @@ export const ComplianceRoadmap: React.FC<ComplianceRoadmapProps> = ({
     }
   };
 
+  const completedCount = steps.filter((s) => s.status === 'completed').length;
+  const progressPercent = Math.round((completedCount / (steps.length || 1)) * 100);
+
+  const getStatusLabel = (status: RoadmapStep['status']) => {
+    switch (status) {
+      case 'completed':
+        return '✓ Completed';
+      case 'current':
+        return '● Current';
+      case 'requires_information':
+        return '⚠ Attention';
+      case 'unavailable':
+        return '○ Pending';
+      default:
+        return '○ Pending';
+    }
+  };
+
   return (
     <div className="bis-roadmap-container">
       {/* Left Column: Roadmap Stepper Stages */}
       <div className="bis-roadmap-stepper-panel">
         <div className="bis-roadmap-panel-header">
-          <h2 className="bis-roadmap-panel-title">Roadmap Stages</h2>
-          <span className="bis-roadmap-stage-counter">
-            {steps.filter((s) => s.status === 'completed').length} of {steps.length} Complete
-          </span>
+          <div className="bis-roadmap-header-top">
+            <h2 className="bis-roadmap-panel-title">Roadmap Stages</h2>
+            <span className="bis-roadmap-stage-counter">
+              <strong>{completedCount}</strong> of {steps.length} Complete ({progressPercent}%)
+            </span>
+          </div>
+          {/* Visual Progress Bar */}
+          <div
+            className="bis-roadmap-progress-wrap"
+            role="progressbar"
+            aria-valuenow={progressPercent}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Roadmap completion progress"
+          >
+            <div
+              className="bis-roadmap-progress-bar"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
         </div>
 
         <div className="bis-roadmap-stepper-list" role="list">
@@ -104,7 +138,7 @@ export const ComplianceRoadmap: React.FC<ComplianceRoadmapProps> = ({
                   <div className="bis-node-header-row">
                     <span className="bis-node-title">{step.title}</span>
                     <Badge variant={getStatusBadgeVariant(step.status)} size="sm">
-                      {step.status.replace('_', ' ')}
+                      {getStatusLabel(step.status)}
                     </Badge>
                   </div>
                   <p className="bis-node-desc">{step.description}</p>
@@ -118,14 +152,14 @@ export const ComplianceRoadmap: React.FC<ComplianceRoadmapProps> = ({
       {/* Right Column: Selected Stage Analysis */}
       <div className="bis-roadmap-details-panel">
         {selectedStep ? (
-          <div key={selectedStep.id} className="bis-roadmap-step-card bis-fade-in-slide">
+          <div key={selectedStep.id} className="bis-roadmap-step-card bis-stage-detail-transition">
             <div className="bis-step-card-header">
               <div>
                 <span className="bis-step-meta-badge">Stage Analysis</span>
                 <h3 className="bis-step-card-title">{selectedStep.title}</h3>
               </div>
               <Badge variant={getStatusBadgeVariant(selectedStep.status)} size="md">
-                {selectedStep.status.replace('_', ' ').toUpperCase()}
+                {getStatusLabel(selectedStep.status)}
               </Badge>
             </div>
 

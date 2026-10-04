@@ -124,7 +124,7 @@ describe('Collapsible Sidebar System', () => {
 });
 
 describe('AppHeader and AppSidebar Integration', () => {
-  it('renders AppHeader with accessible controls and mode switcher', () => {
+  it('renders AppHeader with accessible brand, utility actions, and login button', () => {
     render(
       <ThemeProvider>
         <SidebarProvider>
@@ -142,13 +142,15 @@ describe('AppHeader and AppSidebar Integration', () => {
     );
 
     expect(screen.getByText('Copilot')).toBeInTheDocument();
-    expect(screen.getByLabelText('Toggle navigation menu')).toBeInTheDocument();
-    expect(screen.getByText('Industry / MSME')).toBeInTheDocument();
-    expect(screen.getByText('Consumer')).toBeInTheDocument();
+    expect(screen.getByText('Compliance & Standards')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Toggle navigation menu')).not.toBeInTheDocument();
+    expect(screen.getByText('Evidence Panel')).toBeInTheDocument();
+    expect(screen.getByText('New Session')).toBeInTheDocument();
+    expect(screen.getByText('Login')).toBeInTheDocument();
     expect(screen.getByTitle('Switch to dark mode')).toBeInTheDocument();
   });
 
-  it('renders AppSidebar with navigation links and tooltips in collapsed mode', () => {
+  it('renders AppSidebar with navigation links and tooltips in collapsed mode, and expands on hover/focus', () => {
     render(
       <ThemeProvider>
         <SidebarProvider>
@@ -168,8 +170,20 @@ describe('AppHeader and AppSidebar Integration', () => {
     const nav = screen.getByRole('navigation', { name: 'Main Navigation' });
     expect(nav).toBeInTheDocument();
 
-    // In default collapsed mode, tooltips are rendered
+    // In default compact mode, tooltips are rendered
     const tooltips = screen.getAllByRole('tooltip');
     expect(tooltips.length).toBeGreaterThan(0);
+
+    // Sidebar element
+    const aside = screen.getByLabelText('Application Sidebar');
+    expect(aside).toHaveClass('bis-sidebar--collapsed');
+
+    // Hover sidebar
+    fireEvent.mouseEnter(aside);
+    // Focus sidebar for keyboard accessibility
+    fireEvent.focus(aside);
+    expect(aside).toHaveClass('bis-sidebar--expanded');
   });
 });
+
+

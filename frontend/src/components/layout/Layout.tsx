@@ -11,6 +11,15 @@ export const Layout: React.FC = () => {
   const location = useLocation();
   const { isEvidenceDrawerOpen, closeEvidence, activeEvidence } = useAssistant();
   const { isCollapsed } = useSidebar();
+  const mainContentRef = React.useRef<HTMLElement>(null);
+
+  // Smooth scroll-to-top when navigating to a new route
+  React.useEffect(() => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [location.pathname]);
 
   return (
     <div className={`bis-app-shell ${isCollapsed ? 'bis-shell--collapsed' : 'bis-shell--expanded'}`}>
@@ -22,7 +31,7 @@ export const Layout: React.FC = () => {
         <div className="bis-main-column">
           <AppHeader />
 
-          <main className="bis-main-content">
+          <main ref={mainContentRef} className="bis-main-content">
             <div key={location.pathname} className="bis-page-transition">
               <Outlet />
             </div>

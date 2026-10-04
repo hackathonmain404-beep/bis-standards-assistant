@@ -1,65 +1,37 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  Menu,
   Sun,
   Moon,
-  Globe,
   BookOpen,
   Plus,
-  Building2,
+  LogIn,
   User,
-  FlaskConical,
   MoreHorizontal,
   X,
+  Lock,
+  CheckCircle2,
 } from 'lucide-react';
 import { useAssistant } from '../../state/AssistantContext';
 import { useLanguage } from '../../state/LanguageContext';
 import { useTheme } from '../../state/ThemeContext';
-import { useSidebar } from '../../state/SidebarContext';
-import { LanguageCode } from '../../types/assistant';
-import { isMockMode, setMockMode } from '../../services/apiConfig';
-import { Button } from '../common/Button';
 
 export const AppHeader: React.FC = () => {
   const {
-    userMode,
-    setUserMode,
     newSession,
     isEvidenceDrawerOpen,
     openEvidence,
     activeEvidence,
-    loadMockCase,
   } = useAssistant();
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
   const { resolvedTheme, toggleTheme } = useTheme();
-  const { toggleCollapse, toggleMobile } = useSidebar();
-  const [mockActive, setMockActiveState] = useState(isMockMode);
+
   const [isOverflowOpen, setIsOverflowOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const overflowRef = useRef<HTMLDivElement>(null);
+  const loginModalRef = useRef<HTMLDivElement>(null);
 
-  const handleToggleMock = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value;
-    if (val.startsWith('case:')) {
-      const caseNum = parseInt(val.replace('case:', ''), 10);
-      loadMockCase(caseNum);
-    } else if (val === 'live') {
-      setMockMode(false);
-      setMockActiveState(false);
-    } else if (val === 'mock') {
-      setMockMode(true);
-      setMockActiveState(true);
-    }
-  };
-
-  const handleHamburgerClick = () => {
-    if (window.innerWidth < 768) {
-      toggleMobile();
-    } else {
-      toggleCollapse();
-    }
-  };
-
-  // Close overflow menu on outside click or Escape
+  // Close overflow menu and login modal on outside click or Escape
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (overflowRef.current && !overflowRef.current.contains(e.target as Node)) {
@@ -69,18 +41,18 @@ export const AppHeader: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsOverflowOpen(false);
+        setIsLoginModalOpen(false);
       }
     };
 
-    if (isOverflowOpen) {
-      document.addEventListener('mousedown', handleOutsideClick);
-      document.addEventListener('keydown', handleKeyDown);
-    }
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('keydown', handleKeyDown);
+
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOverflowOpen]);
+  }, []);
 
   const handleOpenEvidence = () => {
     if (activeEvidence) {
@@ -99,279 +71,277 @@ export const AppHeader: React.FC = () => {
     setIsOverflowOpen(false);
   };
 
-  return (
-    <header className="bis-app-header">
-      {/* Group A: Menu Hamburger + Brand Title */}
-      <div className="bis-header-left">
-        <button
-          type="button"
-          className="bis-header-menu-btn"
-          onClick={handleHamburgerClick}
-          aria-label="Toggle navigation menu"
-          title="Toggle Navigation (Alt+B)"
-        >
-          <Menu size={20} />
-        </button>
+  const handleNewSession = () => {
+    newSession();
+    setIsOverflowOpen(false);
+  };
 
-        <div className="bis-header-brand-wrap">
-          <div className="bis-header-badge">BIS</div>
-          <div className="bis-header-titles">
-            <span className="bis-header-title">Copilot</span>
-            <span className="bis-header-tagline">Compliance & Standards</span>
+  return (
+    <>
+      <header className="bis-app-header" role="banner">
+        {/* LEFT: BIS Copilot Brand Identity (No Hamburger) */}
+        <div className="bis-header-left">
+          <div className="bis-header-brand-wrap">
+            <div className="bis-header-badge" aria-hidden="true">BIS</div>
+            <div className="bis-header-titles">
+              <span className="bis-header-title">Copilot</span>
+              <span className="bis-header-tagline">Compliance & Standards</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Group B: Mode / Segmented Control (Visible on >= 640px) */}
-      <div className="bis-header-center bis-header-center-desktop">
-        <div
-          className="bis-segmented-control"
-          role="radiogroup"
-          aria-label={t.header.modeSelector}
-        >
+        {/* RIGHT: Utility Controls (Theme, Evidence, New Session, Login) */}
+        <div className="bis-header-right">
+          {/* Theme Toggle (Compact Icon Control) */}
           <button
             type="button"
-            role="radio"
-            aria-checked={userMode === 'industry'}
-            className={`bis-segment-btn ${
-              userMode === 'industry' ? 'bis-segment-btn--active' : ''
-            }`}
-            onClick={() => setUserMode('industry')}
+            className="bis-header-action-btn bis-theme-toggle-btn"
+            onClick={toggleTheme}
+            aria-label={
+              resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+            }
+            title={
+              resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+            }
           >
-            <Building2 size={15} />
-            <span>{t.header.modeIndustry}</span>
+            {resolvedTheme === 'dark' ? (
+              <Sun size={17} className="bis-theme-icon-sun" />
+            ) : (
+              <Moon size={17} className="bis-theme-icon-moon" />
+            )}
           </button>
+
+          {/* Evidence Drawer Toggle (Secondary Action, Desktop) */}
           <button
             type="button"
-            role="radio"
-            aria-checked={userMode === 'consumer'}
-            className={`bis-segment-btn ${
-              userMode === 'consumer' ? 'bis-segment-btn--active' : ''
+            className={`bis-header-action-btn bis-header-evidence-desktop ${
+              isEvidenceDrawerOpen ? 'bis-header-action-btn--active' : ''
             }`}
-            onClick={() => setUserMode('consumer')}
+            onClick={handleOpenEvidence}
+            aria-label={t.header.evidencePanel || 'Evidence Panel'}
+            aria-expanded={isEvidenceDrawerOpen}
+            title={t.header.evidencePanel || 'Evidence Panel'}
           >
-            <User size={15} />
-            <span>{t.header.modeConsumer}</span>
+            <BookOpen size={16} className="bis-header-btn-icon" />
+            <span className="bis-btn-label-desktop">{t.header.evidencePanel || 'Evidence Panel'}</span>
           </button>
-        </div>
-      </div>
 
-      {/* Group C: Application Controls */}
-      <div className="bis-header-right">
-        {/* Language Selector (Visible on >= 990px) */}
-        <div className="bis-header-select-pill bis-header-lang-desktop">
-          <Globe size={15} className="bis-pill-icon" />
-          <select
-            id="bis-language-select"
-            className="bis-compact-select"
-            value={language}
-            onChange={(e) => setLanguage(e.target.value as LanguageCode)}
-            aria-label={t.header.language}
-          >
-            <option value="en">English</option>
-            <option value="hi">हिन्दी (Hindi)</option>
-            <option value="or">ଓଡ଼ିଆ (Odia)</option>
-          </select>
-        </div>
-
-        {/* Adapter Mode & Test Scenarios (Visible on >= 1200px) */}
-        <div className="bis-header-select-pill bis-header-select-pill--adapter bis-header-adapter-desktop">
-          <FlaskConical size={15} className="bis-pill-icon" />
-          <select
-            id="bis-mock-mode-select"
-            className="bis-compact-select"
-            onChange={handleToggleMock}
-            defaultValue={mockActive ? 'mock' : 'live'}
-            title="Switch between live backend API and test mock scenarios"
-            aria-label="API Adapter and Test Scenarios"
-          >
-            <optgroup label="Adapter Mode">
-              <option value="mock">Mode: Mock Data</option>
-              <option value="live">Mode: Live Backend (/api/v1)</option>
-            </optgroup>
-            <optgroup label="Load Test Scenarios">
-              <option value="case:1">Case 1: Standard Rec</option>
-              <option value="case:2">Case 2: Missing Info</option>
-              <option value="case:3">Case 3: Comparison</option>
-              <option value="case:4">Case 4: Insufficient Evid</option>
-              <option value="case:5">Case 5: Error & Retry</option>
-            </optgroup>
-          </select>
-        </div>
-
-        {/* Theme Toggle (Always visible directly in header) */}
-        <button
-          type="button"
-          className="bis-header-action-btn bis-theme-toggle-btn"
-          onClick={toggleTheme}
-          aria-label={
-            resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-          }
-          title={
-            resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-          }
-        >
-          {resolvedTheme === 'dark' ? (
-            <Sun size={18} className="bis-theme-icon-sun" />
-          ) : (
-            <Moon size={18} className="bis-theme-icon-moon" />
-          )}
-        </button>
-
-        {/* Evidence Drawer Toggle (Direct on >= 1150px) */}
-        <button
-          type="button"
-          className={`bis-header-action-btn bis-header-evidence-desktop ${
-            isEvidenceDrawerOpen ? 'bis-header-action-btn--active' : ''
-          }`}
-          onClick={handleOpenEvidence}
-          title={t.header.evidencePanel}
-          aria-label={t.header.evidencePanel}
-        >
-          <BookOpen size={17} />
-          <span className="bis-btn-label-desktop">{t.header.evidencePanel}</span>
-        </button>
-
-        {/* New Session Button (Direct on >= 1150px) */}
-        <div className="bis-header-new-desktop">
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={newSession}
-            icon={<Plus size={15} />}
+          {/* New Session Button (Secondary Action, Desktop) */}
+          <button
+            type="button"
+            className="bis-header-action-btn bis-header-new-desktop"
+            onClick={handleNewSession}
             id="bis-header-new-session-btn"
+            aria-label={t.header.newSession || 'New Session'}
+            title={t.header.newSession || 'New Session'}
           >
-            <span className="bis-btn-label-desktop">{t.header.newSession}</span>
-          </Button>
-        </div>
-
-        {/* Responsive Overflow "More ⋯" Menu (Visible on < 1150px) */}
-        <div className="bis-header-overflow-wrap" ref={overflowRef}>
-          <button
-            type="button"
-            className={`bis-header-action-btn bis-header-overflow-btn ${
-              isOverflowOpen ? 'bis-header-action-btn--active' : ''
-            }`}
-            onClick={() => setIsOverflowOpen(!isOverflowOpen)}
-            aria-expanded={isOverflowOpen}
-            aria-haspopup="true"
-            aria-label="More options"
-            title="More application controls"
-          >
-            {isOverflowOpen ? <X size={18} /> : <MoreHorizontal size={18} />}
+            <Plus size={16} className="bis-header-btn-icon" />
+            <span className="bis-btn-label-desktop">{t.header.newSession || 'New Session'}</span>
           </button>
 
-          {isOverflowOpen && (
-            <div className="bis-header-overflow-dropdown" role="menu">
-              {/* Mobile Mode Switcher (Visible only on < 640px) */}
-              <div className="bis-overflow-section bis-overflow-mobile-mode">
-                <span className="bis-overflow-heading">Target Mode</span>
-                <div className="bis-segmented-control">
+          {/* Primary Action: Login Button */}
+          <button
+            type="button"
+            className={`bis-header-login-btn ${isLoggedIn ? 'bis-header-login-btn--active' : ''}`}
+            id="bis-header-login-btn"
+            onClick={() => setIsLoginModalOpen(true)}
+            aria-label={isLoggedIn ? 'Logged in as BIS Officer' : 'Login to BIS Copilot'}
+            title={isLoggedIn ? 'Officer Account' : 'Login to BIS Copilot'}
+          >
+            {isLoggedIn ? (
+              <>
+                <User size={15} className="bis-login-icon" />
+                <span>Officer</span>
+              </>
+            ) : (
+              <>
+                <LogIn size={15} className="bis-login-icon" />
+                <span>Login</span>
+              </>
+            )}
+          </button>
+
+          {/* Responsive Overflow "⋯ More" Menu for Mobile (< 768px) */}
+          <div className="bis-header-overflow-wrap" ref={overflowRef}>
+            <button
+              type="button"
+              className={`bis-header-action-btn bis-header-overflow-btn ${
+                isOverflowOpen ? 'bis-header-action-btn--active' : ''
+              }`}
+              onClick={() => setIsOverflowOpen(!isOverflowOpen)}
+              aria-expanded={isOverflowOpen}
+              aria-haspopup="true"
+              aria-label="More options"
+              title="More application controls"
+            >
+              {isOverflowOpen ? <X size={17} /> : <MoreHorizontal size={17} />}
+            </button>
+
+            {isOverflowOpen && (
+              <div className="bis-header-overflow-dropdown" role="menu">
+                <div className="bis-overflow-section">
+                  <span className="bis-overflow-heading">Quick Actions</span>
                   <button
                     type="button"
-                    className={`bis-segment-btn ${
-                      userMode === 'industry' ? 'bis-segment-btn--active' : ''
-                    }`}
-                    onClick={() => {
-                      setUserMode('industry');
-                      setIsOverflowOpen(false);
-                    }}
+                    className="bis-overflow-menu-item"
+                    onClick={handleOpenEvidence}
+                    role="menuitem"
                   >
-                    <Building2 size={14} />
-                    <span>Industry</span>
+                    <BookOpen size={16} />
+                    <span>{t.header.evidencePanel || 'Evidence Panel'}</span>
                   </button>
                   <button
                     type="button"
-                    className={`bis-segment-btn ${
-                      userMode === 'consumer' ? 'bis-segment-btn--active' : ''
-                    }`}
-                    onClick={() => {
-                      setUserMode('consumer');
-                      setIsOverflowOpen(false);
-                    }}
+                    className="bis-overflow-menu-item"
+                    onClick={handleNewSession}
+                    role="menuitem"
                   >
-                    <User size={14} />
-                    <span>Consumer</span>
+                    <Plus size={16} />
+                    <span>{t.header.newSession || 'New Session'}</span>
                   </button>
                 </div>
               </div>
-
-              {/* Tablet/Mobile Language Switcher (Visible on < 990px) */}
-              <div className="bis-overflow-section bis-overflow-mobile-lang">
-                <span className="bis-overflow-heading">Language</span>
-                <div className="bis-header-select-pill">
-                  <Globe size={15} className="bis-pill-icon" />
-                  <select
-                    className="bis-compact-select"
-                    value={language}
-                    onChange={(e) => {
-                      setLanguage(e.target.value as LanguageCode);
-                      setIsOverflowOpen(false);
-                    }}
-                  >
-                    <option value="en">English</option>
-                    <option value="hi">हिन्दी (Hindi)</option>
-                    <option value="or">ଓଡ଼ିଆ (Odia)</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Actions Section */}
-              <div className="bis-overflow-section">
-                <span className="bis-overflow-heading">Quick Actions</span>
-                <button
-                  type="button"
-                  className="bis-overflow-menu-item"
-                  onClick={handleOpenEvidence}
-                >
-                  <BookOpen size={16} />
-                  <span>{t.header.evidencePanel}</span>
-                </button>
-                <button
-                  type="button"
-                  className="bis-overflow-menu-item"
-                  onClick={() => {
-                    newSession();
-                    setIsOverflowOpen(false);
-                  }}
-                >
-                  <Plus size={16} />
-                  <span>{t.header.newSession}</span>
-                </button>
-              </div>
-
-              {/* Adapter & Scenarios Section */}
-              <div className="bis-overflow-section">
-                <span className="bis-overflow-heading">Environment & Test Scenarios</span>
-                <div className="bis-header-select-pill bis-header-select-pill--adapter" style={{ width: '100%' }}>
-                  <FlaskConical size={15} className="bis-pill-icon" />
-                  <select
-                    className="bis-compact-select"
-                    style={{ width: '100%' }}
-                    onChange={(e) => {
-                      handleToggleMock(e);
-                      setIsOverflowOpen(false);
-                    }}
-                    defaultValue={mockActive ? 'mock' : 'live'}
-                  >
-                    <optgroup label="Adapter Mode">
-                      <option value="mock">Mode: Mock Data</option>
-                      <option value="live">Mode: Live Backend (/api/v1)</option>
-                    </optgroup>
-                    <optgroup label="Load Test Scenarios">
-                      <option value="case:1">Case 1: Standard Rec</option>
-                      <option value="case:2">Case 2: Missing Info</option>
-                      <option value="case:3">Case 3: Comparison</option>
-                      <option value="case:4">Case 4: Insufficient Evid</option>
-                      <option value="case:5">Case 5: Error & Retry</option>
-                    </optgroup>
-                  </select>
-                </div>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Accessible Login Modal */}
+      {isLoginModalOpen && (
+        <div
+          className="bis-modal-backdrop"
+          onClick={() => setIsLoginModalOpen(false)}
+          role="presentation"
+        >
+          <div
+            className="bis-modal-dialog bis-login-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="bis-login-modal-title"
+            ref={loginModalRef}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bis-login-modal-header">
+              <div className="bis-login-modal-title-wrap">
+                <div className="bis-login-modal-icon-badge">
+                  <Lock size={18} />
+                </div>
+                <div>
+                  <h2 id="bis-login-modal-title" className="bis-login-modal-title">
+                    BIS Portal Login
+                  </h2>
+                  <p className="bis-login-modal-desc">
+                    Standards & Compliance Officer / Stakeholder Access
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="bis-login-modal-close"
+                onClick={() => setIsLoginModalOpen(false)}
+                aria-label="Close dialog"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {isLoggedIn ? (
+              <div className="bis-login-modal-content">
+                <div className="bis-login-officer-card">
+                  <CheckCircle2 size={24} className="bis-login-check-icon" />
+                  <div className="bis-login-officer-info">
+                    <span className="bis-login-officer-name">BIS Compliance Officer</span>
+                    <span className="bis-login-officer-dept">Central Quality & Standards Wing</span>
+                    <span className="bis-login-officer-id">ID: BIS-NDLS-2026-8841</span>
+                  </div>
+                </div>
+                <div className="bis-login-modal-actions">
+                  <button
+                    type="button"
+                    className="bis-login-btn-secondary"
+                    onClick={() => {
+                      setIsLoggedIn(false);
+                      setIsLoginModalOpen(false);
+                    }}
+                  >
+                    Log Out
+                  </button>
+                  <button
+                    type="button"
+                    className="bis-login-btn-primary"
+                    onClick={() => setIsLoginModalOpen(false)}
+                  >
+                    Continue Session
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form
+                className="bis-login-modal-content"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setIsLoggedIn(true);
+                  setIsLoginModalOpen(false);
+                }}
+              >
+                <div className="bis-login-field-group">
+                  <label htmlFor="bis-login-input-user" className="bis-login-field-label">
+                    BIS ID or Official Email
+                  </label>
+                  <input
+                    id="bis-login-input-user"
+                    type="text"
+                    className="bis-login-text-input"
+                    placeholder="officer.hq@bis.gov.in"
+                    defaultValue="officer.hq@bis.gov.in"
+                    required
+                    autoFocus
+                  />
+                </div>
+
+                <div className="bis-login-field-group">
+                  <label htmlFor="bis-login-input-pass" className="bis-login-field-label">
+                    Security Credentials
+                  </label>
+                  <input
+                    id="bis-login-input-pass"
+                    type="password"
+                    className="bis-login-text-input"
+                    placeholder="••••••••••••"
+                    defaultValue="password123"
+                    required
+                  />
+                </div>
+
+                <div className="bis-login-remember-row">
+                  <label className="bis-login-checkbox-label">
+                    <input type="checkbox" defaultChecked />
+                    <span>Remember credentials on this workstation</span>
+                  </label>
+                </div>
+
+                <div className="bis-login-modal-actions">
+                  <button
+                    type="button"
+                    className="bis-login-btn-secondary"
+                    onClick={() => setIsLoginModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bis-login-btn-primary"
+                    id="bis-modal-login-submit"
+                  >
+                    Log in
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
+

@@ -6,6 +6,7 @@ import {
   RotateCcw,
   FlaskConical,
   Filter,
+  ChevronDown,
 } from 'lucide-react';
 import { laboratoryApi } from '../services/laboratoryApi';
 import { LaboratoryInfo } from '../types/laboratory';
@@ -69,70 +70,91 @@ export const LaboratoriesPage: React.FC = () => {
         </p>
       </div>
 
-      {/* Search & Filter Toolbar */}
-      <div className="bis-search-filter-card">
-        <div className="bis-search-input-col">
-          <label htmlFor="lab-search-input" className="sr-only">
-            Search Laboratories
-          </label>
-          <div className="bis-search-input-wrapper">
-            <Search size={18} className="bis-search-input-icon" />
-            <input
-              id="lab-search-input"
-              type="search"
-              className="bis-input bis-input--with-icon"
-              placeholder="Search by laboratory name, city, test capability, or IS standard..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
+      {/* 1. Search Bar */}
+      <div className="bis-lab-search-container">
+        <label htmlFor="lab-search-input" className="sr-only">
+          Search Laboratories
+        </label>
+        <div className="bis-search-input-wrapper">
+          <Search size={18} className="bis-search-input-icon" />
+          <input
+            id="lab-search-input"
+            type="search"
+            className="bis-input bis-input--with-icon bis-lab-search-input"
+            placeholder="Search by laboratory name, city, test capability, or IS standard..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
         </div>
+      </div>
 
-        <div className="bis-filters-row">
-          <div className="bis-filter-group">
-            <label htmlFor="lab-state-select" className="bis-filter-label">
-              <MapPin size={13} />
+      {/* 2. Filter Toolbar: Compact horizontal row with State and Recognition */}
+      <div className="bis-lab-filters-toolbar" role="toolbar" aria-label="Laboratory filters">
+        <div className="bis-lab-filters-row">
+          {/* State Filter */}
+          <div
+            className={`bis-lab-filter-control ${
+              selectedState !== 'All' ? 'bis-lab-filter-control--active' : ''
+            }`}
+          >
+            <label htmlFor="lab-state-select" className="bis-lab-filter-label">
+              <MapPin size={14} className="bis-lab-filter-icon" />
               <span>State:</span>
             </label>
-            <select
-              id="lab-state-select"
-              className="bis-select"
-              value={selectedState}
-              onChange={(e) => setSelectedState(e.target.value)}
-            >
-              {states.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
+            <div className="bis-lab-select-wrapper">
+              <select
+                id="lab-state-select"
+                className="bis-lab-select"
+                value={selectedState}
+                onChange={(e) => setSelectedState(e.target.value)}
+                aria-label="Filter by state"
+              >
+                {states.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={14} className="bis-lab-chevron" aria-hidden="true" />
+            </div>
           </div>
 
-          <div className="bis-filter-group">
-            <label htmlFor="lab-status-select" className="bis-filter-label">
-              <ShieldCheck size={13} />
+          {/* Recognition Filter */}
+          <div
+            className={`bis-lab-filter-control ${
+              selectedStatus !== 'All' ? 'bis-lab-filter-control--active' : ''
+            }`}
+          >
+            <label htmlFor="lab-status-select" className="bis-lab-filter-label">
+              <ShieldCheck size={14} className="bis-lab-filter-icon" />
               <span>Recognition:</span>
             </label>
-            <select
-              id="lab-status-select"
-              className="bis-select"
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-            >
-              {statuses.map((st) => (
-                <option key={st} value={st}>
-                  {st}
-                </option>
-              ))}
-            </select>
+            <div className="bis-lab-select-wrapper">
+              <select
+                id="lab-status-select"
+                className="bis-lab-select"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                aria-label="Filter by recognition status"
+              >
+                {statuses.map((st) => (
+                  <option key={st} value={st}>
+                    {st}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={14} className="bis-lab-chevron" aria-hidden="true" />
+            </div>
           </div>
 
+          {/* Reset Filters */}
           {hasActiveFilters && (
             <Button
               variant="ghost"
               size="sm"
               onClick={handleResetFilters}
               icon={<RotateCcw size={13} />}
+              className="bis-lab-reset-btn"
             >
               Reset Filters
             </Button>
@@ -140,17 +162,18 @@ export const LaboratoriesPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Labs Results Section */}
-      <div className="bis-labs-results">
-        <div className="bis-results-header">
-          <div className="bis-results-count-badge">
-            <Filter size={13} />
-            <span>
-              Found <strong>{labs.length}</strong> recognized test facilities
-            </span>
-          </div>
+      {/* 3. Result Count Row (Dedicated clean row) */}
+      <div className="bis-lab-results-count-row">
+        <div className="bis-results-count-badge">
+          <Filter size={13} />
+          <span>
+            Found <strong>{labs.length}</strong> recognized test facilities
+          </span>
         </div>
+      </div>
 
+      {/* 4. Labs Results Section */}
+      <div className="bis-labs-results">
         {loading ? (
           <LoadingSkeleton lines={4} message="Fetching recognized laboratory directory..." />
         ) : labs.length === 0 ? (

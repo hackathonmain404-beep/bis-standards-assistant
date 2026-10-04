@@ -20,13 +20,18 @@ export const SavedJourneyPage: React.FC = () => {
   const { checklist } = useCompliance();
   const [savedStandards, setSavedStandards] = useState<string[]>(() => storage.getSavedStandards());
   const [activeTab, setActiveTab] = useState<'all' | 'standards' | 'milestones'>('all');
+  const [removingId, setRemovingId] = useState<string | null>(null);
 
   const savedDetails = MOCK_STANDARDS.filter((s) => savedStandards.includes(s.standard_number));
   const completedChecklist = checklist.filter((i) => i.completed);
 
   const handleRemoveBookmark = (stdNum: string) => {
-    storage.toggleSavedStandard(stdNum);
-    setSavedStandards(storage.getSavedStandards());
+    setRemovingId(stdNum);
+    setTimeout(() => {
+      storage.toggleSavedStandard(stdNum);
+      setSavedStandards(storage.getSavedStandards());
+      setRemovingId(null);
+    }, 180);
   };
 
   return (
@@ -34,7 +39,7 @@ export const SavedJourneyPage: React.FC = () => {
       {/* Page Header */}
       <div className="bis-page-header">
         <span className="bis-eyebrow">Personal Compliance Workspace</span>
-        <h2 className="bis-page-title">Saved Items & Milestones</h2>
+        <h1 className="bis-page-title">Saved Items & Milestones</h1>
         <p className="bis-page-subtitle">
           Manage your bookmarked Indian Standards, review completed audit milestones, and quickly resume active compliance journeys.
         </p>
@@ -109,7 +114,7 @@ export const SavedJourneyPage: React.FC = () => {
 
       {/* Tab Content: Bookmarked Standards */}
       {(activeTab === 'all' || activeTab === 'standards') && (
-        <div className="bis-section-container">
+        <div className="bis-section-container bis-tab-panel-enter">
           <div className="bis-section-header-flex">
             <div>
               <h3 className="bis-section-heading">Bookmarked Standards</h3>
@@ -143,7 +148,10 @@ export const SavedJourneyPage: React.FC = () => {
           ) : (
             <div className="bis-saved-items-grid">
               {savedDetails.map((std) => (
-                <div key={std.standard_number} className="bis-saved-item-card">
+                <div
+                  key={std.standard_number}
+                  className={`bis-saved-item-card ${removingId === std.standard_number ? 'bis-saved-item--removing' : ''}`}
+                >
                   <div className="bis-saved-item-top">
                     <div className="bis-saved-item-badges">
                       <span className="bis-is-badge">{std.standard_number}</span>
@@ -174,6 +182,7 @@ export const SavedJourneyPage: React.FC = () => {
                     <span className="bis-saved-meta-item">
                       <strong>Division:</strong> {std.department}
                     </span>
+                    <span className="bis-meta-bullet" aria-hidden="true">•</span>
                     <span className="bis-saved-meta-item">
                       <strong>Year:</strong> {std.publication_year}
                     </span>
@@ -206,7 +215,7 @@ export const SavedJourneyPage: React.FC = () => {
 
       {/* Tab Content: Completed Checklist Milestones */}
       {(activeTab === 'all' || activeTab === 'milestones') && (
-        <div className="bis-section-container">
+        <div className="bis-section-container bis-tab-panel-enter">
           <div className="bis-section-header-flex">
             <div>
               <h3 className="bis-section-heading">Completed Milestones ({completedChecklist.length})</h3>

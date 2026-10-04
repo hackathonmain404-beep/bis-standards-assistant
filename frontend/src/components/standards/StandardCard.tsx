@@ -18,6 +18,7 @@ export const StandardCard: React.FC<StandardCardProps> = ({
 }) => {
   const [isWhyModalOpen, setIsWhyModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(() => storage.isStandardSaved(standard.standard_number));
+  const [isRelevanceOpen, setIsRelevanceOpen] = useState(true);
 
   const handleToggleSave = () => {
     storage.toggleSavedStandard(standard.standard_number);
@@ -57,28 +58,38 @@ export const StandardCard: React.FC<StandardCardProps> = ({
         <p className="bis-standard-card-desc">{standard.short_description}</p>
       )}
 
-      {/* Why it may be relevant */}
+      {/* Why it may be relevant (collapsible, defaults open) */}
       {standard.match_reasons && standard.match_reasons.length > 0 && (
         <div className="bis-standard-reasons-preview">
-          <div className="bis-reasons-header">
-            <span className="bis-reasons-title">Relevance Assessment:</span>
+          <button
+            type="button"
+            className="bis-reasons-header-btn"
+            onClick={() => setIsRelevanceOpen(!isRelevanceOpen)}
+            aria-expanded={isRelevanceOpen}
+            aria-label="Toggle relevance assessment"
+          >
+            <span className="bis-reasons-title">
+              Relevance Assessment <span className="bis-reasons-caret">{isRelevanceOpen ? '▲' : '▼'}</span>
+            </span>
             <span className="bis-provisional-tag">Requires User Verification</span>
-          </div>
-          <ul className="bis-reasons-list">
-            {standard.match_reasons.slice(0, 3).map((reason, idx) => (
-              <li key={idx} className="bis-reason-item">
-                <span
-                  className={`bis-reason-icon bis-reason-icon--${reason.status}`}
-                  aria-hidden="true"
-                >
-                  {reason.status === 'matched' ? '✓' : reason.status === 'partial' ? '⚠' : '○'}
-                </span>
-                <span className="bis-reason-label">
-                  <strong>{reason.category}:</strong> {reason.label}
-                </span>
-              </li>
-            ))}
-          </ul>
+          </button>
+          {isRelevanceOpen && (
+            <ul className="bis-reasons-list">
+              {standard.match_reasons.slice(0, 3).map((reason, idx) => (
+                <li key={idx} className="bis-reason-item">
+                  <span
+                    className={`bis-reason-icon bis-reason-icon--${reason.status}`}
+                    aria-hidden="true"
+                  >
+                    {reason.status === 'matched' ? '✓' : reason.status === 'partial' ? '⚠' : '○'}
+                  </span>
+                  <span className="bis-reason-label">
+                    <strong>{reason.category}:</strong> {reason.label}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 

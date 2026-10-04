@@ -69,7 +69,7 @@ export const CompliancePage: React.FC = () => {
       {/* Tab Panels */}
       <div className="bis-compliance-tab-content">
         {activeTab === 'roadmap' && (
-          <div id="panel-roadmap" role="tabpanel" aria-labelledby="tab-roadmap">
+          <div id="panel-roadmap" role="tabpanel" aria-labelledby="tab-roadmap" className="bis-tab-panel-enter">
             <ComplianceRoadmap
               steps={roadmapSteps}
               onActionClick={(step) => {
@@ -88,13 +88,13 @@ export const CompliancePage: React.FC = () => {
         )}
 
         {activeTab === 'checklist' && (
-          <div id="panel-checklist" role="tabpanel" aria-labelledby="tab-checklist">
+          <div id="panel-checklist" role="tabpanel" aria-labelledby="tab-checklist" className="bis-tab-panel-enter">
             <ComplianceChecklist items={checklist} onToggleItem={toggleChecklistItem} />
           </div>
         )}
 
         {activeTab === 'schemes' && (
-          <div id="panel-schemes" role="tabpanel" aria-labelledby="tab-schemes">
+          <div id="panel-schemes" role="tabpanel" aria-labelledby="tab-schemes" className="bis-tab-panel-enter">
             <div className="bis-schemes-list">
               {MOCK_CERTIFICATION_SCHEMES.map((scheme) => (
                 <CertificationCard key={scheme.scheme_code} scheme={scheme} />

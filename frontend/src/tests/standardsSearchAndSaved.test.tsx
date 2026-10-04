@@ -39,11 +39,17 @@ describe('StandardsSearchPage Workspace', () => {
     const searchInput = screen.getByPlaceholderText(/search by is number/i);
     expect(searchInput).toBeInTheDocument();
 
-    // Check filter labels
+    // Check primary filter labels on toolbar
     expect(screen.getByLabelText(/^category$/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/^technical division$/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^status$/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^regulatory qco$/i)).toBeInTheDocument();
+
+    // Check More Filters drawer opens and reveals secondary filters
+    const moreFiltersBtn = screen.getByRole('button', { name: /more filters/i });
+    expect(moreFiltersBtn).toBeInTheDocument();
+    fireEvent.click(moreFiltersBtn);
+    expect(screen.getByLabelText(/^technical division$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^certification scheme$/i)).toBeInTheDocument();
 
     // Wait for standards to load
     await waitFor(() => {
@@ -98,7 +104,7 @@ describe('SavedJourneyPage Workspace', () => {
 });
 
 describe('AppHeader Responsive Navigation & Overflow Menu', () => {
-  it('renders brand, mode switcher, theme toggle, and handles overflow toggle', () => {
+  it('renders brand, theme toggle, handles overflow toggle and login interaction', () => {
     renderWithProviders(<AppHeader />);
 
     expect(screen.getByText('Copilot')).toBeInTheDocument();
@@ -108,6 +114,10 @@ describe('AppHeader Responsive Navigation & Overflow Menu', () => {
     const themeBtn = screen.getByTitle(/switch to dark mode|switch to light mode/i);
     expect(themeBtn).toBeInTheDocument();
 
+    // Login button
+    const loginBtn = screen.getByRole('button', { name: /login/i });
+    expect(loginBtn).toBeInTheDocument();
+
     // Overflow button
     const overflowBtn = screen.getByLabelText(/more options/i);
     expect(overflowBtn).toBeInTheDocument();
@@ -116,10 +126,17 @@ describe('AppHeader Responsive Navigation & Overflow Menu', () => {
     fireEvent.click(overflowBtn);
     expect(screen.getByRole('menu')).toBeInTheDocument();
     expect(screen.getByText('Quick Actions')).toBeInTheDocument();
-    expect(screen.getByText('Environment & Test Scenarios')).toBeInTheDocument();
 
     // Close on second click
     fireEvent.click(overflowBtn);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+
+    // Open Login dialog
+    fireEvent.click(loginBtn);
+    expect(screen.getByText('BIS Portal Login')).toBeInTheDocument();
+    expect(screen.getByLabelText(/close dialog/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText(/close dialog/i));
+    expect(screen.queryByText('BIS Portal Login')).not.toBeInTheDocument();
   });
 });
+

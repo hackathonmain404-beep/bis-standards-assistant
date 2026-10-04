@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   MessageSquare,
@@ -8,8 +8,6 @@ import {
   Award,
   Bookmark,
   PlusCircle,
-  PanelLeftClose,
-  PanelLeftOpen,
   Building2,
 } from 'lucide-react';
 import { useLanguage } from '../../state/LanguageContext';
@@ -19,7 +17,68 @@ import { useSidebar } from '../../state/SidebarContext';
 export const AppSidebar: React.FC = () => {
   const { t } = useLanguage();
   const { newSession } = useAssistant();
-  const { isCollapsed, toggleCollapse, mobileOpen, setMobileOpen } = useSidebar();
+  const { mobileOpen, setMobileOpen } = useSidebar();
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const isExpanded = isHovered || isFocused || mobileOpen;
+
+  const handleMouseEnter = () => {
+    if (collapseTimerRef.current) {
+      clearTimeout(collapseTimerRef.current);
+      collapseTimerRef.current = null;
+    }
+    // Hover intent delay: 60ms to prevent accidental twitch opening
+    hoverTimerRef.current = setTimeout(() => {
+      setIsHovered(true);
+    }, 60);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimerRef.current) {
+      clearTimeout(hoverTimerRef.current);
+      hoverTimerRef.current = null;
+    }
+    // Collapse safety buffer: 120ms to allow smooth cursor transition without flickering
+    collapseTimerRef.current = setTimeout(() => {
+      setIsHovered(false);
+    }, 120);
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsFocused(false);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+      if (collapseTimerRef.current) clearTimeout(collapseTimerRef.current);
+    };
+  }, []);
+
+  const handleNavClick = () => {
+    if (mobileOpen) {
+      setMobileOpen(false);
+    }
+    // Collapse on click for clean page focus
+    setIsHovered(false);
+    setIsFocused(false);
+  };
+
+  const handleLogoClick = () => {
+    if (window.innerWidth < 768) {
+      setMobileOpen(!mobileOpen);
+    }
+  };
 
   const navItems = [
     { to: '/assistant', label: t.nav.assistant, icon: <MessageSquare size={20} /> },
@@ -29,12 +88,6 @@ export const AppSidebar: React.FC = () => {
     { to: '/hallmarking', label: t.nav.hallmarking, icon: <Award size={20} /> },
     { to: '/saved', label: t.nav.saved, icon: <Bookmark size={20} /> },
   ];
-
-  const handleNavClick = () => {
-    if (mobileOpen) {
-      setMobileOpen(false);
-    }
-  };
 
   return (
     <>
@@ -47,36 +100,28 @@ export const AppSidebar: React.FC = () => {
         />
       )}
 
-      {/* Main Sidebar Element */}
+      {/* Main Sidebar Element (Compact Icon Rail with Smooth Hover Expansion) */}
       <aside
-        className={`bis-sidebar ${isCollapsed ? 'bis-sidebar--collapsed' : 'bis-sidebar--expanded'} ${
-          mobileOpen ? 'bis-sidebar--mobile-open' : ''
-        }`}
+        className={`bis-sidebar ${
+          isExpanded ? 'bis-sidebar--expanded bis-sidebar--hover-expanded' : 'bis-sidebar--collapsed'
+        } ${mobileOpen ? 'bis-sidebar--mobile-open' : ''}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         aria-label="Application Sidebar"
       >
-        {/* Top Header / Branding & Desktop Collapse Toggle */}
+        {/* Top Header / Branding */}
         <div className="bis-sidebar-header">
-          <div className="bis-sidebar-brand" onClick={handleNavClick}>
+          <div className="bis-sidebar-brand" onClick={handleLogoClick}>
             <div className="bis-sidebar-logo-icon">
-              <Building2 size={24} />
+              <Building2 size={22} />
             </div>
-            {!isCollapsed && (
-              <div className="bis-sidebar-brand-text">
-                <span className="bis-brand-title">BIS Copilot</span>
-                <span className="bis-brand-tag">Standards & Compliance</span>
-              </div>
-            )}
+            <div className="bis-sidebar-brand-text">
+              <span className="bis-brand-title">BIS Copilot</span>
+              <span className="bis-brand-tag">Standards & Compliance</span>
+            </div>
           </div>
-
-          <button
-            type="button"
-            className="bis-sidebar-collapse-btn"
-            onClick={toggleCollapse}
-            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            {isCollapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-          </button>
         </div>
 
         {/* Navigation Items */}
@@ -94,8 +139,8 @@ export const AppSidebar: React.FC = () => {
                   <span className="bis-nav-icon">{item.icon}</span>
                   <span className="bis-nav-label">{item.label}</span>
 
-                  {/* Tooltip when collapsed */}
-                  {isCollapsed && (
+                  {/* Tooltip visible only in compact mode before hover expansion */}
+                  {!isExpanded && (
                     <span className="bis-nav-tooltip" role="tooltip">
                       {item.label}
                     </span>
@@ -108,8 +153,8 @@ export const AppSidebar: React.FC = () => {
 
         {/* Active Workspace / New Session */}
         <div className="bis-sidebar-workspace">
-          {!isCollapsed ? (
-            <>
+          {isExpanded ? (
+            <div className="bis-workspace-expanded-content">
               <div className="bis-workspace-header">
                 <span className="bis-workspace-title">Active Workspace</span>
                 <button
@@ -120,15 +165,17 @@ export const AppSidebar: React.FC = () => {
                     handleNavClick();
                   }}
                   title="Start a new inquiry"
+                  aria-label="New Chat"
                 >
-                  <PlusCircle size={14} /> New Chat
+                  <PlusCircle size={14} className="bis-btn-icon-subtle" />
+                  <span>New Chat</span>
                 </button>
               </div>
               <div className="bis-session-entry bis-session-entry--active">
                 <span className="bis-session-dot" />
                 <span className="bis-session-text">Current Inquiry Session</span>
               </div>
-            </>
+            </div>
           ) : (
             <div className="bis-workspace-collapsed">
               <button
@@ -150,19 +197,18 @@ export const AppSidebar: React.FC = () => {
           )}
         </div>
 
-        {/* Footer Government Emblem / Authority Tag */}
+        {/* Footer Government Authority Tag */}
         <div className="bis-sidebar-footer">
           <div className="bis-gov-badge">
-            <span className="bis-gov-flag">🇮🇳</span>
-            {!isCollapsed && (
-              <div className="bis-gov-text">
-                <span className="bis-gov-authority">Government of India</span>
-                <span className="bis-gov-ministry">Bureau of Indian Standards</span>
-              </div>
-            )}
+            <span className="bis-gov-flag" aria-hidden="true">🇮🇳</span>
+            <div className="bis-gov-text">
+              <span className="bis-gov-authority">Government of India</span>
+              <span className="bis-gov-ministry">Bureau of Indian Standards</span>
+            </div>
           </div>
         </div>
       </aside>
     </>
   );
 };
+
