@@ -158,3 +158,76 @@ def process_query(req: QueryRequest) -> AIResponsePayload:
         language=req.language or "en",
     )
     return result
+
+
+class IngestRequest(BaseModel):
+    """Payload to trigger ingestion of a PDF or text standard."""
+    model_config = ConfigDict(extra="ignore")
+
+    file_path: str = Field(..., description="Path to PDF or TXT standard document on disk")
+    standard_number: Optional[str] = Field(None, description="Indian Standard number (e.g. IS 10500:2012)")
+    title: Optional[str] = Field(None, description="Document title")
+    document_id: Optional[str] = Field(None, description="Unique document ID (e.g. doc-is-10500-2012)")
+    year: Optional[str] = Field(None, description="Publication year")
+    categories: Optional[List[str]] = Field(default_factory=list, description="Product categories")
+
+
+@app.post("/corpus/reload", tags=["Ingestion"])
+def reload_corpus() -> Dict[str, Any]:
+    """
+    Reloads all processed chunks from disk and re-indexes the search engine in memory.
+    """
+    pipeline = get_pipeline()
+    standards_count, chunks_count = pipeline.reload_corpus()
+    return {
+        "status": "reloaded",
+        "standards_indexed": standards_count,
+        "chunks_count": chunks_count,
+    }
+
+
+@app.post("/corpus/ingest", tags=["Ingestion"])
+def ingest_file(req: IngestRequest) -> Dict[str, Any]:
+    """
+    Ingests a single PDF or text file into the knowledge base and re-indexes in-memory retriever.
+    """
+    from pathlib import Path
+    from ai.src.ingestion.pipeline import IngestionPipeline
+
+    target_path = Path(req.file_path)
+    if not target_path.is_file():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"File not found on server at: {req.file_path}",
+        )
+
+    pipeline = get_pipeline()
+    ingestor = IngestionPipeline()
+    try:
+        doc, chunks = ingestor.process_file_and_save(
+            input_filepath=target_path,
+            output_dir=pipeline.processed_dir,
+            document_id=req.document_id,
+            title=req.title,
+            standard_number=req.standard_number,
+            year=req.year,
+            product_categories=req.categories,
+        )
+        # Hot-reload in memory
+        standards_count, chunks_count = pipeline.reload_corpus()
+        return {
+            "status": "ingested",
+            "document_id": doc.document_id,
+            "standard_number": doc.standard_number,
+            "title": doc.title,
+            "chunks_created": len(chunks),
+            "total_standards_indexed": standards_count,
+            "total_chunks_indexed": chunks_count,
+        }
+    except Exception as exc:
+        logger.error("Failed to ingest file %s: %s", req.file_path, exc, exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to ingest document: {exc}",
+        )
+

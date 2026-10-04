@@ -236,3 +236,16 @@ class BISPipeline:
     def get_chunks_count(self) -> int:
         """Returns the total number of retrieval chunks indexed."""
         return len(self.chunks)
+
+    def reload_corpus(self) -> tuple[int, int]:
+        """
+        Reloads all processed chunks from disk and re-indexes the retriever.
+        Returns (standards_count, chunks_count).
+        """
+        self.chunks = []
+        self.documents = {}
+        self._initialize_corpus()
+        self.retriever.index_chunks(self.chunks)
+        self.recommendation_engine = ProductRecommendationEngine(retriever=self.retriever)
+        return self.get_indexed_standards_count(), self.get_chunks_count()
+
