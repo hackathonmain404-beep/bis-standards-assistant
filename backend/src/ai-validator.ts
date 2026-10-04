@@ -1,14 +1,35 @@
 /**
  * Downstream AI Response Validator — BIS Intelligent Assistant Backend
  * Follows Section 18 & 19 of Master Implementation Prompt
- * Treats AI/RAG output as UNTRUSTED DOWNSTREAM DATA.
+ * Treats AI/RAG output as UNTRUSTED DOWNSTREAM DATA using declarative Zod schemas.
  */
 
+import { z } from 'zod';
 import { AppError } from './errors.ts';
 import type { AIServiceResponse, CitationItem } from './types.ts';
 import { Logger } from './logger.ts';
 
 const logger = new Logger(undefined, 'ai-validator');
+
+export const CitationItemZodSchema = z.object({
+  index: z.number().int().optional(),
+  standard_id: z.string().nullable().optional(),
+  document_title: z.string().nullable().optional(),
+  section: z.string().nullable().optional(),
+  clause: z.string().nullable().optional(),
+  snippet: z.string().nullable().optional(),
+  source_document_id: z.string().nullable().optional(),
+});
+
+export const AIServiceResponseZodSchema = z.object({
+  response_text: z.string().min(1),
+  intent: z.string().optional().default('GENERAL_BIS'),
+  citations: z.array(z.unknown()).optional().default([]),
+  needs_clarification: z.boolean().optional().default(false),
+  clarification_questions: z.array(z.string()).optional().default([]),
+  follow_up_suggestions: z.array(z.string()).optional().default([]),
+  metadata: z.record(z.string(), z.unknown()).optional().default({}),
+});
 
 export function validateAiServiceResponse(data: unknown): AIServiceResponse {
   if (!data || typeof data !== 'object') {

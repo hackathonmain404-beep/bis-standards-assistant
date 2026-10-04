@@ -10,7 +10,7 @@ import { getOrCreateRequestId } from './request-id.ts';
 import { formatErrorResponse, AppError } from './errors.ts';
 import { validateChatRequest, validatePagination, isValidUuid } from './validation.ts';
 import { chatRateLimiter, generalRateLimiter, getClientIdentifier } from './rate-limiter.ts';
-import { createServerClient } from './supabase-client.ts';
+import { createServerClient, getUserScopedClient } from './supabase-client.ts';
 import { getAuthenticatedUser } from './auth.ts';
 import { getBackendConfig } from './config.ts';
 import { getAiServiceClient } from './ai-client.ts';
@@ -41,14 +41,12 @@ const server = http.createServer(async (req, res) => {
   const logger = new Logger(requestId, fullUrl.pathname);
 
   try {
-    const caller = await getAuthenticatedUser(standardReq, supabase);
-
     // Normalize path: strip /api/v1 prefix
     const path = fullUrl.pathname.replace(/^\/api\/v1/, '').replace(/^\/v1/, '') || '/';
     const segments = path.split('/').filter(Boolean);
     const rootRoute = segments[0] || '';
 
-    // Route: /health
+    // Route: /health (public, no auth required)
     if (rootRoute === 'health') {
       if (req.method !== 'GET') {
         throw new AppError('INVALID_REQUEST', 'Method not allowed for /health. Use GET.', 405);
@@ -65,7 +63,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // Route: /ready
+    // Route: /ready (public, no auth required)
     if (rootRoute === 'ready') {
       if (req.method !== 'GET') {
         throw new AppError('INVALID_REQUEST', 'Method not allowed for /ready. Use GET.', 405);
@@ -82,12 +80,16 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // Authenticate caller (optional for guest access on /chat, strict when Bearer is provided)
+    const caller = await getAuthenticatedUser(standardReq, supabase, true);
+    const userClient = getUserScopedClient(standardReq);
+
     // Route: /chat
     if (rootRoute === 'chat') {
       if (req.method !== 'POST') {
         throw new AppError('INVALID_REQUEST', 'Method not allowed for /chat. Use POST.', 405);
       }
-      chatRateLimiter.check(getClientIdentifier(standardReq));
+      chatRateLimiter.check(getClientIdentifier(standardReq, caller?.id));
 
       const rawBody = await readJsonBody(req);
       const chatReq = validateChatRequest(rawBody);
@@ -106,7 +108,7 @@ const server = http.createServer(async (req, res) => {
 
     // Route: /sessions
     if (rootRoute === 'sessions') {
-      generalRateLimiter.check(getClientIdentifier(standardReq));
+      generalRateLimiter.check(getClientIdentifier(standardReq, caller?.id));
       const conversationService = new ConversationService(supabase);
       const sessionId = segments[1] || null;
 

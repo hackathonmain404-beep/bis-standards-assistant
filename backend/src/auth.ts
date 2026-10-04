@@ -15,7 +15,8 @@ export interface AuthenticatedUser {
 
 export async function getAuthenticatedUser(
   request: Request,
-  supabaseClient: SupabaseClient
+  supabaseClient: SupabaseClient,
+  optional = false
 ): Promise<AuthenticatedUser | null> {
   const authHeader = request.headers.get('authorization') || request.headers.get('Authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -30,6 +31,7 @@ export async function getAuthenticatedUser(
   try {
     const { data: { user }, error } = await supabaseClient.auth.getUser(token);
     if (error || !user) {
+      if (optional) return null;
       throw AppError.authRequired('Invalid or expired authentication token.');
     }
 
@@ -39,6 +41,7 @@ export async function getAuthenticatedUser(
       role: user.role,
     };
   } catch (err) {
+    if (optional) return null;
     if (err instanceof AppError) throw err;
     throw AppError.authRequired('Failed to authenticate token.');
   }

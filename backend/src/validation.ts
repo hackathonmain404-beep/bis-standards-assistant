@@ -1,17 +1,19 @@
 /**
  * Input Validation Utilities — BIS Intelligent Assistant Backend
- * Enforces API_CONTRACT.md and SECURITY.md constraints
+ * Enforces API_CONTRACT.md and SECURITY.md constraints using Zod schemas
  */
 
+import { z } from 'zod';
 import { AppError } from './errors.ts';
 import type { ChatRequest } from './types.ts';
 
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const SUPPORTED_LANGUAGES = new Set(['en', 'hi']);
-const MAX_MESSAGE_LENGTH = 5000;
-const MAX_CLIENT_REQUEST_ID_LENGTH = 128;
-const DEFAULT_LIMIT = 20;
-const MAX_LIMIT = 100;
+export const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+export const SUPPORTED_LANGUAGES = ['en', 'hi'] as const;
+export const SUPPORTED_LANGUAGES_SET = new Set<string>(['en', 'hi']);
+export const MAX_MESSAGE_LENGTH = 5000;
+export const MAX_CLIENT_REQUEST_ID_LENGTH = 128;
+export const DEFAULT_LIMIT = 20;
+export const MAX_LIMIT = 100;
 
 export function isValidUuid(id: string): boolean {
   if (typeof id !== 'string') return false;
@@ -22,6 +24,32 @@ export function sanitizeString(input: string): string {
   if (typeof input !== 'string') return '';
   return input.replace(/\0/g, '').trim();
 }
+
+/**
+ * Zod Schemas for declarative API contract validation
+ */
+export const UuidZodSchema = z
+  .string()
+  .regex(UUID_REGEX, 'Must be a valid UUID v4');
+
+export const ChatRequestZodSchema = z.object({
+  message: z
+    .string({ error: 'Please enter a question to get started.' })
+    .min(1, 'Please enter a question to get started.')
+    .max(MAX_MESSAGE_LENGTH, `Message exceeds maximum permitted length of ${MAX_MESSAGE_LENGTH} characters.`),
+  session_id: z
+    .string()
+    .regex(UUID_REGEX, 'Invalid session_id format. Must be a valid UUID v4.')
+    .nullable()
+    .optional(),
+  language: z.enum(SUPPORTED_LANGUAGES).optional(),
+  client_request_id: z.string().max(MAX_CLIENT_REQUEST_ID_LENGTH).nullable().optional(),
+});
+
+export const PaginationZodSchema = z.object({
+  limit: z.coerce.number().int().min(1).max(MAX_LIMIT).default(DEFAULT_LIMIT),
+  offset: z.coerce.number().int().min(0).default(0),
+});
 
 export function validateChatRequest(body: unknown): ChatRequest {
   if (!body || typeof body !== 'object') {
@@ -62,7 +90,7 @@ export function validateChatRequest(body: unknown): ChatRequest {
       throw AppError.invalidRequest('Language must be a string code (e.g. en, hi).');
     }
     const normalizedLang = raw.language.trim().toLowerCase();
-    if (!SUPPORTED_LANGUAGES.has(normalizedLang)) {
+    if (!SUPPORTED_LANGUAGES_SET.has(normalizedLang)) {
       throw AppError.unsupportedLanguage(normalizedLang);
     }
     language = normalizedLang;

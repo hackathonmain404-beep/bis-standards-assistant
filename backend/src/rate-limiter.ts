@@ -13,10 +13,19 @@ export class RateLimiter {
   private records = new Map<string, RateLimitRecord>();
   private windowMs: number;
   private maxRequests: number;
+  private cleanupTimer?: any;
 
   constructor(maxRequests = 20, windowMs = 60000) {
     this.maxRequests = maxRequests;
     this.windowMs = windowMs;
+
+    if (typeof setInterval === 'function') {
+      const timer = setInterval(() => this.cleanup(), windowMs);
+      if (timer && typeof (timer as any).unref === 'function') {
+        (timer as any).unref();
+      }
+      this.cleanupTimer = timer;
+    }
   }
 
   check(identifier: string): void {
@@ -53,13 +62,22 @@ export class RateLimiter {
       }
     }
   }
+
+  destroy(): void {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer);
+    }
+  }
 }
 
 export const chatRateLimiter = new RateLimiter(20, 60000);
 export const generalRateLimiter = new RateLimiter(60, 60000);
 
-export function getClientIdentifier(request: Request): string {
-  const authHeader = request.headers.get('authorization') || '';
+export function getClientIdentifier(request: Request, userId?: string | null): string {
+  if (userId) {
+    return `user:${userId}`;
+  }
+  const authHeader = request.headers.get('authorization') || request.headers.get('Authorization') || '';
   if (authHeader.startsWith('Bearer ')) {
     return `user:${authHeader.slice(7, 27)}`;
   }

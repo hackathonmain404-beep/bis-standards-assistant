@@ -96,9 +96,11 @@ export interface HealthResponse {
 }
 
 export interface ErrorResponse {
+  success?: boolean;
   error: {
     code: string;
     message: string;
+    request_id?: string;
     details?: Record<string, unknown>;
   };
 }

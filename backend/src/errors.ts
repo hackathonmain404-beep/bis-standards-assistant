@@ -117,9 +117,11 @@ export function formatErrorResponse(
   }
 
   const responseBody: ErrorResponse = {
+    success: false,
     error: {
       code,
       message,
+      request_id: requestId,
       ...(details ? { details } : {}),
     },
   };

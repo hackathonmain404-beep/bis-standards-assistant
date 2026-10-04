@@ -105,6 +105,10 @@ export function createInMemorySupabaseClient(): any {
           filters.push(item => item[col] === val);
           return queryBuilder;
         },
+        is(col: string, val: any) {
+          filters.push(item => item[col] === val);
+          return queryBuilder;
+        },
         gt(col: string, val: any) {
           filters.push(item => item[col] > val);
           return queryBuilder;
