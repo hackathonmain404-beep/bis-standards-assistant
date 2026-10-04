@@ -27,7 +27,7 @@ export const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({
       }`}
     >
       <div className="bis-suggested-header">
-        <Sparkles size={13} className="bis-suggested-icon" aria-hidden="true" />
+        <Sparkles size={16} className="bis-suggested-icon" aria-hidden="true" />
         <span className="bis-suggested-label">
           {isFollowup ? (t.chat.suggestedTitle || 'Suggested follow-up inquiries:') : 'Try asking:'}
         </span>
@@ -44,7 +44,7 @@ export const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({
             title={prompt}
           >
             <span className="bis-chip-text">{prompt}</span>
-            <ArrowUpRight size={14} className="bis-chip-arrow-icon" aria-hidden="true" />
+            <ArrowUpRight size={18} className="bis-chip-arrow-icon" aria-hidden="true" />
           </button>
         ))}
       </div>

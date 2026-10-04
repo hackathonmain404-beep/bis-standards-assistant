@@ -39,10 +39,11 @@ export const AppSidebar: React.FC = () => {
       clearTimeout(collapseTimerRef.current);
       collapseTimerRef.current = null;
     }
-    // Hover intent delay: 60ms to prevent accidental twitch opening
+    // Intentional hover intent (180ms): eliminates accidental triggers from passing cursors
+    // and provides a natural, measured response before starting the smooth expansion.
     hoverTimerRef.current = setTimeout(() => {
       setIsHovered(true);
-    }, 60);
+    }, 180);
   };
 
   const handleMouseLeave = () => {
@@ -50,10 +51,11 @@ export const AppSidebar: React.FC = () => {
       clearTimeout(hoverTimerRef.current);
       hoverTimerRef.current = null;
     }
-    // Collapse safety buffer: 120ms to allow smooth cursor transition without flickering
+    // Controlled collapse buffer (200ms): prevents boundary flicker and provides
+    // a relaxed, fluid transition when moving away from the sidebar.
     collapseTimerRef.current = setTimeout(() => {
       setIsHovered(false);
-    }, 120);
+    }, 200);
   };
 
   const handleFocus = () => {
@@ -77,7 +79,6 @@ export const AppSidebar: React.FC = () => {
     if (mobileOpen) {
       setMobileOpen(false);
     }
-    // Collapse on click for clean page focus
     setIsHovered(false);
     setIsFocused(false);
   };
@@ -108,7 +109,7 @@ export const AppSidebar: React.FC = () => {
         />
       )}
 
-      {/* Main Sidebar Element (Compact Icon Rail with Smooth Hover Expansion) */}
+      {/* Main Sidebar Element (Compact Icon Rail with Smooth Professional Hover Expansion) */}
       <aside
         className={`bis-sidebar ${
           isExpanded ? 'bis-sidebar--expanded bis-sidebar--hover-expanded' : 'bis-sidebar--collapsed'
@@ -158,63 +159,15 @@ export const AppSidebar: React.FC = () => {
                   <span className="bis-nav-icon">{item.icon}</span>
                   <span className="bis-nav-label">{item.label}</span>
 
-                  {/* Tooltip visible only in compact mode before hover expansion */}
-                  {!isExpanded && (
-                    <span className="bis-nav-tooltip" role="tooltip">
-                      {item.label}
-                    </span>
-                  )}
+                  {/* Tooltip visible in compact mode, smoothly suppressed on expand via CSS */}
+                  <span className="bis-nav-tooltip" role="tooltip">
+                    {item.label}
+                  </span>
                 </NavLink>
               </li>
             ))}
           </ul>
         </nav>
-
-        {/* Active Workspace / New Session */}
-        <div className="bis-sidebar-workspace">
-          {isExpanded ? (
-            <div className="bis-workspace-expanded-content">
-              <div className="bis-workspace-header">
-                <span className="bis-workspace-title">Active Workspace</span>
-                <button
-                  type="button"
-                  className="bis-new-chat-btn"
-                  onClick={() => {
-                    newSession();
-                    handleNavClick();
-                  }}
-                  title="Start a new inquiry"
-                  aria-label="New Chat"
-                >
-                  <PlusCircle size={14} className="bis-btn-icon-subtle" />
-                  <span>New Chat</span>
-                </button>
-              </div>
-              <div className="bis-session-entry bis-session-entry--active">
-                <span className="bis-session-dot" />
-                <span className="bis-session-text">Current Inquiry Session</span>
-              </div>
-            </div>
-          ) : (
-            <div className="bis-workspace-collapsed">
-              <button
-                type="button"
-                className="bis-new-chat-icon-btn"
-                onClick={() => {
-                  newSession();
-                  handleNavClick();
-                }}
-                title="New Chat Session"
-                aria-label="New Chat Session"
-              >
-                <PlusCircle size={20} />
-              </button>
-              <span className="bis-nav-tooltip" role="tooltip">
-                New Chat Session
-              </span>
-            </div>
-          )}
-        </div>
 
         {/* Mobile Navigation Drawer Secondary Actions (Hidden on Desktop) */}
         <div className="bis-sidebar-mobile-secondary">

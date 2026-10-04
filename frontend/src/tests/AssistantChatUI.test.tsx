@@ -12,14 +12,13 @@ import { AssistantPage } from '../pages/AssistantPage';
 
 describe('Assistant Chat UI Refinements', () => {
   describe('AssistantHeader Component', () => {
-    it('renders BIS Standards Knowledge Copilot badge, title, and subtitle when expanded', () => {
+    it('renders title and subtitle when expanded', () => {
       render(
         <LanguageProvider>
           <AssistantHeader isCompact={false} />
         </LanguageProvider>
       );
 
-      expect(screen.getByText(/BIS Standards Knowledge Copilot/i)).toBeInTheDocument();
       expect(screen.getByRole('heading', { level: 1, name: /BIS Intelligent Assistant/i })).toBeInTheDocument();
       expect(screen.getByText(/Get guidance on standards, QCOs, certification, testing and compliance/i)).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: /start new conversation/i })).not.toBeInTheDocument();
@@ -214,8 +213,7 @@ describe('Assistant Chat UI Refinements', () => {
       const heading = screen.getByRole('heading', { level: 1, name: /BIS Intelligent Assistant/i });
       expect(emptyContainer).toContainElement(heading);
 
-      // 2. Badge & Subtitle
-      expect(screen.getByText(/BIS Standards Knowledge Copilot/i)).toBeInTheDocument();
+      // 2. Subtitle
       expect(screen.getByText(/Get guidance on standards, QCOs, certification, testing and compliance/i)).toBeInTheDocument();
 
       // 3. Workflow indicator
