@@ -16,9 +16,15 @@ export const Layout: React.FC = () => {
   // Smooth scroll-to-top when navigating to a new route
   React.useEffect(() => {
     if (mainContentRef.current) {
-      mainContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
+      if (typeof mainContentRef.current.scrollTo === 'function') {
+        mainContentRef.current.scrollTo({ top: 0, behavior: 'instant' });
+      } else {
+        mainContentRef.current.scrollTop = 0;
+      }
     }
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (typeof window.scrollTo === 'function') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
   }, [location.pathname]);
 
   const isAssistant = location.pathname === '/assistant' || location.pathname === '/';
@@ -43,9 +49,9 @@ export const Layout: React.FC = () => {
             >
               <Outlet />
             </div>
-          </main>
 
-          {!isAssistant && <AppFooter />}
+            {!isAssistant && <AppFooter />}
+          </main>
         </div>
       </div>
 

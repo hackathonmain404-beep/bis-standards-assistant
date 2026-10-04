@@ -12,16 +12,16 @@ import { AssistantPage } from '../pages/AssistantPage';
 
 describe('Assistant Chat UI Refinements', () => {
   describe('AssistantHeader Component', () => {
-    it('renders official BIS Knowledge Copilot badge, title, and subtitle when expanded', () => {
+    it('renders BIS Standards Knowledge Copilot badge, title, and subtitle when expanded', () => {
       render(
         <LanguageProvider>
           <AssistantHeader isCompact={false} />
         </LanguageProvider>
       );
 
-      expect(screen.getByText(/Official BIS Knowledge Copilot/i)).toBeInTheDocument();
+      expect(screen.getByText(/BIS Standards Knowledge Copilot/i)).toBeInTheDocument();
       expect(screen.getByRole('heading', { level: 1, name: /BIS Intelligent Assistant/i })).toBeInTheDocument();
-      expect(screen.getByText(/Your AI-powered guide to Indian Standards/i)).toBeInTheDocument();
+      expect(screen.getByText(/Get guidance on standards, QCOs, certification, testing and compliance/i)).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: /start new conversation/i })).not.toBeInTheDocument();
     });
 
@@ -34,7 +34,7 @@ describe('Assistant Chat UI Refinements', () => {
       );
 
       expect(screen.getByRole('heading', { level: 1, name: /BIS Intelligent Assistant/i })).toBeInTheDocument();
-      expect(screen.queryByText(/Your AI-powered guide to Indian Standards/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Get guidance on standards, QCOs, certification, testing and compliance/i)).not.toBeInTheDocument();
       const newChatBtn = screen.getByRole('button', { name: /start new conversation/i });
       expect(newChatBtn).toBeInTheDocument();
       fireEvent.click(newChatBtn);
@@ -205,7 +205,7 @@ describe('Assistant Chat UI Refinements', () => {
       expect(chatStream).toHaveClass('bis-chat-stream--empty');
 
       // Verify empty state container exists inside chat stream
-      const emptyContainer = container.querySelector('.bis-assistant-empty-container');
+      const emptyContainer = container.querySelector<HTMLElement>('.bis-assistant-empty-container');
       expect(emptyContainer).toBeInTheDocument();
       expect(chatStream).toContainElement(emptyContainer);
 
@@ -215,8 +215,8 @@ describe('Assistant Chat UI Refinements', () => {
       expect(emptyContainer).toContainElement(heading);
 
       // 2. Badge & Subtitle
-      expect(screen.getByText(/Official BIS Knowledge Copilot/i)).toBeInTheDocument();
-      expect(screen.getByText(/Your AI-powered guide to Indian Standards/i)).toBeInTheDocument();
+      expect(screen.getByText(/BIS Standards Knowledge Copilot/i)).toBeInTheDocument();
+      expect(screen.getByText(/Get guidance on standards, QCOs, certification, testing and compliance/i)).toBeInTheDocument();
 
       // 3. Workflow indicator
       expect(screen.getByText(/Describe Product/i)).toBeInTheDocument();
@@ -225,6 +225,12 @@ describe('Assistant Chat UI Refinements', () => {
       // 4. Suggested Prompts
       expect(screen.getByText(/Try asking:/i)).toBeInTheDocument();
       expect(screen.getByText('Find applicable standards for my product')).toBeInTheDocument();
+
+      // 5. Explore BIS Compliance Quick Action Cards
+      expect(screen.getByText(/Explore BIS Compliance/i)).toBeInTheDocument();
+      expect(screen.getByText(/BIS Standard Discovery/i)).toBeInTheDocument();
+      expect(screen.getByText(/Certification Schemes/i)).toBeInTheDocument();
+      expect(screen.getByText(/Testing & Laboratories/i)).toBeInTheDocument();
     });
   });
 });

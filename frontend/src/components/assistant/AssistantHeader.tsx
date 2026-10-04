@@ -23,7 +23,7 @@ export const AssistantHeader: React.FC<AssistantHeaderProps> = ({
         <div className="bis-assistant-header-titles">
           <div className="bis-assistant-badge-pill">
             <ShieldCheck size={13} className="bis-badge-pill-icon" aria-hidden="true" />
-            <span>Official BIS Knowledge Copilot</span>
+            <span>BIS Standards Knowledge Copilot</span>
           </div>
           <h1 className="bis-assistant-title">{t.app.title || 'BIS Intelligent Assistant'}</h1>
           {!isCompact && (
@@ -32,7 +32,7 @@ export const AssistantHeader: React.FC<AssistantHeaderProps> = ({
                 Describe your product or ask about an Indian Standard.
               </p>
               <p className="bis-assistant-subtitle">
-                Your AI-powered guide to Indian Standards, mandatory QCOs, certification schemes, testing requirements, and compliance guidance.
+                Get guidance on standards, QCOs, certification, testing and compliance.
               </p>
 
               {/* Subtle Workflow Indicator (Section 5) */}

@@ -86,6 +86,15 @@
   min-width: 0;
   width: 100%;
   max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bis-page-transition {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
 }
 
 .bis-main-content--assistant {
@@ -2141,22 +2150,47 @@
 .bis-chat-stream--empty {
   justify-content: flex-start;
   align-items: center;
-  padding: 1rem 1.5rem 1.5rem;
+  padding: 0.85rem 1.5rem 2.5rem;
 }
 
 .bis-chat-stream--active {
-  padding: 0.75rem 1.75rem 2rem;
+  padding: 0.75rem 1.75rem 2.5rem;
 }
 
-/* Empty Viewport Feature Hint Cards */
+/* Empty Viewport Feature Section & Hint Cards */
+.bis-empty-feature-section {
+  width: 100%;
+  max-width: 660px;
+  margin-inline: auto;
+  margin-top: 0.5rem;
+}
+
+.bis-feature-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.45rem;
+}
+
+.bis-feature-section-title {
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary, #64748B);
+}
+
+[data-theme='dark'] .bis-feature-section-title {
+  color: #94A3B8;
+}
+
 .bis-empty-feature-cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
-  max-width: 660px;
   width: 100%;
   margin-inline: auto;
-  padding-top: 0.25rem;
+  padding-top: 0.15rem;
 }
 
 .bis-feature-hint-card {
@@ -2651,12 +2685,16 @@
     gap: 0.35rem !important;
   }
 
+  .bis-assistant-header--expanded {
+    padding: 0 0 0.4rem 0 !important;
+  }
+
   .bis-assistant-header--compact {
-    padding: 0.5rem 0.85rem;
+    padding: 0.45rem 0.75rem !important;
   }
 
   .bis-assistant-top-suggestions {
-    padding: 0.35rem 0 0.65rem;
+    padding: 0.25rem 0 0.5rem !important;
     max-width: 100%;
     width: 100%;
   }
@@ -2665,7 +2703,7 @@
   .bis-suggested-chips-grid {
     display: grid !important;
     grid-template-columns: 1fr !important;
-    gap: 0.5rem !important;
+    gap: 0.45rem !important;
     width: 100% !important;
     max-width: 100% !important;
     overflow-x: visible !important;
@@ -2677,10 +2715,10 @@
     white-space: normal !important;
     word-break: break-word !important;
     flex-shrink: 1 !important;
-    padding: 0.65rem 0.85rem !important;
+    padding: 0.55rem 0.8rem !important;
     font-size: 0.825rem !important;
-    min-height: 44px;
-    box-sizing: border-box;
+    min-height: 42px !important;
+    box-sizing: border-box !important;
   }
 
   .bis-chat-stream {
@@ -2692,12 +2730,12 @@
   .bis-chat-stream--empty {
     justify-content: flex-start !important;
     align-items: center !important;
-    padding: 0.75rem 0.75rem 1.5rem !important;
+    padding: 0.5rem 0.75rem 3.5rem !important;
   }
 
   .bis-assistant-empty-container {
     margin-block: 0 !important;
-    padding: 0.25rem 0 1.25rem !important;
+    padding: 0.2rem 0 2rem !important;
     width: 100% !important;
     max-width: 100% !important;
   }
@@ -2725,16 +2763,40 @@
   }
 
   /* Requirement 13: Quick Action Cards reflow to compact responsive cards */
+  .bis-empty-feature-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 0.45rem !important;
+  }
+
+  .bis-feature-section-header {
+    margin-bottom: 0.35rem !important;
+  }
+
   .bis-empty-feature-cards {
     grid-template-columns: 1fr !important;
-    gap: 0.5rem !important;
+    gap: 0.45rem !important;
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
   }
 
   .bis-feature-hint-card {
-    padding: 0.65rem 0.85rem;
+    padding: 0.55rem 0.75rem !important;
+    min-height: auto !important;
+  }
+
+  .bis-feature-hint-icon {
+    font-size: 1.15rem !important;
+  }
+
+  .bis-feature-hint-title {
+    font-size: 0.8rem !important;
+  }
+
+  .bis-feature-hint-text {
+    font-size: 0.75rem !important;
+    line-height: 1.3 !important;
   }
 
   .bis-composer-disclaimer {
@@ -6586,10 +6648,13 @@
 .bis-footer {
   background-color: var(--color-bg-surface);
   border-top: 1px solid var(--color-border);
-  padding: 0.75rem var(--space-5);
+  padding: 0.65rem var(--space-5);
   font-size: 0.8rem;
   color: var(--color-text-secondary);
   flex-shrink: 0;
+  margin-top: auto;
+  width: 100%;
+  box-sizing: border-box;
   box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.02);
 }
 
@@ -9296,14 +9361,38 @@ html, body,
     z-index: 999 !important;
   }
 
+  .bis-footer {
+    padding: 0.85rem 1rem max(1rem, env(safe-area-inset-bottom, 0px)) !important;
+    margin-top: auto !important;
+    position: relative !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
   .bis-footer-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .bis-disclaimer-content {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.35rem !important;
+    width: 100% !important;
   }
 
   .bis-disclaimer-text {
-    white-space: normal;
+    white-space: normal !important;
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .bis-footer-links {
+    flex-wrap: wrap !important;
+    gap: 0.45rem 0.75rem !important;
+    width: 100% !important;
   }
 
   .bis-prompt-cards-grid {

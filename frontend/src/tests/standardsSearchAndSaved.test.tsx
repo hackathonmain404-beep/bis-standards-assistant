@@ -5,11 +5,13 @@ import { MemoryRouter } from 'react-router-dom';
 import { StandardsSearchPage } from '../pages/StandardsSearchPage';
 import { SavedJourneyPage } from '../pages/SavedJourneyPage';
 import { AppHeader } from '../components/layout/AppHeader';
+import { Layout } from '../components/layout/Layout';
 import { AssistantProvider } from '../state/AssistantContext';
 import { LanguageProvider } from '../state/LanguageContext';
 import { ThemeProvider } from '../state/ThemeContext';
 import { SidebarProvider } from '../state/SidebarContext';
 import { ComplianceProvider } from '../state/ComplianceContext';
+import { AuthProvider } from '../state/AuthContext';
 
 const renderWithProviders = (ui: React.ReactElement) => {
   return render(
@@ -136,4 +138,38 @@ describe('AppHeader Responsive Navigation & Overflow Menu', () => {
     expect(loginBtn).toBeInTheDocument();
   });
 });
+
+describe('Layout and AppFooter Document Flow', () => {
+  it('renders AppFooter inside the scrollable main content container in normal document flow', () => {
+    const { container } = render(
+      <MemoryRouter initialEntries={['/standards']}>
+        <ThemeProvider>
+          <SidebarProvider>
+            <AuthProvider>
+              <LanguageProvider>
+                <ComplianceProvider>
+                  <AssistantProvider>
+                    <Layout />
+                  </AssistantProvider>
+                </ComplianceProvider>
+              </LanguageProvider>
+            </AuthProvider>
+          </SidebarProvider>
+        </ThemeProvider>
+      </MemoryRouter>
+    );
+
+    const mainContent = container.querySelector('main.bis-main-content');
+    expect(mainContent).toBeInTheDocument();
+
+    const footer = container.querySelector<HTMLElement>('footer.bis-footer');
+    expect(footer).toBeInTheDocument();
+
+    // Crucial check: footer is INSIDE mainContent so it scrolls in normal document flow without overlaying results
+    expect(mainContent).toContainElement(footer);
+    expect(screen.getByText('Official Regulatory Advisory')).toBeInTheDocument();
+    expect(screen.getByText('BIS Portal')).toBeInTheDocument();
+  });
+});
+
 

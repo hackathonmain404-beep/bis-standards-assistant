@@ -113,33 +113,38 @@ export const AssistantPage: React.FC = () => {
               <SuggestedPrompts onSelectPrompt={(p) => sendMessage(p)} />
             </div>
 
-            {/* Feature Hints (Centered) */}
-            <div className="bis-empty-feature-cards">
-              <div className="bis-feature-hint-card">
-                <span className="bis-feature-hint-icon" aria-hidden="true">🏛️</span>
-                <div className="bis-feature-hint-body">
-                  <span className="bis-feature-hint-title">BIS Standard Discovery</span>
-                  <span className="bis-feature-hint-text">
-                    Describe your product to locate applicable IS numbers & mandatory QCOs
-                  </span>
-                </div>
+            {/* Quick Action Feature Hints */}
+            <div className="bis-empty-feature-section">
+              <div className="bis-feature-section-header">
+                <span className="bis-feature-section-title">Explore BIS Compliance</span>
               </div>
-              <div className="bis-feature-hint-card">
-                <span className="bis-feature-hint-icon" aria-hidden="true">📜</span>
-                <div className="bis-feature-hint-body">
-                  <span className="bis-feature-hint-title">Certification Schemes</span>
-                  <span className="bis-feature-hint-text">
-                    Inspect ISI Mark (Scheme I) vs Compulsory Registration (CRS) guidelines
-                  </span>
+              <div className="bis-empty-feature-cards">
+                <div className="bis-feature-hint-card">
+                  <span className="bis-feature-hint-icon" aria-hidden="true">🏛️</span>
+                  <div className="bis-feature-hint-body">
+                    <span className="bis-feature-hint-title">BIS Standard Discovery</span>
+                    <span className="bis-feature-hint-text">
+                      Locate applicable IS numbers & mandatory QCOs
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div className="bis-feature-hint-card">
-                <span className="bis-feature-hint-icon" aria-hidden="true">🧪</span>
-                <div className="bis-feature-hint-body">
-                  <span className="bis-feature-hint-title">Testing & Laboratories</span>
-                  <span className="bis-feature-hint-text">
-                    Identify recognized testing facilities and parameter requirements
-                  </span>
+                <div className="bis-feature-hint-card">
+                  <span className="bis-feature-hint-icon" aria-hidden="true">📜</span>
+                  <div className="bis-feature-hint-body">
+                    <span className="bis-feature-hint-title">Certification Schemes</span>
+                    <span className="bis-feature-hint-text">
+                      Inspect ISI Mark (Scheme I) vs CRS guidelines
+                    </span>
+                  </div>
+                </div>
+                <div className="bis-feature-hint-card">
+                  <span className="bis-feature-hint-icon" aria-hidden="true">🧪</span>
+                  <div className="bis-feature-hint-body">
+                    <span className="bis-feature-hint-title">Testing & Laboratories</span>
+                    <span className="bis-feature-hint-text">
+                      Identify recognized facilities and test parameters
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
