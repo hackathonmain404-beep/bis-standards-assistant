@@ -51,4 +51,24 @@ describe('ChatInput component', () => {
 
     expect(handleSend).toHaveBeenCalledWith('Tell me about electric irons');
   });
+
+  it('renders unified regulatory footer items and does not render example text below composer', () => {
+    render(
+      <LanguageProvider>
+        <ChatInput onSendMessage={vi.fn()} isLoading={false} />
+      </LanguageProvider>
+    );
+
+    // Textarea has proper placeholder
+    const textarea = screen.getByPlaceholderText('Describe your product or ask about a BIS standard...');
+    expect(textarea).toBeInTheDocument();
+
+    // Example sentence must NOT exist below composer
+    expect(screen.queryByText(/Example: I manufacture/i)).not.toBeInTheDocument();
+
+    // Regulatory footer items exist
+    expect(screen.getByText('Official Regulatory Advisory')).toBeInTheDocument();
+    expect(screen.getByText('AI-assisted compliance insights')).toBeInTheDocument();
+    expect(screen.getByText('Cross-reference official BIS gazettes')).toBeInTheDocument();
+  });
 });

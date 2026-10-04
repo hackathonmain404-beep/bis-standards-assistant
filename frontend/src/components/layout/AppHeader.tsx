@@ -11,10 +11,6 @@ import {
   X,
   ShieldCheck,
   LogOut,
-  Lock,
-  Loader2,
-  AlertCircle,
-  ExternalLink,
 } from 'lucide-react';
 import bisLogo from '../../assets/bis-logo.png';
 import { useAssistant } from '../../state/AssistantContext';
@@ -36,16 +32,9 @@ export const AppHeader: React.FC = () => {
 
   const [isOverflowOpen, setIsOverflowOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
-  const [emailInput, setEmailInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
-  const [modalError, setModalError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const overflowRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
-  const loginModalRef = useRef<HTMLDivElement>(null);
 
   // Close menus on outside click or Escape
   useEffect(() => {
@@ -61,7 +50,6 @@ export const AppHeader: React.FC = () => {
       if (e.key === 'Escape') {
         setIsOverflowOpen(false);
         setIsUserMenuOpen(false);
-        setIsLoginModalOpen(false);
       }
     };
 
@@ -88,30 +76,7 @@ export const AppHeader: React.FC = () => {
     if (isAuthenticated) {
       setIsUserMenuOpen(!isUserMenuOpen);
     } else {
-      setModalError(null);
-      setIsLoginModalOpen(true);
-    }
-  };
-
-  const handleModalSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!emailInput.trim() || !passwordInput) {
-      setModalError('Please enter both your email and password.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    setModalError(null);
-
-    const res = await login(emailInput.trim(), passwordInput);
-    setIsSubmitting(false);
-
-    if (res.success) {
-      setIsLoginModalOpen(false);
-      setEmailInput('');
-      setPasswordInput('');
-    } else {
-      setModalError(res.error || 'Unable to sign in. Please check your credentials and try again.');
+      navigate('/login');
     }
   };
 
@@ -323,7 +288,7 @@ export const AppHeader: React.FC = () => {
                       role="menuitem"
                     >
                       <LogIn size={16} />
-                      <span>Full Login Page</span>
+                      <span>Login</span>
                     </button>
                   )}
                 </div>
@@ -332,133 +297,6 @@ export const AppHeader: React.FC = () => {
           </div>
         </div>
       </header>
-
-      {/* Accessible Login Modal */}
-      {isLoginModalOpen && (
-        <div
-          className="bis-modal-backdrop"
-          onClick={() => setIsLoginModalOpen(false)}
-          role="presentation"
-        >
-          <div
-            className="bis-modal-dialog bis-login-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="bis-login-modal-title"
-            ref={loginModalRef}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="bis-login-modal-header">
-              <div className="bis-login-modal-title-wrap">
-                <div className="bis-login-modal-icon-badge">
-                  <Lock size={18} />
-                </div>
-                <div>
-                  <h2 id="bis-login-modal-title" className="bis-login-modal-title">
-                    BIS Portal Login
-                  </h2>
-                  <p className="bis-login-modal-desc">
-                    Standards & Compliance Officer / Stakeholder Access
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="bis-login-modal-close"
-                onClick={() => setIsLoginModalOpen(false)}
-                aria-label="Close dialog"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <form className="bis-login-modal-content" onSubmit={handleModalSubmit}>
-              {modalError && (
-                <div className="bis-login-alert-error" role="alert">
-                  <AlertCircle size={16} />
-                  <span>{modalError}</span>
-                </div>
-              )}
-
-              <div className="bis-login-field-group">
-                <label htmlFor="bis-login-input-user" className="bis-login-field-label">
-                  BIS ID or Official Email
-                </label>
-                <input
-                  id="bis-login-input-user"
-                  type="email"
-                  className="bis-login-text-input"
-                  placeholder="name@organization.gov.in"
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  required
-                  autoFocus
-                  disabled={isSubmitting}
-                />
-              </div>
-
-              <div className="bis-login-field-group">
-                <label htmlFor="bis-login-input-pass" className="bis-login-field-label">
-                  Security Credentials
-                </label>
-                <input
-                  id="bis-login-input-pass"
-                  type="password"
-                  className="bis-login-text-input"
-                  placeholder="Enter your security password"
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)}
-                  required
-                  disabled={isSubmitting}
-                />
-              </div>
-
-              <div className="bis-login-remember-row">
-                <label className="bis-login-checkbox-label">
-                  <input type="checkbox" defaultChecked />
-                  <span>Remember credentials on this workstation</span>
-                </label>
-                <button
-                  type="button"
-                  className="bis-forgot-link"
-                  onClick={() => {
-                    setIsLoginModalOpen(false);
-                    navigate('/login');
-                  }}
-                >
-                  Full page →
-                </button>
-              </div>
-
-              <div className="bis-login-modal-actions">
-                <button
-                  type="button"
-                  className="bis-login-btn-secondary"
-                  onClick={() => setIsLoginModalOpen(false)}
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bis-login-btn-primary"
-                  id="bis-modal-login-submit"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <span className="bis-btn-loading-content">
-                      <Loader2 size={15} className="bis-spin-icon" />
-                      <span>Logging in...</span>
-                    </span>
-                  ) : (
-                    <span>Log in</span>
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </>
   );
 };

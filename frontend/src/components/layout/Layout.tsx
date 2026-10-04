@@ -21,6 +21,8 @@ export const Layout: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location.pathname]);
 
+  const isAssistant = location.pathname === '/assistant' || location.pathname === '/';
+
   return (
     <div className={`bis-app-shell ${isCollapsed ? 'bis-shell--collapsed' : 'bis-shell--expanded'}`}>
       <div className="bis-layout-body">
@@ -31,13 +33,19 @@ export const Layout: React.FC = () => {
         <div className="bis-main-column">
           <AppHeader />
 
-          <main ref={mainContentRef} className="bis-main-content">
-            <div key={location.pathname} className="bis-page-transition">
+          <main
+            ref={mainContentRef}
+            className={`bis-main-content ${isAssistant ? 'bis-main-content--assistant' : ''}`}
+          >
+            <div
+              key={location.pathname}
+              className={`bis-page-transition ${isAssistant ? 'bis-page-transition--assistant' : ''}`}
+            >
               <Outlet />
             </div>
           </main>
 
-          <AppFooter />
+          {!isAssistant && <AppFooter />}
         </div>
       </div>
 

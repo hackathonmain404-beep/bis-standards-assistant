@@ -1,11 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowDown } from 'lucide-react';
 import { useAssistant } from '../state/AssistantContext';
+import { AssistantHeader } from '../components/assistant/AssistantHeader';
 import { ChatMessage } from '../components/assistant/ChatMessage';
 import { ChatInput } from '../components/assistant/ChatInput';
 import { SuggestedPrompts } from '../components/assistant/SuggestedPrompts';
+import { AIProcessingState } from '../components/assistant/AIProcessingState';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
-import { EmptyState } from '../components/common/EmptyState';
 
 export const AssistantPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,16 +19,52 @@ export const AssistantPage: React.FC = () => {
     submitClarification,
     openEvidence,
     retryLastMessage,
+    newSession,
   } = useAssistant();
 
+  const chatStreamRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const prevMessagesLength = useRef(messages.length);
 
-  // Auto-scroll to bottom of conversation
-  useEffect(() => {
-    if (typeof messagesEndRef.current?.scrollIntoView === 'function') {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  const [isNearBottom, setIsNearBottom] = useState(true);
+  const [hasNewMessages, setHasNewMessages] = useState(false);
+
+  // Check if user is scrolled within 100px of bottom
+  const checkIfNearBottom = useCallback(() => {
+    const el = chatStreamRef.current;
+    if (!el) return true;
+    const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
+    return distance <= 100;
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    const near = checkIfNearBottom();
+    setIsNearBottom(near);
+    if (near) {
+      setHasNewMessages(false);
     }
-  }, [messages, isLoading]);
+  }, [checkIfNearBottom]);
+
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
+    if (messagesEndRef.current?.scrollIntoView) {
+      messagesEndRef.current.scrollIntoView({ behavior });
+    }
+    setHasNewMessages(false);
+  }, []);
+
+  // Smart auto-scroll: only scroll automatically if user was already near bottom
+  useEffect(() => {
+    if (messages.length > prevMessagesLength.current) {
+      if (isNearBottom) {
+        scrollToBottom('smooth');
+      } else {
+        setHasNewMessages(true);
+      }
+    } else if (isLoading && isNearBottom) {
+      scrollToBottom('smooth');
+    }
+    prevMessagesLength.current = messages.length;
+  }, [messages, isLoading, isNearBottom, scrollToBottom]);
 
   const handleViewStandard = (standardNumber: string) => {
     navigate(`/standards/${encodeURIComponent(standardNumber)}`);
@@ -36,58 +74,129 @@ export const AssistantPage: React.FC = () => {
     navigate('/compliance');
   };
 
+  const hasMessages = messages.length > 0;
+
   return (
-    <div className="bis-assistant-page">
-      <div className="bis-chat-stream" role="log" aria-label="Conversation history" aria-live="polite">
-        {messages.length === 0 ? (
-          <div className="bis-chat-welcome-container">
-            <EmptyState
-              title="BIS Intelligent Assistant"
-              description="Ask natural-language questions regarding Indian Standards, mandatory Quality Control Orders (QCOs), testing protocols, or describe your product to discover applicable standards."
-              suggestions={[
-                'Find the applicable BIS standard for my product',
-                'Check mandatory QCO requirements for electrical appliances',
-                'Inspect certification schemes (ISI vs CRS) and testing guidelines',
-                'Locate BIS recognized laboratories and accredited testing facilities',
-              ]}
-              onSelectSuggestion={(q) => sendMessage(q)}
-            />
-          </div>
-        ) : (
-          <div className="bis-messages-list">
-            {messages.map((msg) => (
-              <ChatMessage
-                key={msg.id}
-                message={msg}
-                onOpenEvidence={openEvidence}
-                onSelectSuggestion={(q) => sendMessage(q)}
-                onSubmitClarification={submitClarification}
-                onRetry={retryLastMessage}
-                onViewStandard={handleViewStandard}
-                onStartCompliance={handleStartCompliance}
-              />
-            ))}
+    <div
+      className={`bis-assistant-page ${
+        hasMessages ? 'bis-assistant-page--active' : 'bis-assistant-page--empty'
+      }`}
+    >
+      {!hasMessages ? (
+        /* ------------------------------------------------------------------
+           EMPTY / LANDING STATE: Dedicated Centered Hero Container
+           ------------------------------------------------------------------ */
+        <div
+          ref={chatStreamRef}
+          className="bis-chat-stream bis-chat-stream--empty"
+          role="log"
+          aria-label="Conversation history"
+          aria-live="polite"
+        >
+          <div className="bis-assistant-empty-container">
+            {/* Title, Badge, Subtitle (Centered) */}
+            <AssistantHeader isCompact={false} />
 
-            {isLoading && (
-              <div className="bis-chat-loading-slot">
-                <LoadingSkeleton message={loadingStage || 'Consulting BIS knowledge base...'} />
+            {/* Suggested Prompts (Centered) */}
+            <div className="bis-assistant-top-suggestions">
+              <SuggestedPrompts onSelectPrompt={(p) => sendMessage(p)} />
+            </div>
+
+            {/* Feature Hints (Centered) */}
+            <div className="bis-empty-feature-cards">
+              <div className="bis-feature-hint-card">
+                <span className="bis-feature-hint-icon" aria-hidden="true">🏛️</span>
+                <div className="bis-feature-hint-body">
+                  <span className="bis-feature-hint-title">BIS Standard Discovery</span>
+                  <span className="bis-feature-hint-text">
+                    Describe your product to locate applicable IS numbers & mandatory QCOs
+                  </span>
+                </div>
               </div>
-            )}
-
-            <div ref={messagesEndRef} />
+              <div className="bis-feature-hint-card">
+                <span className="bis-feature-hint-icon" aria-hidden="true">📜</span>
+                <div className="bis-feature-hint-body">
+                  <span className="bis-feature-hint-title">Certification Schemes</span>
+                  <span className="bis-feature-hint-text">
+                    Inspect ISI Mark (Scheme I) vs Compulsory Registration (CRS) guidelines
+                  </span>
+                </div>
+              </div>
+              <div className="bis-feature-hint-card">
+                <span className="bis-feature-hint-icon" aria-hidden="true">🧪</span>
+                <div className="bis-feature-hint-body">
+                  <span className="bis-feature-hint-title">Testing & Laboratories</span>
+                  <span className="bis-feature-hint-text">
+                    Identify recognized testing facilities and parameter requirements
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
-      </div>
-
-      {/* Suggested Inquiries (when conversation is active) */}
-      {messages.length > 0 && !isLoading && (
-        <div className="bis-chat-bottom-suggestions">
-          <SuggestedPrompts onSelectPrompt={(p) => sendMessage(p)} />
         </div>
+      ) : (
+        /* ------------------------------------------------------------------
+           ACTIVE CONVERSATION STATE: Wider Chat Alignment
+           ------------------------------------------------------------------ */
+        <>
+          <AssistantHeader isCompact={true} onNewSession={newSession} />
+
+          <div
+            ref={chatStreamRef}
+            onScroll={handleScroll}
+            className="bis-chat-stream bis-chat-stream--active"
+            role="log"
+            aria-label="Conversation history"
+            aria-live="polite"
+          >
+            <div className="bis-messages-list">
+              {messages.map((msg) => (
+                <ChatMessage
+                  key={msg.id}
+                  message={msg}
+                  onOpenEvidence={openEvidence}
+                  onSelectSuggestion={(q) => sendMessage(q)}
+                  onSubmitClarification={submitClarification}
+                  onRetry={retryLastMessage}
+                  onViewStandard={handleViewStandard}
+                  onStartCompliance={handleStartCompliance}
+                />
+              ))}
+
+              {isLoading && (
+                <div className="bis-chat-loading-slot">
+                  <AIProcessingState currentStage={loadingStage} />
+                </div>
+              )}
+
+              <div ref={messagesEndRef} className="bis-messages-anchor" />
+            </div>
+          </div>
+
+          {/* Floating "New Response" scroll pill */}
+          {hasNewMessages && (
+            <button
+              type="button"
+              className="bis-new-response-pill"
+              onClick={() => scrollToBottom('smooth')}
+              aria-label="Scroll to new response"
+            >
+              <ArrowDown size={14} aria-hidden="true" />
+              <span>New response</span>
+            </button>
+          )}
+
+          {/* Optional Follow-up prompts when conversation is active */}
+          {!isLoading && (
+            <div className="bis-chat-followup-container">
+              <SuggestedPrompts onSelectPrompt={(p) => sendMessage(p)} isFollowup />
+            </div>
+          )}
+        </>
       )}
 
-      {/* Fixed Chat Input Area */}
-      <div className="bis-chat-input-container">
+      {/* 4. Chat Composer - FIXED / DOCKED AT BOTTOM */}
+      <div className="bis-chat-composer-dock">
         <ChatInput onSendMessage={sendMessage} isLoading={isLoading} />
       </div>
     </div>

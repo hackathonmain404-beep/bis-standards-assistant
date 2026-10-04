@@ -194,7 +194,7 @@ export const LoginPage: React.FC = () => {
         <div className="bis-login-form-header">
           <h2 className="bis-login-welcome-title">Welcome back</h2>
           <p className="bis-login-welcome-subtitle">
-            Sign in to continue to your regulatory compliance workspace.
+            Your AI assistant for Indian Standards, compliance, certification and testing.
           </p>
         </div>
 
@@ -351,18 +351,9 @@ export const LoginPage: React.FC = () => {
 
           {/* Password */}
           <div className="bis-form-group">
-            <div className="bis-form-label-row">
-              <label htmlFor="login-password" className="bis-form-label">
-                Password
-              </label>
-              <button
-                type="button"
-                className="bis-forgot-link"
-                onClick={() => setShowForgotNotice(true)}
-              >
-                Forgot password?
-              </button>
-            </div>
+            <label htmlFor="login-password" className="bis-form-label">
+              Password
+            </label>
             <div className="bis-input-icon-wrap">
               <Lock size={16} className="bis-field-icon" aria-hidden="true" />
               <input
@@ -400,7 +391,7 @@ export const LoginPage: React.FC = () => {
             )}
           </div>
 
-          {/* Remember Me Checkbox */}
+          {/* Remember Me Checkbox & Forgot Password */}
           <div className="bis-login-options-row">
             <label className="bis-checkbox-label">
               <input
@@ -409,8 +400,15 @@ export const LoginPage: React.FC = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="bis-checkbox-input"
               />
-              <span>Remember this device</span>
+              <span>Remember me</span>
             </label>
+            <button
+              type="button"
+              className="bis-forgot-link"
+              onClick={() => setShowForgotNotice(true)}
+            >
+              Forgot password?
+            </button>
           </div>
 
           {/* Submit Button */}
@@ -430,6 +428,14 @@ export const LoginPage: React.FC = () => {
             )}
           </button>
         </form>
+
+        {/* Back to BIS Copilot link */}
+        <div className="bis-login-bottom-back-wrap">
+          <Link to="/assistant" className="bis-login-bottom-back-link">
+            <ArrowLeft size={15} />
+            <span>Back to BIS Copilot</span>
+          </Link>
+        </div>
 
         {/* Account Registration Row */}
         <div className="bis-login-register-row">

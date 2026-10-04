@@ -2,6 +2,7 @@ import React from 'react';
 import { ChatMessage as ChatMessageType } from '../../types/assistant';
 import { Citation, SourceReference } from '../../types/evidence';
 import { AIResponseView } from './AIResponseView';
+import { AssistantErrorState } from './AssistantErrorState';
 import { Button } from '../common/Button';
 
 export interface ChatMessageProps {
@@ -53,14 +54,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             <p>{message.content}</p>
           </div>
         ) : isError ? (
-          <div className="bis-error-message-bubble">
-            <p className="bis-error-bubble-text">{message.errorMessage || message.content}</p>
-            {onRetry && (
-              <Button variant="danger" size="sm" onClick={onRetry}>
-                Retry Query
-              </Button>
-            )}
-          </div>
+          <AssistantErrorState
+            message={message.errorMessage || message.content}
+            onRetry={onRetry}
+            onNewInquiry={() => {
+              const el = document.getElementById('bis-main-query-input');
+              el?.focus();
+            }}
+          />
         ) : message.structuredData ? (
           <AIResponseView
             data={message.structuredData}

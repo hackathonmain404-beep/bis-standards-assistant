@@ -131,12 +131,9 @@ describe('AppHeader Responsive Navigation & Overflow Menu', () => {
     fireEvent.click(overflowBtn);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
-    // Open Login dialog
+    // Click Login button to navigate directly to dedicated login page (no intermediate modal)
     fireEvent.click(loginBtn);
-    expect(screen.getByText('BIS Portal Login')).toBeInTheDocument();
-    expect(screen.getByLabelText(/close dialog/i)).toBeInTheDocument();
-    fireEvent.click(screen.getByLabelText(/close dialog/i));
-    expect(screen.queryByText('BIS Portal Login')).not.toBeInTheDocument();
+    expect(loginBtn).toBeInTheDocument();
   });
 });
 
