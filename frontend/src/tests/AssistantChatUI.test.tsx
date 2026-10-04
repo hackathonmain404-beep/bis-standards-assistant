@@ -185,5 +185,46 @@ describe('Assistant Chat UI Refinements', () => {
         expect(screen.getByRole('button', { name: /start new conversation/i })).toBeInTheDocument();
       });
     });
+
+    it('ensures top assistant content is rendered inside the primary chat stream container for natural mobile scrolling', () => {
+      const { container } = render(
+        <LanguageProvider>
+          <ComplianceProvider>
+            <AssistantProvider>
+              <MemoryRouter>
+                <AssistantPage />
+              </MemoryRouter>
+            </AssistantProvider>
+          </ComplianceProvider>
+        </LanguageProvider>
+      );
+
+      // Verify the single vertical scroll container exists
+      const chatStream = container.querySelector('.bis-chat-stream');
+      expect(chatStream).toBeInTheDocument();
+      expect(chatStream).toHaveClass('bis-chat-stream--empty');
+
+      // Verify empty state container exists inside chat stream
+      const emptyContainer = container.querySelector('.bis-assistant-empty-container');
+      expect(emptyContainer).toBeInTheDocument();
+      expect(chatStream).toContainElement(emptyContainer);
+
+      // Verify all upper content is inside this emptyContainer at the top:
+      // 1. Heading
+      const heading = screen.getByRole('heading', { level: 1, name: /BIS Intelligent Assistant/i });
+      expect(emptyContainer).toContainElement(heading);
+
+      // 2. Badge & Subtitle
+      expect(screen.getByText(/Official BIS Knowledge Copilot/i)).toBeInTheDocument();
+      expect(screen.getByText(/Your AI-powered guide to Indian Standards/i)).toBeInTheDocument();
+
+      // 3. Workflow indicator
+      expect(screen.getByText(/Describe Product/i)).toBeInTheDocument();
+      expect(screen.getByText(/Find Standards/i)).toBeInTheDocument();
+
+      // 4. Suggested Prompts
+      expect(screen.getByText(/Try asking:/i)).toBeInTheDocument();
+      expect(screen.getByText('Find applicable standards for my product')).toBeInTheDocument();
+    });
   });
 });

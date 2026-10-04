@@ -52,6 +52,17 @@ export const AssistantPage: React.FC = () => {
     setHasNewMessages(false);
   }, []);
 
+  // Ensure that in empty state or on initial mount, the chat stream starts at top: 0
+  useEffect(() => {
+    if (messages.length === 0 && chatStreamRef.current) {
+      if (typeof chatStreamRef.current.scrollTo === 'function') {
+        chatStreamRef.current.scrollTo({ top: 0, behavior: 'instant' });
+      } else {
+        chatStreamRef.current.scrollTop = 0;
+      }
+    }
+  }, [messages.length]);
+
   // Smart auto-scroll: only scroll automatically if user was already near bottom
   useEffect(() => {
     if (messages.length > prevMessagesLength.current) {

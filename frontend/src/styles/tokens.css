@@ -265,7 +265,10 @@
   --color-bg-base: var(--color-bg-canvas);
   --color-bg-surface: var(--color-surface-base);
   --color-bg-elevated: var(--color-surface-elevated);
-  --color-bg-header: var(--color-surface-base);
+  --color-bg-header: #EDF3FA;
+  --bg-header-surface: linear-gradient(180deg, #EAF1F9 0%, #F4F8FC 100%);
+  --color-border-header: #D3E0EE;
+  --shadow-header: 0 1px 3px rgba(16, 42, 86, 0.05), 0 2px 6px -1px rgba(16, 42, 86, 0.04);
   --color-surface-hover: var(--color-bg-subtle);
   --color-surface-selected: var(--color-primary-subtle);
 
@@ -400,6 +403,9 @@
   --color-bg-surface: var(--color-surface-base);
   --color-bg-elevated: var(--color-surface-elevated);
   --color-bg-header: var(--color-surface-base);
+  --bg-header-surface: none;
+  --color-border-header: var(--color-border-subtle);
+  --shadow-header: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
   --color-bg-sidebar: #070B14;
   --color-surface-hover: rgba(255, 255, 255, 0.06);
   --color-surface-selected: var(--color-primary-subtle);

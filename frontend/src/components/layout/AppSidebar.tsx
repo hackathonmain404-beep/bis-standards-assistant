@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   MessageSquare,
   Search,
@@ -9,15 +9,23 @@ import {
   Bookmark,
   PlusCircle,
   Building2,
+  X,
+  BookOpen,
+  LogIn,
+  LogOut,
+  User,
 } from 'lucide-react';
 import { useLanguage } from '../../state/LanguageContext';
 import { useAssistant } from '../../state/AssistantContext';
 import { useSidebar } from '../../state/SidebarContext';
+import { useAuth } from '../../state/AuthContext';
 
 export const AppSidebar: React.FC = () => {
   const { t } = useLanguage();
-  const { newSession } = useAssistant();
+  const { newSession, openEvidence, activeEvidence } = useAssistant();
   const { mobileOpen, setMobileOpen } = useSidebar();
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -122,6 +130,17 @@ export const AppSidebar: React.FC = () => {
               <span className="bis-brand-tag">Standards & Compliance</span>
             </div>
           </div>
+
+          {/* Mobile Drawer Close Button (Visible ONLY on mobile) */}
+          <button
+            type="button"
+            className="bis-sidebar-close-btn"
+            onClick={() => setMobileOpen(false)}
+            aria-label="Close navigation menu"
+            title="Close navigation menu"
+          >
+            <X size={20} aria-hidden="true" />
+          </button>
         </div>
 
         {/* Navigation Items */}
@@ -194,6 +213,65 @@ export const AppSidebar: React.FC = () => {
                 New Chat Session
               </span>
             </div>
+          )}
+        </div>
+
+        {/* Mobile Navigation Drawer Secondary Actions (Hidden on Desktop) */}
+        <div className="bis-sidebar-mobile-secondary">
+          <div className="bis-mobile-secondary-divider" />
+          <span className="bis-mobile-secondary-title">Quick Actions</span>
+          <button
+            type="button"
+            className="bis-mobile-secondary-link"
+            onClick={() => {
+              openEvidence(activeEvidence);
+              setMobileOpen(false);
+            }}
+          >
+            <BookOpen size={18} aria-hidden="true" />
+            <span>Evidence Panel</span>
+          </button>
+          <button
+            type="button"
+            className="bis-mobile-secondary-link"
+            onClick={() => {
+              newSession();
+              setMobileOpen(false);
+            }}
+          >
+            <PlusCircle size={18} aria-hidden="true" />
+            <span>New Session</span>
+          </button>
+          {isAuthenticated ? (
+            <div className="bis-mobile-auth-section">
+              <div className="bis-mobile-auth-user">
+                <User size={16} aria-hidden="true" />
+                <span className="bis-mobile-user-name">{user?.name || user?.role || 'Officer'}</span>
+              </div>
+              <button
+                type="button"
+                className="bis-mobile-secondary-link bis-mobile-secondary-link--danger"
+                onClick={() => {
+                  logout();
+                  setMobileOpen(false);
+                }}
+              >
+                <LogOut size={16} aria-hidden="true" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="bis-mobile-secondary-link"
+              onClick={() => {
+                setMobileOpen(false);
+                navigate('/login');
+              }}
+            >
+              <LogIn size={18} aria-hidden="true" />
+              <span>Login</span>
+            </button>
           )}
         </div>
 

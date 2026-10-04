@@ -10,9 +10,24 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 100vw;
+  height: 100dvh;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   background-color: var(--color-bg-base);
+}
+
+/* Desktop default: mobile-only navigation elements are strictly hidden */
+.bis-header-hamburger-btn {
+  display: none !important;
+}
+
+.bis-sidebar-close-btn {
+  display: none !important;
+}
+
+.bis-sidebar-mobile-secondary {
+  display: none !important;
 }
 
 .bis-mobile-header {
@@ -45,6 +60,9 @@
   flex: 1;
   overflow: hidden;
   position: relative;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .bis-main-column {
@@ -52,6 +70,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   background-color: var(--color-bg-base);
 }
@@ -62,6 +83,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .bis-main-content--assistant {
@@ -745,8 +769,9 @@
 .bis-app-header {
   height: var(--header-height, 64px);
   min-height: var(--header-height, 64px);
-  background: linear-gradient(180deg, #F0F6FD 0%, #F7FAFE 55%, #FFFFFF 100%);
-  border-bottom: 1.5px solid #CFE0F5;
+  background-color: var(--color-bg-header, #EDF3FA);
+  background-image: var(--bg-header-surface, linear-gradient(180deg, #EAF1F9 0%, #F4F8FC 100%));
+  border-bottom: 1px solid var(--color-border-header, #D3E0EE);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -754,15 +779,17 @@
   gap: var(--spacing-4);
   z-index: var(--z-sticky, 200);
   flex-shrink: 0;
-  box-shadow: 0 2px 10px rgba(16, 42, 86, 0.05);
+  box-shadow: var(--shadow-header, 0 1px 3px rgba(16, 42, 86, 0.05));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-[data-theme="dark"] .bis-app-header {
-  background-color: rgba(19, 27, 46, 0.95);
-  backdrop-filter: blur(16px) saturate(190%);
-  -webkit-backdrop-filter: blur(16px) saturate(190%);
-  border-bottom-color: rgba(255, 255, 255, 0.08);
-  box-shadow: none;
+[data-theme="dark"] .bis-app-header,
+.dark .bis-app-header {
+  background-color: var(--color-bg-header, var(--color-surface-base, #131B2E));
+  background-image: none;
+  border-bottom-color: var(--color-border-header, var(--color-border-subtle, rgba(255, 255, 255, 0.08)));
+  box-shadow: var(--shadow-header, 0 1px 3px rgba(0, 0, 0, 0.4));
 }
 
 /* Header Left: BIS Copilot Brand Identity (No Hamburger) */
@@ -870,26 +897,26 @@
 
 /* Light Mode Switch: soft warm/cool off-white track, #D8E1EC border */
 .bis-pill-theme-switch--light {
-  background-color: #F3F6FA;
-  border: 1px solid #D8E1EC;
-  box-shadow: inset 0 1px 2px rgba(23, 59, 115, 0.05), 0 1px 2px rgba(23, 59, 115, 0.04);
+  background-color: #E2EAF4;
+  border: 1px solid #C8D6E5;
+  box-shadow: inset 0 1px 2px rgba(23, 59, 115, 0.08), 0 1px 2px rgba(23, 59, 115, 0.04);
 }
 
 .bis-pill-theme-switch--light:hover {
-  background-color: #EEF3FA;
-  border-color: #CBD5E1;
-  box-shadow: inset 0 1px 2px rgba(23, 59, 115, 0.07), 0 1px 3px rgba(23, 59, 115, 0.08);
+  background-color: #D9E4F0;
+  border-color: #B4C6DB;
+  box-shadow: inset 0 1px 2px rgba(23, 59, 115, 0.1), 0 1px 3px rgba(23, 59, 115, 0.08);
 }
 
 /* Dark Mode Switch: deep navy / charcoal track */
 .bis-pill-theme-switch--dark {
-  background-color: #111827;
+  background-color: #0B111E;
   border: 1px solid #1E293B;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .bis-pill-theme-switch--dark:hover {
-  background-color: #162032;
+  background-color: #111A2E;
   border-color: #334155;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.4);
 }
@@ -949,14 +976,14 @@
 
 .bis-pill-theme-switch--light .bis-pill-thumb {
   transform: translateX(0);
-  background-color: #3156A6;
-  box-shadow: 0 2px 4px rgba(49, 86, 166, 0.35);
+  background-color: #173B73;
+  box-shadow: 0 2px 4px rgba(23, 59, 115, 0.35);
 }
 
 .bis-pill-theme-switch--dark .bis-pill-thumb {
   transform: translateX(28px);
-  background-color: #2563EB;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 0 8px rgba(37, 99, 235, 0.35);
+  background-color: #6366F1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 0 8px rgba(99, 102, 241, 0.35);
 }
 
 /* Icons Inside the Thumb */
@@ -984,25 +1011,42 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
+  background-color: var(--color-btn-secondary-bg, #FFFFFF);
+  border: 1px solid var(--color-btn-secondary-border, #D8E1EC);
   border-radius: var(--radius-md);
-  color: var(--color-text-primary);
+  color: var(--color-btn-secondary-text, #173B73);
   cursor: pointer;
   transition: background-color var(--duration-fast, 140ms) var(--ease-standard),
-              border-color var(--duration-fast, 140ms) var(--ease-standard);
+              border-color var(--duration-fast, 140ms) var(--ease-standard),
+              color var(--duration-fast, 140ms) var(--ease-standard);
   flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
 }
 
 .bis-header-overflow-btn:hover {
-  background-color: var(--color-bg-subtle);
-  border-color: var(--color-border-strong);
-  color: var(--color-text-primary);
+  background-color: var(--color-btn-secondary-hover, #EEF3FA);
+  border-color: var(--color-border-hover, #CBD5E1);
+  color: var(--color-btn-secondary-text, #173B73);
 }
 
 .bis-header-overflow-btn:focus-visible {
-  outline: 2px solid var(--color-primary-600);
+  outline: 2px solid var(--color-primary-base);
   outline-offset: 2px;
+}
+
+[data-theme="dark"] .bis-header-overflow-btn,
+.dark .bis-header-overflow-btn {
+  background-color: var(--color-secondary-base, #1E293B);
+  border-color: var(--color-border-default, rgba(255, 255, 255, 0.14));
+  color: var(--color-text-primary, #F8FAFC);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .bis-header-overflow-btn:hover,
+.dark .bis-header-overflow-btn:hover {
+  background-color: var(--color-secondary-hover, #334155);
+  border-color: var(--color-border-hover, rgba(255, 255, 255, 0.26));
+  color: #FFFFFF;
 }
 
 @media (max-width: 1024px) {
@@ -1035,12 +1079,12 @@
   gap: 8px;
   height: 36px;
   padding: 0 0.85rem;
-  background-color: #FFFFFF;
-  border: 1px solid #D8E1EC;
+  background-color: var(--color-btn-secondary-bg, #FFFFFF);
+  border: 1px solid var(--color-btn-secondary-border, #D8E1EC);
   border-radius: var(--radius-md);
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #173B73;
+  color: var(--color-btn-secondary-text, #173B73);
   cursor: pointer;
   white-space: nowrap;
   transition: background-color var(--duration-fast, 140ms) var(--ease-standard),
@@ -1048,6 +1092,7 @@
               border-color var(--duration-fast, 140ms) var(--ease-standard),
               box-shadow var(--duration-fast, 140ms) var(--ease-standard);
   flex-shrink: 0;
+  box-shadow: var(--shadow-xs);
 }
 
 .bis-header-btn-icon {
@@ -1056,39 +1101,43 @@
 }
 
 .bis-header-action-btn:hover {
-  background-color: #EEF3FA;
-  color: #173B73;
-  border-color: #3156A6;
-  box-shadow: 0 2px 6px rgba(23, 59, 115, 0.05);
+  background-color: var(--color-btn-secondary-hover, #EEF3FA);
+  color: var(--color-btn-secondary-text, #173B73);
+  border-color: var(--color-primary-border, #CBD5E1);
+  box-shadow: var(--shadow-sm);
 }
 
 .bis-header-action-btn:focus-visible {
-  outline: 2px solid #3156A6;
+  outline: 2px solid var(--color-primary-base);
   outline-offset: 2px;
 }
 
 .bis-header-action-btn--active {
-  background-color: #EAF1FF;
-  border-color: #3156A6;
-  color: #173B73;
+  background-color: var(--color-primary-subtle, #EAF1FF);
+  border-color: var(--color-primary-border, #C8DBFC);
+  color: var(--color-primary-base, #173B73);
 }
 
-[data-theme="dark"] .bis-header-action-btn {
-  background-color: var(--color-bg-surface);
-  border-color: var(--color-border);
-  color: var(--color-text-secondary);
+[data-theme="dark"] .bis-header-action-btn,
+.dark .bis-header-action-btn {
+  background-color: var(--color-secondary-base, #1E293B);
+  border-color: var(--color-border-default, rgba(255, 255, 255, 0.14));
+  color: var(--color-text-primary, #F8FAFC);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-[data-theme="dark"] .bis-header-action-btn:hover {
-  background-color: var(--color-bg-subtle);
-  border-color: var(--color-border-strong);
-  color: var(--color-text-primary);
+[data-theme="dark"] .bis-header-action-btn:hover,
+.dark .bis-header-action-btn:hover {
+  background-color: var(--color-secondary-hover, #334155);
+  border-color: var(--color-border-hover, rgba(255, 255, 255, 0.26));
+  color: #FFFFFF;
 }
 
-[data-theme="dark"] .bis-header-action-btn--active {
-  background-color: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.4);
-  color: #93C5FD;
+[data-theme="dark"] .bis-header-action-btn--active,
+.dark .bis-header-action-btn--active {
+  background-color: var(--color-primary-subtle, rgba(99, 102, 241, 0.15));
+  border-color: var(--color-primary-border, rgba(99, 102, 241, 0.4));
+  color: var(--color-primary-hover, #818CF8);
 }
 
 /* Level 1: Primary Action Button (Login) - theme.md Section 7.1 */
@@ -1099,8 +1148,8 @@
   gap: 7px;
   height: 36px;
   padding: 0 1rem;
-  background-color: #173B73;
-  color: #FFFFFF;
+  background-color: var(--color-btn-primary-bg, #173B73);
+  color: var(--color-btn-primary-text, #FFFFFF);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   font-size: 0.8125rem;
@@ -1119,13 +1168,13 @@
 }
 
 .bis-header-login-btn:hover {
-  background-color: #102A56;
+  background-color: var(--color-btn-primary-hover, #102A56);
   box-shadow: 0 3px 8px rgba(16, 42, 86, 0.25);
   transform: translateY(-1px);
 }
 
 .bis-header-login-btn:active {
-  background-color: #0A1C3C;
+  background-color: var(--color-primary-active, #0A1C3C);
   transform: scale(0.98);
 }
 
@@ -1140,19 +1189,31 @@
 }
 
 .bis-header-login-btn--active {
-  background-color: var(--color-btn-primary-bg);
+  background-color: var(--color-btn-primary-bg, #173B73);
 }
 
 /* Dark mode styling for Login */
-[data-theme="dark"] .bis-header-login-btn {
-  background-color: var(--color-btn-primary-bg);
-  color: var(--color-btn-primary-text);
+[data-theme="dark"] .bis-header-login-btn,
+.dark .bis-header-login-btn {
+  background-color: var(--color-btn-primary-bg, #6366F1);
+  color: var(--color-btn-primary-text, #FFFFFF);
   box-shadow: var(--shadow-xs);
 }
 
-[data-theme="dark"] .bis-header-login-btn:hover {
-  background-color: var(--color-btn-primary-hover);
+[data-theme="dark"] .bis-header-login-btn:hover,
+.dark .bis-header-login-btn:hover {
+  background-color: var(--color-btn-primary-hover, #818CF8);
   box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .bis-header-login-btn:active,
+.dark .bis-header-login-btn:active {
+  background-color: var(--color-primary-active, #4F46E5);
+}
+
+[data-theme="dark"] .bis-header-login-btn--active,
+.dark .bis-header-login-btn--active {
+  background-color: var(--color-btn-primary-bg, #6366F1);
 }
 
 /* Header Overflow Menu (Mobile < 768px) */
@@ -1166,8 +1227,8 @@
   right: 0;
   width: 240px;
   max-width: 90vw;
-  background-color: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-base, #FFFFFF);
+  border: 1px solid var(--color-border-subtle, #D8E1EC);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: var(--space-3);
@@ -1176,6 +1237,13 @@
   flex-direction: column;
   gap: var(--space-2);
   animation: pageEnterFadeSlide 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+[data-theme="dark"] .bis-header-overflow-dropdown,
+.dark .bis-header-overflow-dropdown {
+  background-color: var(--color-surface-elevated, #18223B);
+  border-color: var(--color-border-default, rgba(255, 255, 255, 0.14));
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
 .bis-overflow-section {
@@ -1930,6 +1998,7 @@
   max-width: 680px;
   width: 100%;
   margin-inline: auto;
+  margin-block: auto;
   padding: 0.5rem 1rem 1rem;
   box-sizing: border-box;
 }
@@ -2065,10 +2134,12 @@
   display: flex;
   flex-direction: column;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 .bis-chat-stream--empty {
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 1rem 1.5rem 1.5rem;
 }
@@ -2528,66 +2599,138 @@
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
   .bis-assistant-empty-container {
-    padding: 0.75rem 0.75rem 1rem;
+    padding: 0.75rem 1rem 1.25rem;
     max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .bis-assistant-header--expanded {
-    padding: 0 0 0.65rem 0;
+    padding: 0 0 0.5rem 0;
     text-align: center;
   }
 
   .bis-assistant-header--expanded .bis-assistant-title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  .bis-assistant-header--expanded .bis-assistant-prompt-lead {
+    font-size: 0.9rem;
+    margin: 0.35rem 0 0.2rem;
     text-align: center;
   }
 
   .bis-assistant-header--expanded .bis-assistant-subtitle {
-    font-size: 0.825rem;
+    font-size: 0.8rem;
     max-width: 100%;
     text-align: center;
+    line-height: 1.4;
+  }
+
+  /* Requirement 12: Workflow Indicator - Reflow to compact 2x2 grid without horizontal overflow */
+  .bis-assistant-workflow-indicator {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.45rem !important;
+    padding: 0.5rem 0.75rem !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .bis-assistant-workflow-indicator .bis-wf-arrow {
+    display: none !important;
+  }
+
+  .bis-assistant-workflow-indicator .bis-wf-step {
+    font-size: 0.75rem !important;
+    justify-content: flex-start !important;
+    gap: 0.35rem !important;
   }
 
   .bis-assistant-header--compact {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.85rem;
   }
 
   .bis-assistant-top-suggestions {
-    padding: 0.25rem 0.5rem 0.65rem;
+    padding: 0.35rem 0 0.65rem;
     max-width: 100%;
+    width: 100%;
   }
 
+  /* Requirement 11: Suggested Prompts become 1-column full-width cards */
   .bis-suggested-chips-grid {
-    display: flex;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    gap: 0.5rem;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .bis-suggested-chips-grid::-webkit-scrollbar {
-    display: none;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: visible !important;
+    padding: 0 !important;
   }
 
   .bis-compact-suggestion-chip {
-    white-space: nowrap;
-    flex-shrink: 0;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
+    width: 100% !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    flex-shrink: 1 !important;
+    padding: 0.65rem 0.85rem !important;
+    font-size: 0.825rem !important;
+    min-height: 44px;
+    box-sizing: border-box;
   }
 
   .bis-chat-stream {
-    padding: 0.75rem 1rem 1.5rem;
+    padding: 0.65rem 0.85rem 1.25rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
+  .bis-chat-stream--empty {
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding: 0.75rem 0.75rem 1.5rem !important;
+  }
+
+  .bis-assistant-empty-container {
+    margin-block: 0 !important;
+    padding: 0.25rem 0 1.25rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Requirement 14 & 16: Chat composer dock with mobile keyboard safe-area insets */
   .bis-chat-composer-dock {
-    padding: 0.6rem 1rem 0.5rem;
+    padding: 0.5rem 0.75rem max(0.5rem, env(safe-area-inset-bottom, 0px)) !important;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  .bis-empty-feature-cards {
-    grid-template-columns: 1fr;
+  .bis-chat-input-wrapper {
+    padding: 0.55rem 0.75rem 0.45rem;
+  }
+
+  .bis-chat-input-toolbar {
+    flex-wrap: wrap;
     gap: 0.5rem;
+  }
+
+  .bis-chat-send-btn {
+    padding: 0.4rem 0.95rem;
+    font-size: 0.825rem;
+    min-height: 38px;
+  }
+
+  /* Requirement 13: Quick Action Cards reflow to compact responsive cards */
+  .bis-empty-feature-cards {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .bis-feature-hint-card {
@@ -8907,20 +9050,199 @@ html, body,
 }
 
 @media (max-width: 768px) {
+  /* Requirement 3 & 4: Mobile Hamburger Button visible only on mobile */
+  .bis-header-hamburger-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    margin-right: 0.5rem;
+    background: transparent;
+    border: 1px solid var(--color-border-header, #D3E0EE);
+    border-radius: var(--radius-md, 8px);
+    color: var(--color-text-primary, #0F172A);
+    cursor: pointer;
+    transition: background-color var(--duration-fast, 120ms) ease, border-color var(--duration-fast, 120ms) ease, color var(--duration-fast, 120ms) ease;
+    box-sizing: border-box;
+  }
+
+  .bis-header-hamburger-btn:hover {
+    background-color: rgba(16, 42, 86, 0.08);
+    color: var(--color-primary-base, #173B73);
+  }
+
+  .bis-header-hamburger-btn:focus-visible {
+    outline: 2px solid var(--color-primary-600, #2563EB);
+    outline-offset: 2px;
+  }
+
+  [data-theme='dark'] .bis-header-hamburger-btn,
+  .dark .bis-header-hamburger-btn {
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #F8FAFC;
+  }
+
+  [data-theme='dark'] .bis-header-hamburger-btn:hover,
+  .dark .bis-header-hamburger-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #93C5FD;
+  }
+
+  /* Requirement 6 & 8: Mobile Header Simplification */
+  .bis-header-evidence-desktop,
+  .bis-header-new-desktop,
+  .bis-header-auth-wrap,
+  .bis-header-overflow-wrap,
+  .bis-header-tagline {
+    display: none !important;
+  }
+
+  .bis-app-header {
+    padding: 0 0.85rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .bis-header-logo-img {
+    height: 34px !important;
+    max-width: 90px !important;
+  }
+
+  .bis-header-title {
+    font-size: 0.975rem !important;
+  }
+
+  /* Requirement 1 & 5: Mobile Navigation Drawer & Backdrop */
   .bis-sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 280px !important;
-    transform: translateX(-100%);
-    box-shadow: var(--shadow-xl);
-    z-index: 50;
-    transition: transform var(--transition-normal);
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 290px !important;
+    max-width: 86vw !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    transform: translateX(-100%) !important;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35) !important;
+    z-index: 999 !important;
+    transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   .bis-sidebar.bis-sidebar--mobile-open {
-    transform: translateX(0);
+    transform: translateX(0) !important;
+  }
+
+  .bis-mobile-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    background-color: rgba(10, 20, 38, 0.65) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    z-index: 998 !important;
+    animation: fadeIn 0.2s ease forwards !important;
+  }
+
+  .bis-sidebar-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 1rem 1.15rem !important;
+  }
+
+  .bis-sidebar-close-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: var(--radius-md, 8px) !important;
+    color: #C4D1E3 !important;
+    cursor: pointer !important;
+    transition: all var(--duration-fast, 120ms) ease !important;
+  }
+
+  .bis-sidebar-close-btn:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #FFFFFF !important;
+  }
+
+  .bis-sidebar-mobile-secondary {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.35rem !important;
+    padding: 0.85rem 1rem !important;
+    margin-top: auto !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .bis-mobile-secondary-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #7E97BA;
+    margin-bottom: 0.25rem;
+  }
+
+  .bis-mobile-secondary-link {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-md, 6px);
+    background: transparent;
+    border: none;
+    color: #C4D1E3;
+    font-size: 0.825rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--duration-fast, 120ms) ease;
+    text-align: left;
+    width: 100%;
+  }
+
+  .bis-mobile-secondary-link:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+  }
+
+  .bis-mobile-auth-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-top: 0.35rem;
+    margin-top: 0.35rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .bis-mobile-auth-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    color: #93C5FD;
+    font-weight: 600;
+  }
+
+  .bis-mobile-secondary-link--danger {
+    color: #F87171 !important;
+  }
+
+  .bis-mobile-secondary-link--danger:hover {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    color: #FCA5A5 !important;
   }
 
   /* When drawer opens on mobile, always show full labels */
@@ -8961,9 +9283,17 @@ html, body,
     display: none;
   }
 
+  /* Requirement 22: Evidence Drawer on Mobile */
   .bis-evidence-drawer {
-    width: 100vw;
-    max-width: 100vw;
+    width: 100% !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+  }
+
+  .bis-drawer-backdrop {
+    z-index: 999 !important;
   }
 
   .bis-footer-container {
@@ -8988,6 +9318,40 @@ html, body,
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-4);
+  }
+}
+
+@media (max-width: 640px) {
+  /* Requirement 20 & 21: Structured response and standard recommendation buttons stack */
+  .bis-rec-meta-strip {
+    grid-template-columns: 1fr !important;
+    gap: 0.45rem !important;
+  }
+
+  .bis-rec-actions-toolbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5rem !important;
+  }
+
+  .bis-rec-actions-left {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.5rem !important;
+  }
+
+  .bis-rec-action-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.55rem 0.75rem !important;
+  }
+
+  .bis-testing-chips-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .bis-saved-items-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 

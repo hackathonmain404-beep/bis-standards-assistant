@@ -11,12 +11,14 @@ import {
   X,
   ShieldCheck,
   LogOut,
+  Menu,
 } from 'lucide-react';
 import bisLogo from '../../assets/bis-logo.png';
 import { useAssistant } from '../../state/AssistantContext';
 import { useLanguage } from '../../state/LanguageContext';
 import { useTheme } from '../../state/ThemeContext';
 import { useAuth } from '../../state/AuthContext';
+import { useSidebar } from '../../state/SidebarContext';
 
 export const AppHeader: React.FC = () => {
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ export const AppHeader: React.FC = () => {
   const { t } = useLanguage();
   const { resolvedTheme, toggleTheme } = useTheme();
   const { user, isAuthenticated, login, logout } = useAuth();
+  const { mobileOpen, toggleMobile, closeMobile } = useSidebar();
 
   const [isOverflowOpen, setIsOverflowOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -83,13 +86,30 @@ export const AppHeader: React.FC = () => {
   return (
     <>
       <header className="bis-app-header" role="banner">
-        {/* LEFT: BIS Copilot Brand Identity */}
+        {/* LEFT: BIS Copilot Brand Identity & Mobile Hamburger Menu */}
         <div className="bis-header-left">
+          {/* Mobile-Only Hamburger Toggle Button (Hidden on Desktop via CSS) */}
+          <button
+            type="button"
+            className="bis-header-hamburger-btn"
+            onClick={toggleMobile}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileOpen}
+            title={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            id="bis-mobile-hamburger-btn"
+          >
+            {mobileOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+          </button>
+
           <div
             className="bis-header-brand-wrap"
-            onClick={() => navigate('/assistant')}
+            onClick={() => {
+              closeMobile();
+              navigate('/assistant');
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
+                closeMobile();
                 navigate('/assistant');
               }
             }}

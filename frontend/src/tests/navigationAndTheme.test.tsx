@@ -184,6 +184,98 @@ describe('AppHeader and AppSidebar Integration', () => {
     fireEvent.focus(aside);
     expect(aside).toHaveClass('bis-sidebar--expanded');
   });
+
+  it('supports instantaneous theme switching between light and dark without layout shift or missing elements', () => {
+    localStorage.clear();
+    const { container } = render(
+      <ThemeProvider>
+        <SidebarProvider>
+          <LanguageProvider>
+            <ComplianceProvider>
+              <AssistantProvider>
+                <MemoryRouter>
+                  <AppHeader />
+                </MemoryRouter>
+              </AssistantProvider>
+            </ComplianceProvider>
+          </LanguageProvider>
+        </SidebarProvider>
+      </ThemeProvider>
+    );
+
+    // Initial state: Light mode
+    const header = container.querySelector('.bis-app-header');
+    expect(header).toBeInTheDocument();
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+
+    const switchBtn = screen.getByRole('switch', { name: /switch to dark mode/i });
+    expect(switchBtn).toHaveClass('bis-pill-theme-switch--light');
+    expect(switchBtn).toHaveAttribute('aria-checked', 'false');
+
+    // Toggle to Dark Mode
+    fireEvent.click(switchBtn);
+
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(document.documentElement).toHaveClass('dark');
+    expect(switchBtn).toHaveClass('bis-pill-theme-switch--dark');
+    expect(switchBtn).toHaveAttribute('aria-checked', 'true');
+
+    // Toggle back to Light Mode
+    fireEvent.click(switchBtn);
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    expect(document.documentElement).not.toHaveClass('dark');
+    expect(switchBtn).toHaveClass('bis-pill-theme-switch--light');
+
+    // Explicit check: deprecated header elements are NOT restored
+    expect(screen.queryByText(/Industry/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/MSME/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Mock Data/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Cases/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/select language/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/toggle navigation menu/i)).not.toBeInTheDocument();
+  });
+
+  it('renders mobile hamburger button with accessible labels and toggles navigation drawer', () => {
+    render(
+      <ThemeProvider>
+        <SidebarProvider>
+          <LanguageProvider>
+            <ComplianceProvider>
+              <AssistantProvider>
+                <MemoryRouter>
+                  <AppHeader />
+                  <AppSidebar />
+                </MemoryRouter>
+              </AssistantProvider>
+            </ComplianceProvider>
+          </LanguageProvider>
+        </SidebarProvider>
+      </ThemeProvider>
+    );
+
+    // Initial state: drawer closed, hamburger shows "Open navigation menu"
+    const hamburger = screen.getByRole('button', { name: 'Open navigation menu' });
+    expect(hamburger).toBeInTheDocument();
+    expect(hamburger).toHaveAttribute('aria-expanded', 'false');
+
+    // Click hamburger to open mobile drawer
+    fireEvent.click(hamburger);
+    expect(hamburger).toHaveAttribute('aria-expanded', 'true');
+    const closeButtons = screen.getAllByRole('button', { name: 'Close navigation menu' });
+    expect(closeButtons.length).toBeGreaterThanOrEqual(1);
+
+    // The sidebar now has mobile open class
+    const aside = screen.getByLabelText('Application Sidebar');
+    expect(aside).toHaveClass('bis-sidebar--mobile-open');
+
+    // Mobile drawer contains secondary actions: Evidence Panel, New Session
+    expect(screen.getAllByText('Evidence Panel').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('New Session').length).toBeGreaterThanOrEqual(1);
+
+    // Clicking close button closes the drawer
+    fireEvent.click(closeButtons[closeButtons.length - 1]);
+    expect(hamburger).toHaveAttribute('aria-expanded', 'false');
+  });
 });
 
 
