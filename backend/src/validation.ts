@@ -8,8 +8,8 @@ import { AppError } from './errors.ts';
 import type { ChatRequest } from './types.ts';
 
 export const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-export const SUPPORTED_LANGUAGES = ['en', 'hi'] as const;
-export const SUPPORTED_LANGUAGES_SET = new Set<string>(['en', 'hi']);
+export const SUPPORTED_LANGUAGES = ['en', 'hi', 'or'] as const;
+export const SUPPORTED_LANGUAGES_SET = new Set<string>(['en', 'hi', 'or']);
 export const MAX_MESSAGE_LENGTH = 5000;
 export const MAX_CLIENT_REQUEST_ID_LENGTH = 128;
 export const DEFAULT_LIMIT = 20;

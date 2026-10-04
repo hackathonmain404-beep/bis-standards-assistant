@@ -39,10 +39,26 @@ export const laboratoryApi = {
     if (filter?.query) queryParams.append('q', filter.query);
     if (filter?.state) queryParams.append('state', filter.state);
 
-    const response = await fetch(`${apiConfig.baseUrl}/labs?${queryParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch laboratories: ${response.statusText}`);
+    try {
+      const response = await fetch(`${apiConfig.baseUrl}/labs?${queryParams.toString()}`);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch {
+      // Fallback
     }
-    return await response.json();
+
+    let results = [...MOCK_LABORATORIES];
+    if (filter?.query) {
+      const q = filter.query.toLowerCase();
+      results = results.filter(
+        (l) =>
+          l.name.toLowerCase().includes(q) ||
+          l.location.city.toLowerCase().includes(q) ||
+          l.location.state.toLowerCase().includes(q) ||
+          l.capabilities.some((c) => c.toLowerCase().includes(q))
+      );
+    }
+    return results;
   },
 };

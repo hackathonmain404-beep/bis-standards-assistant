@@ -109,13 +109,18 @@ export const assistantApi = {
     }
 
     // LIVE API MODE: Call Backend API Gateway
+    const isValidUuid = (id?: string | null): boolean => {
+      if (!id || typeof id !== 'string') return false;
+      return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id.trim());
+    };
+
     const response = await fetch(`${apiConfig.baseUrl}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        session_id: request.session_id,
+        session_id: isValidUuid(request.session_id) ? request.session_id?.trim() : undefined,
         message: request.message,
         language: request.language || 'en',
       }),

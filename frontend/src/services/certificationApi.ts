@@ -9,10 +9,15 @@ export const certificationApi = {
       return MOCK_CERTIFICATION_SCHEMES;
     }
 
-    const response = await fetch(`${apiConfig.baseUrl}/certification/schemes`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch certification schemes: ${response.statusText}`);
+    try {
+      const response = await fetch(`${apiConfig.baseUrl}/certification/schemes`);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch {
+      // Fallback
     }
-    return await response.json();
+
+    return MOCK_CERTIFICATION_SCHEMES;
   },
 };

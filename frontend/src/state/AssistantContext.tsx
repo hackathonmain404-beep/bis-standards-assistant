@@ -52,7 +52,7 @@ export const AssistantProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const newSession = () => {
     setMessages([]);
     setError(null);
-    setCurrentSessionId('session-' + Date.now());
+    setCurrentSessionId(null);
     setIsEvidenceDrawerOpen(false);
     setActiveEvidence(null);
   };
