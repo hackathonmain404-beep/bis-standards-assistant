@@ -5,6 +5,8 @@
   "description": "AI-Powered Intelligent Assistant for Indian Standards and BIS Services",
   "scripts": {
     "dev": "npm --prefix backend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
     "test": "npm --prefix backend test",
     "diagnose": "npm --prefix backend run diagnose"
   }
