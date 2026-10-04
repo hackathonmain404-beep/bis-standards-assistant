@@ -16,6 +16,11 @@ export const apiConfig: ApiConfig = {
   timeoutMs: 15000,
 };
 
+// Automatically purge stale mock flags when configured for live backend
+if (typeof window !== 'undefined' && import.meta.env.VITE_USE_MOCK_API === 'false') {
+  localStorage.removeItem('bis_use_mock_api');
+}
+
 export function setMockMode(enabled: boolean): void {
   apiConfig.useMock = enabled;
   if (typeof window !== 'undefined') {
@@ -24,6 +29,11 @@ export function setMockMode(enabled: boolean): void {
 }
 
 export function isMockMode(): boolean {
+  // When live backend is explicitly configured, never allow stale localStorage to force mock mode
+  if (import.meta.env.VITE_USE_MOCK_API === 'false') {
+    return false;
+  }
+
   if (typeof window !== 'undefined') {
     const stored = localStorage.getItem('bis_use_mock_api');
     if (stored !== null) {
