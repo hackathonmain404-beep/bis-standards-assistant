@@ -12,7 +12,9 @@ import { laboratoryApi } from '../services/laboratoryApi';
 import { LaboratoryInfo } from '../types/laboratory';
 import { LaboratoryCard } from '../components/laboratories/LaboratoryCard';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
+import { CardSkeleton } from '../components/common/Skeletons';
 import { Button } from '../components/common/Button';
+import { useScrollReveal } from '../utils/useScrollReveal';
 
 export const LaboratoriesPage: React.FC = () => {
   const [labs, setLabs] = useState<LaboratoryInfo[]>([]);
@@ -20,6 +22,8 @@ export const LaboratoriesPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [selectedState, setSelectedState] = useState('All');
   const [selectedStatus, setSelectedStatus] = useState('All');
+
+  useScrollReveal([labs, loading]);
 
   const states = ['All', 'Uttar Pradesh', 'Maharashtra', 'Tamil Nadu', 'Karnataka', 'Delhi'];
   const statuses = ['All', 'BIS Central Lab', 'BIS Regional Lab', 'BIS Recognized'];
@@ -175,13 +179,21 @@ export const LaboratoriesPage: React.FC = () => {
       {/* 4. Labs Results Section */}
       <div className="bis-labs-results">
         {loading ? (
-          <LoadingSkeleton lines={4} message="Fetching recognized laboratory directory..." />
+          <div className="bis-labs-grid" role="status" aria-label="Loading recognized laboratories...">
+            <CardSkeleton count={3} />
+          </div>
         ) : labs.length === 0 ? (
           <div className="bis-empty-results">
             <FlaskConical size={36} className="bis-text-muted" />
-            <h3 className="bis-empty-title">No test laboratories match your criteria</h3>
+            <h3 className="bis-empty-title">
+              {hasActiveFilters
+                ? 'No test laboratories match your criteria.'
+                : 'No verified laboratories are currently available.'}
+            </h3>
             <p className="bis-empty-desc">
-              Try adjusting your search terms, changing the state filter, or resetting all filters.
+              {hasActiveFilters
+                ? 'Try adjusting your search terms, changing the state filter, or resetting all filters.'
+                : 'Connect to the BIS knowledge service to retrieve verified laboratory information.'}
             </p>
             {hasActiveFilters && (
               <Button variant="secondary" size="sm" onClick={handleResetFilters} icon={<RotateCcw size={14} />}>
@@ -192,11 +204,12 @@ export const LaboratoriesPage: React.FC = () => {
         ) : (
           <div className="bis-labs-grid">
             {labs.map((lab) => (
-              <LaboratoryCard
-                key={lab.id}
-                lab={lab}
-                onSelectStandard={(std) => setQuery(std)}
-              />
+              <div key={lab.id} className="bis-reveal">
+                <LaboratoryCard
+                  lab={lab}
+                  onSelectStandard={(std) => setQuery(std)}
+                />
+              </div>
             ))}
           </div>
         )}

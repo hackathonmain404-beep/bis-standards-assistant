@@ -8,7 +8,7 @@ export const storage = {
   getSavedStandards(): string[] {
     try {
       const data = localStorage.getItem(SAVED_STANDARDS_KEY);
-      return data ? JSON.parse(data) : ['IS 17526:2021', 'IS 302-2-3:2021'];
+      return data ? JSON.parse(data) : [];
     } catch {
       return [];
     }

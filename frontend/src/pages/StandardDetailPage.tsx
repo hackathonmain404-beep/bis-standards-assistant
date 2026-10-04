@@ -5,6 +5,7 @@ import { StandardDetail } from '../types/standards';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
+import { ContentSkeleton } from '../components/common/Skeletons';
 import { TestingRequirementsTable } from '../components/compliance/TestingRequirementsTable';
 import { SourceCard } from '../components/evidence/SourceCard';
 import { useAssistant } from '../state/AssistantContext';
@@ -32,7 +33,7 @@ export const StandardDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="bis-page-container">
-        <LoadingSkeleton lines={5} message="Loading standard specifications..." />
+        <ContentSkeleton />
       </div>
     );
   }

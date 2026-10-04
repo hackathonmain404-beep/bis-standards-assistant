@@ -161,7 +161,11 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
             </div>
           ) : (
             <div className="bis-drawer-empty">
-              <p>No citation selected. Click any <code>[N]</code> reference or source card to view full clause text.</p>
+              <span className="bis-drawer-empty-icon" aria-hidden="true">📖</span>
+              <h4 className="bis-drawer-empty-title">No supporting evidence was retrieved.</h4>
+              <p className="bis-drawer-empty-desc">
+                Ask a compliance inquiry in the Assistant or click any citation reference <code>[N]</code> or source card to inspect verified clause excerpts.
+              </p>
             </div>
           )}
         </div>

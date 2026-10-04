@@ -105,6 +105,18 @@ export const ComplianceRoadmap: React.FC<ComplianceRoadmapProps> = ({
               style={{ width: `${progressPercent}%` }}
             />
           </div>
+
+          {completedCount === 0 && (
+            <div className="bis-roadmap-unstarted-banner">
+              <ShieldAlert size={16} className="bis-text-accent" aria-hidden="true" />
+              <div className="bis-unstarted-text">
+                <span className="bis-unstarted-title">No compliance journey started yet.</span>
+                <span className="bis-unstarted-desc">
+                  Start by describing your product in the Assistant or choosing an applicable standard.
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="bis-roadmap-stepper-list" role="list">

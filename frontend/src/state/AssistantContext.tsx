@@ -15,7 +15,7 @@ interface AssistantContextType {
   setUserMode: (mode: UserMode) => void;
   activeEvidence: Citation | SourceReference | null;
   isEvidenceDrawerOpen: boolean;
-  openEvidence: (evidence: Citation | SourceReference) => void;
+  openEvidence: (evidence: Citation | SourceReference | null) => void;
   closeEvidence: () => void;
   sendMessage: (text: string) => Promise<void>;
   submitClarification: (fields: Record<string, string>) => Promise<void>;
@@ -40,7 +40,7 @@ export const AssistantProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [isEvidenceDrawerOpen, setIsEvidenceDrawerOpen] = useState<boolean>(false);
   const [lastUserMessage, setLastUserMessage] = useState<string>('');
 
-  const openEvidence = (evidence: Citation | SourceReference) => {
+  const openEvidence = (evidence: Citation | SourceReference | null) => {
     setActiveEvidence(evidence);
     setIsEvidenceDrawerOpen(true);
   };

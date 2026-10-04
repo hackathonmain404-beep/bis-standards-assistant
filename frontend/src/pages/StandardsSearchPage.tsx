@@ -15,7 +15,9 @@ import { StandardDetail } from '../types/standards';
 import { StandardCard } from '../components/standards/StandardCard';
 import { Button } from '../components/common/Button';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
+import { CardSkeleton } from '../components/common/Skeletons';
 import { Modal } from '../components/common/Modal';
+import { useScrollReveal } from '../utils/useScrollReveal';
 
 export const StandardsSearchPage: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +33,8 @@ export const StandardsSearchPage: React.FC = () => {
   const [standards, setStandards] = useState<StandardDetail[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useScrollReveal([standards, loading]);
 
   const categories = [
     'All',
@@ -407,8 +411,8 @@ export const StandardsSearchPage: React.FC = () => {
           ---------------------------------------------------------------- */}
       <div className="bis-standards-results-container">
         {loading ? (
-          <div className="bis-loading-card-wrap">
-            <LoadingSkeleton lines={4} message="Querying authoritative BIS database..." />
+          <div className="bis-standards-grid" role="status" aria-label="Loading standards...">
+            <CardSkeleton count={4} />
           </div>
         ) : error ? (
           <div className="bis-empty-results-box bis-error-results-box">
@@ -433,9 +437,9 @@ export const StandardsSearchPage: React.FC = () => {
         ) : standards.length === 0 ? (
           <div className="bis-empty-results-box">
             <BookOpen size={42} className="bis-empty-icon" />
-            <h3 className="bis-empty-title">No matching standards found</h3>
+            <h3 className="bis-empty-title">No verified standards found.</h3>
             <p className="bis-empty-desc">
-              We couldn&apos;t find any standards matching your active search or filters. Try removing a filter or searching for a product name like &ldquo;water bottle&rdquo; or &ldquo;electric iron&rdquo;.
+              Try another search term or refine your filters.
             </p>
             {hasAnyFilterOrSearch && (
               <Button variant="outline" size="sm" onClick={handleResetFilters} icon={<RotateCcw size={14} />}>
@@ -446,28 +450,29 @@ export const StandardsSearchPage: React.FC = () => {
         ) : (
           <div className="bis-standards-grid">
             {standards.map((std) => (
-              <StandardCard
-                key={std.standard_number}
-                standard={{
-                  standard_number: std.standard_number,
-                  title: std.title,
-                  status: std.status,
-                  short_description: std.overview,
-                  is_mandatory: std.is_mandatory,
-                  qco_order: std.qco_reference,
-                  match_reasons: [
-                    { category: 'Technical Division', label: std.department, status: 'matched' },
-                    { category: 'Category', label: std.category, status: 'matched' },
-                    {
-                      category: 'Mandatory Status',
-                      label: std.is_mandatory ? 'Enforced under QCO' : 'Voluntary Standard',
-                      status: 'matched',
-                    },
-                  ],
-                }}
-                onViewStandard={(num) => navigate(`/standards/${encodeURIComponent(num)}`)}
-                onStartCompliance={(_num) => navigate('/compliance')}
-              />
+              <div key={std.standard_number} className="bis-reveal">
+                <StandardCard
+                  standard={{
+                    standard_number: std.standard_number,
+                    title: std.title,
+                    status: std.status,
+                    short_description: std.overview,
+                    is_mandatory: std.is_mandatory,
+                    qco_order: std.qco_reference,
+                    match_reasons: [
+                      { category: 'Technical Division', label: std.department, status: 'matched' },
+                      { category: 'Category', label: std.category, status: 'matched' },
+                      {
+                        category: 'Mandatory Status',
+                        label: std.is_mandatory ? 'Enforced under QCO' : 'Voluntary Standard',
+                        status: 'matched',
+                      },
+                    ],
+                  }}
+                  onViewStandard={(num) => navigate(`/standards/${encodeURIComponent(num)}`)}
+                  onStartCompliance={(_num) => navigate('/compliance')}
+                />
+              </div>
             ))}
           </div>
         )}

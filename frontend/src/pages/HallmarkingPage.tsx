@@ -13,11 +13,14 @@ import {
 } from 'lucide-react';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
+import { useScrollReveal } from '../utils/useScrollReveal';
 
 export const HallmarkingPage: React.FC = () => {
   const marksRef = useRef<HTMLDivElement>(null);
   const gradesRef = useRef<HTMLDivElement>(null);
   const huidRef = useRef<HTMLDivElement>(null);
+
+  useScrollReveal();
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -102,7 +105,7 @@ export const HallmarkingPage: React.FC = () => {
 
         <div className="bis-three-marks-grid">
           {/* Mark 1: BIS Standard Mark */}
-          <div className="bis-mark-box">
+          <div className="bis-mark-box bis-reveal">
             <div className="bis-mark-box-top">
               <div className="bis-mark-icon-wrap">
                 <ShieldCheck size={28} className="bis-mark-icon" />
@@ -120,7 +123,7 @@ export const HallmarkingPage: React.FC = () => {
           </div>
 
           {/* Mark 2: Purity / Fineness Grade */}
-          <div className="bis-mark-box">
+          <div className="bis-mark-box bis-reveal">
             <div className="bis-mark-box-top">
               <div className="bis-mark-icon-wrap">
                 <Award size={28} className="bis-mark-icon" />
@@ -138,7 +141,7 @@ export const HallmarkingPage: React.FC = () => {
           </div>
 
           {/* Mark 3: 6-Digit HUID Code */}
-          <div className="bis-mark-box">
+          <div className="bis-mark-box bis-reveal">
             <div className="bis-mark-box-top">
               <div className="bis-mark-icon-wrap">
                 <QrCode size={28} className="bis-mark-icon" />
@@ -193,7 +196,7 @@ export const HallmarkingPage: React.FC = () => {
           BIS recognizes six standard caratage and fineness grades for hallmarking in India. Only jewelry complying with these exact purity standards may be certified:
         </p>
 
-        <div className="bis-table-responsive">
+        <div className="bis-table-responsive bis-reveal">
           <table className="bis-table" aria-label="Standard Gold Purity Grades">
             <thead>
               <tr>

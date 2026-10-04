@@ -14,6 +14,7 @@ import { MOCK_STANDARDS } from '../mocks/mockStandardsData';
 import { Button } from '../components/common/Button';
 import { Badge } from '../components/common/Badge';
 import { useCompliance } from '../state/ComplianceContext';
+import { useScrollReveal } from '../utils/useScrollReveal';
 
 export const SavedJourneyPage: React.FC = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ export const SavedJourneyPage: React.FC = () => {
   const [savedStandards, setSavedStandards] = useState<string[]>(() => storage.getSavedStandards());
   const [activeTab, setActiveTab] = useState<'all' | 'standards' | 'milestones'>('all');
   const [removingId, setRemovingId] = useState<string | null>(null);
+
+  useScrollReveal([savedStandards, activeTab]);
 
   const savedDetails = MOCK_STANDARDS.filter((s) => savedStandards.includes(s.standard_number));
   const completedChecklist = checklist.filter((i) => i.completed);
@@ -137,12 +140,12 @@ export const SavedJourneyPage: React.FC = () => {
           {savedDetails.length === 0 ? (
             <div className="bis-empty-results-box">
               <Bookmark size={36} className="bis-empty-icon" />
-              <h4 className="bis-empty-title">No standards bookmarked yet</h4>
+              <h4 className="bis-empty-title">No saved standards yet.</h4>
               <p className="bis-empty-desc">
-                When browsing the Indian Standards Directory, click the star icon (☆) on any standard card to pin it here.
+                Search the BIS standards directory to save a standard for later.
               </p>
               <Button variant="primary" size="sm" onClick={() => navigate('/standards')} icon={<Search size={15} />}>
-                Explore Standards Directory
+                Search Standards
               </Button>
             </div>
           ) : (
@@ -150,7 +153,7 @@ export const SavedJourneyPage: React.FC = () => {
               {savedDetails.map((std) => (
                 <div
                   key={std.standard_number}
-                  className={`bis-saved-item-card ${removingId === std.standard_number ? 'bis-saved-item--removing' : ''}`}
+                  className={`bis-saved-item-card bis-reveal ${removingId === std.standard_number ? 'bis-saved-item--removing' : ''}`}
                 >
                   <div className="bis-saved-item-top">
                     <div className="bis-saved-item-badges">
@@ -231,18 +234,18 @@ export const SavedJourneyPage: React.FC = () => {
           {completedChecklist.length === 0 ? (
             <div className="bis-empty-results-box">
               <CheckCircle2 size={36} className="bis-empty-icon" />
-              <h4 className="bis-empty-title">No completed milestones yet</h4>
+              <h4 className="bis-empty-title">No compliance milestones yet.</h4>
               <p className="bis-empty-desc">
-                Follow your compliance journey steps and mark requirements as done to track audit readiness here.
+                Follow your compliance roadmap and mark audit requirements as complete to track your progress here.
               </p>
               <Button variant="outline" size="sm" onClick={() => navigate('/compliance')}>
-                Go to Compliance Journey
+                Start Compliance Roadmap
               </Button>
             </div>
           ) : (
             <ul className="bis-completed-milestones-list">
               {completedChecklist.map((item) => (
-                <li key={item.id} className="bis-completed-milestone-item">
+                <li key={item.id} className="bis-completed-milestone-item bis-reveal">
                   <div className="bis-milestone-check-wrap">
                     <CheckCircle2 size={20} className="bis-milestone-check-icon" />
                   </div>

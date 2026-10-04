@@ -1,59 +1,300 @@
+/* ==========================================================================
+   VISUAL DESIGN SYSTEM & STYLING SPECIFICATION (theme.md)
+   Centralized Design Tokens Architecture
+   ========================================================================== */
+
 :root {
-  /* --------------------------------------------------------------------------
-     LIGHT THEME (Default)
-     Government Authority, National Standards Trust, Crisp Precision
-     -------------------------------------------------------------------------- */
-  /* Primary Authority Scale */
-  --color-primary-950: #060E1A;
-  --color-primary-900: #0B192C;
-  --color-primary-800: #1E3E62;
-  --color-primary-700: #183B56;
-  --color-primary-600: #1A5276;
-  --color-primary-500: #2563EB;
-  --color-primary-200: #BFDBFE;
-  --color-primary-100: #EBF3FA;
-  --color-primary-50: #F4F8FC;
+  /* ==========================================================================
+     COLOR TOKENS - LIGHT THEME (DEFAULT) - Section 2.3 & Section 20 & 32
+     Professional BIS Copilot Palette: Deep Navy, Controlled Blue, Cool-White
+     ========================================================================== */
+  --color-bg-canvas: #F3F6FA;
+  --color-bg-subtle: #EEF3FA;
+  --color-surface-base: #FFFFFF;
+  --color-surface-elevated: #FBFCFE;
+  --color-surface-overlay: #FFFFFF;
+  --color-surface-sunken: #EDF2F9;
 
-  /* Accent - Indian Standards Saffron / Amber Gold */
-  --color-accent-700: #B45309;
-  --color-accent-600: #D97706;
-  --color-accent-500: #F59E0B;
-  --color-accent-400: #FBBF24;
-  --color-accent-200: #FDE68A;
-  --color-accent-100: #FEF3C7;
-  --color-accent-50: #FFFBEB;
+  --color-border-subtle: #D8E1EC;
+  --color-border-default: #CBD5E1;
+  --color-border-hover: #94A3B8;
+  --color-border-strong: #64748B;
 
-  /* Layered Semantic Surfaces in Light Mode */
-  --color-bg-base: #F8FAFC;        /* Soft cool off-white page background */
-  --color-bg-sidebar: #0B192C;     /* Deep navy authority sidebar */
-  --color-bg-header: #FFFFFF;      /* Clean pure white header */
-  --color-bg-surface: #FFFFFF;     /* Crisp pure white cards & panels */
-  --color-bg-elevated: #FFFFFF;    /* Clean white elevated dropdowns/modals */
-  --color-bg-subtle: #F1F5F9;      /* Subtle cool gray for secondary inputs/pills */
-  --color-surface-hover: #F8FAFC;  /* Clean light hover surface */
-  --color-surface-selected: #EFF6FF; /* Pale blue selected surface */
-
-  /* Semantic Typography */
-  --color-text-main: #0B192C;      /* Deep navy primary text */
-  --color-text-primary: #0B192C;   /* Deep navy headings & card titles */
-  --color-text-secondary: #334155; /* Slate blue-gray secondary text */
-  --color-text-muted: #475569;     /* Soft slate readable text */
-  --color-text-subtle: #64748B;    /* Helper labels */
+  --color-text-primary: #14213D;
+  --color-text-secondary: #52637A;
+  --color-text-muted: #76859A;
+  --color-text-disabled: #9AA7B8;
   --color-text-inverse: #FFFFFF;
-  --color-text-disabled: #94A3B8;
 
-  /* Semantic Borders */
-  --color-border: #E2E8F0;         /* Very light cool gray */
-  --color-border-subtle: #F1F5F9;  /* Ultra subtle divider */
-  --color-border-strong: #CBD5E1;  /* Clear outline border */
-  --color-border-focus: #2563EB;   /* Restrained blue focus ring */
+  --color-primary-base: #173B73;
+  --color-primary-hover: #102A56;
+  --color-primary-active: #0A1C3C;
+  --color-primary-subtle: #EAF1FF;
+  --color-primary-border: #C8DBFC;
 
-  /* FRONTEND_ARCHITECTURE.md Section 19 Semantic Token Aliases */
-  --bg-page: var(--color-bg-base);
+  --color-secondary-base: #E2E8F0;
+  --color-secondary-hover: #CBD5E1;
+  --color-secondary-active: #94A3B8;
+
+  --color-accent-base: #3156A6;
+  --color-accent-subtle: #EAF1FF;
+
+  --color-success-base: #287A4B;
+  --color-success-subtle: #E8F5ED;
+  --color-success-border: #C6E7D3;
+
+  --color-warning-base: #B7791F;
+  --color-warning-subtle: #FFF4D8;
+  --color-warning-border: #FBE2A5;
+
+  --color-error-base: #B42318;
+  --color-error-subtle: #FDECEC;
+  --color-error-border: #FECDCA;
+
+  --color-info-base: #3156A6;
+  --color-info-subtle: #EAF1FF;
+  --color-info-border: #C8DBFC;
+
+  --color-overlay: rgba(16, 42, 86, 0.45);
+  --color-focus-ring: rgba(49, 86, 166, 0.35);
+
+  /* Semantic Buttons in Light Mode */
+  --color-btn-primary-bg: #173B73;
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-primary-hover: #102A56;
+  --color-btn-secondary-bg: #FFFFFF;
+  --color-btn-secondary-text: #173B73;
+  --color-btn-secondary-border: #D8E1EC;
+  --color-btn-secondary-hover: #EEF3FA;
+  --color-btn-disabled-bg: #EEF3FA;
+  --color-btn-disabled-text: #9AA7B8;
+  --color-btn-disabled-border: #D8E1EC;
+
+  /* Semantic Tabs in Light Mode */
+  --color-tab-text: #52637A;
+  --color-tab-hover-bg: #EEF3FA;
+  --color-tab-hover-text: #173B73;
+  --color-tab-active-bg: #EAF1FF;
+  --color-tab-active-text: #173B73;
+  --color-tab-active-border: #3156A6;
+
+  /* Semantic Navigation in Light Mode (Dark Navy Foundation #102A56) */
+  --color-bg-sidebar: #102A56;
+  --color-border-sidebar: rgba(255, 255, 255, 0.08);
+  --color-nav-text: #C4D1E3;
+  --color-nav-icon: #AFC0DA;
+  --color-nav-hover-bg: #173B73;
+  --color-nav-hover-text: #F2F6FC;
+  --color-nav-hover-icon: #E8F0FC;
+  --color-nav-active-bg: #264F91;
+  --color-nav-active-text: #FFFFFF;
+  --color-nav-active-border: #7EA7FF;
+  --color-nav-active-icon: #FFFFFF;
+
+  /* ==========================================================================
+     SHADOW TOKENS - LIGHT THEME - Section 9.2 & Section 20 & 32
+     Multi-Stop Soft Deep Navy Ambient Occlusion + Directional Key Light
+     ========================================================================== */
+  --shadow-xs: 0 1px 2px 0 rgba(23, 59, 115, 0.04);
+  --shadow-sm: 0 2px 6px 0 rgba(23, 59, 115, 0.05), 0 1px 2px -1px rgba(23, 59, 115, 0.03);
+  --shadow-md: 0 2px 10px rgba(23, 59, 115, 0.06), 0 1px 3px rgba(23, 59, 115, 0.04);
+  --shadow-lg: 0 10px 18px -3px rgba(23, 59, 115, 0.07), 0 4px 6px -4px rgba(23, 59, 115, 0.03);
+  --shadow-xl: 0 18px 24px -5px rgba(23, 59, 115, 0.08), 0 8px 10px -6px rgba(23, 59, 115, 0.03);
+  --shadow-2xl: 0 25px 45px -12px rgba(23, 59, 115, 0.15);
+  --shadow-inner: inset 0 2px 4px 0 rgba(23, 59, 115, 0.04);
+  --shadow-drawer: -6px 0 24px rgba(23, 59, 115, 0.12);
+  --shadow-card: 0 2px 10px rgba(23, 59, 115, 0.06);
+  --shadow-card-hover: 0 6px 16px rgba(23, 59, 115, 0.09);
+
+  /* ==========================================================================
+     TYPOGRAPHY TOKENS - Section 3 & Section 20
+     ========================================================================== */
+  --font-family-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-display: "Plus Jakarta Sans", "Inter Display", -apple-system, sans-serif;
+  --font-family-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  /* Backward Compatibility Font Variables */
+  --font-sans: var(--font-family-sans);
+  --font-mono: var(--font-family-mono);
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --text-display-2xl: 4.00rem;
+  --text-display-xl: 3.25rem;
+  --text-display-lg: 2.50rem;
+  --text-h1: 2.00rem;
+  --text-h2: 1.50rem;
+  --text-h3: 1.25rem;
+  --text-h4: 1.125rem;
+  --text-body-lead: 1.125rem;
+  --text-body-base: 1.00rem;
+  --text-body-small: 0.875rem;
+  --text-label-md: 0.875rem;
+  --text-label-sm: 0.75rem;
+  --text-caption: 0.75rem;
+  --text-micro: 0.6875rem;
+  --text-code-sm: 0.8125rem;
+
+  /* Fluid typography formulas */
+  --text-display-xl-fluid: clamp(2.25rem, 1.75rem + 2.5vw, 3.25rem);
+  --text-h1-fluid: clamp(1.625rem, 1.35rem + 1.5vw, 2.00rem);
+
+  /* ==========================================================================
+     SPACING TOKENS (8PX / 4PX SCALE) - Section 4 & Section 20
+     ========================================================================== */
+  --spacing-0: 0px;
+  --spacing-0-5: 2px;
+  --spacing-1: 4px;
+  --spacing-1-5: 6px;
+  --spacing-2: 8px;
+  --spacing-2-5: 10px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-32: 128px;
+
+  /* Backward Compatibility Space Scale */
+  --space-1: var(--spacing-1);
+  --space-2: var(--spacing-2);
+  --space-3: var(--spacing-3);
+  --space-4: var(--spacing-4);
+  --space-5: var(--spacing-5);
+  --space-6: var(--spacing-6);
+  --space-8: var(--spacing-8);
+  --space-10: var(--spacing-10);
+  --space-12: var(--spacing-12);
+  --space-16: var(--spacing-16);
+
+  /* ==========================================================================
+     BORDER RADIUS TOKENS - Section 8 & Section 20
+     ========================================================================== */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+  --radius-circle: 50%;
+
+  /* ==========================================================================
+     BORDER WIDTH TOKENS - Section 10 & Section 20
+     ========================================================================== */
+  --border-width-hairline: 1px;
+  --border-width-emphasis: 2px;
+  --border-width-heavy: 4px;
+
+  /* ==========================================================================
+     LAYOUT & BREAKPOINT TOKENS - Section 5 & Section 20
+     ========================================================================== */
+  --layout-min-width: 320px;
+  --layout-reading-width: 68ch;
+  --layout-compact-width: 768px;
+  --layout-max-width: 1280px;
+  --layout-wide-width: 1440px;
+
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* Shell Layout Dimensions */
+  --header-height: 64px;
+  --sidebar-collapsed-width: 70px;
+  --sidebar-expanded-width: 260px;
+  --drawer-width: 440px;
+  --content-max-width: 1280px;
+
+  /* ==========================================================================
+     ANIMATION & MOTION TOKENS - Section 14 & Section 20
+     ========================================================================== */
+  --duration-instant: 0ms;
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --duration-moderate: 300ms;
+  --duration-slow: 450ms;
+  --duration-deliberate: 600ms;
+
+  --ease-standard: cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --ease-enter: cubic-bezier(0.0, 0.0, 0.2, 1.0);
+  --ease-exit: cubic-bezier(0.4, 0.0, 1.0, 1.0);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --motion-fast: var(--duration-fast);
+  --motion-normal: var(--duration-normal);
+  --motion-slow: var(--duration-moderate);
+
+  --transition-fast: var(--duration-fast) var(--ease-standard);
+  --transition-normal: var(--duration-normal) var(--ease-standard);
+  --transition-slow: var(--duration-moderate) var(--ease-emphasized);
+
+  /* ==========================================================================
+     Z-INDEX SYSTEM - Section 20
+     ========================================================================== */
+  --z-recessed: -1;
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 500;
+  --z-modal: 1000;
+  --z-popover: 1100;
+  --z-toast: 1200;
+  --z-tooltip: 1300;
+
+  /* ==========================================================================
+     SEMANTIC COMPATIBILITY BRIDGES
+     Maps theme.md tokens to legacy and component variables
+     ========================================================================== */
+  --color-bg-base: var(--color-bg-canvas);
+  --color-bg-surface: var(--color-surface-base);
+  --color-bg-elevated: var(--color-surface-elevated);
+  --color-bg-header: var(--color-surface-base);
+  --color-surface-hover: var(--color-bg-subtle);
+  --color-surface-selected: var(--color-primary-subtle);
+
+  --color-text-main: var(--color-text-primary);
+  --color-text-subtle: var(--color-text-muted);
+
+  --color-border: var(--color-border-subtle);
+  --color-border-focus: var(--color-primary-base);
+
+  /* Status Tokens */
+  --status-success-bg: var(--color-success-subtle);
+  --status-success-text: var(--color-success-base);
+  --status-success-border: var(--color-success-border);
+  --status-warning-bg: var(--color-warning-subtle);
+  --status-warning-text: var(--color-warning-base);
+  --status-warning-border: var(--color-warning-border);
+  --status-error-bg: var(--color-error-subtle);
+  --status-error-text: var(--color-error-base);
+  --status-error-border: var(--color-error-border);
+  --status-info-bg: var(--color-info-subtle);
+  --status-info-text: var(--color-info-base);
+  --status-info-border: var(--color-info-border);
+
+  /* Semantic Architecture Section 19 Token Aliases */
+  --bg-page: var(--color-bg-canvas);
   --bg-sidebar: var(--color-bg-sidebar);
   --bg-header: var(--color-bg-header);
-  --surface: var(--color-bg-surface);
-  --surface-elevated: var(--color-bg-elevated);
+  --surface: var(--color-surface-base);
+  --surface-elevated: var(--color-surface-elevated);
   --surface-hover: var(--color-surface-hover);
   --surface-selected: var(--color-surface-selected);
   --text-primary: var(--color-text-primary);
@@ -61,218 +302,167 @@
   --text-muted: var(--color-text-muted);
   --border: var(--color-border);
   --border-subtle: var(--color-border-subtle);
-  --accent-primary: var(--color-primary-500);
-  --accent-secondary: var(--color-accent-500);
-  --success: var(--status-success-text);
-  --warning: var(--status-warning-text);
-  --error: var(--status-error-text);
-  --info: var(--status-info-text);
+  --accent-primary: var(--color-primary-base);
+  --accent-secondary: var(--color-accent-base);
+  --success: var(--color-success-base);
+  --warning: var(--color-warning-base);
+  --error: var(--color-error-base);
+  --info: var(--color-info-base);
 
-  /* Semantic Navigation (Sidebar in Light Mode: Pale blue highlight + blue accent) */
-  --color-nav-text: #CBD5E1;
-  --color-nav-hover-bg: rgba(255, 255, 255, 0.08);
-  --color-nav-hover-text: #FFFFFF;
-  --color-nav-active-bg: rgba(37, 99, 235, 0.18);
-  --color-nav-active-text: #FFFFFF;
-  --color-nav-active-border: #3B82F6;
-  --color-nav-active-icon: #60A5FA;
+  /* Legacy Scale References */
+  --color-primary-950: #060E1A;
+  --color-primary-900: #0B192C;
+  --color-primary-800: #1E3E62;
+  --color-primary-700: #3730A3;
+  --color-primary-600: #4338CA;
+  --color-primary-500: var(--color-primary-base);
+  --color-primary-200: var(--color-primary-border);
+  --color-primary-100: var(--color-primary-subtle);
+  --color-primary-50: var(--color-primary-subtle);
 
-  /* Semantic Buttons in Light Mode */
-  --color-btn-primary-bg: #1E3E62;
-  --color-btn-primary-text: #FFFFFF;
-  --color-btn-primary-hover: #0B192C;
-  --color-btn-secondary-bg: #FFFFFF;
-  --color-btn-secondary-text: #0B192C;
-  --color-btn-secondary-border: #E2E8F0;
-  --color-btn-secondary-hover: #F8FAFC;
-  --color-btn-disabled-bg: #F1F5F9;
-  --color-btn-disabled-text: #94A3B8;
-  --color-btn-disabled-border: #E2E8F0;
-
-  /* Semantic Tabs in Light Mode */
-  --color-tab-text: #475569;
-  --color-tab-hover-bg: #F8FAFC;
-  --color-tab-hover-text: #0B192C;
-  --color-tab-active-bg: #EFF6FF;
-  --color-tab-active-text: #1E3E62;
-  --color-tab-active-border: #3B82F6;
-
-  /* Status Colors */
-  --status-success-bg: #ECFDF5;
-  --status-success-text: #065F46;
-  --status-success-border: #A7F3D0;
-  --status-warning-bg: #FFFBEB;
-  --status-warning-text: #92400E;
-  --status-warning-border: #FDE68A;
-  --status-error-bg: #FEF2F2;
-  --status-error-text: #991B1B;
-  --status-error-border: #FECACA;
-  --status-info-bg: #EFF6FF;
-  --status-info-text: #1E40AF;
-  --status-info-border: #BFDBFE;
-
-  /* Shadows */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --shadow-drawer: -4px 0 24px rgba(15, 23, 42, 0.15);
-
-  /* Spacing Scale (4, 8, 12, 16, 20, 24, 32, 40, 48, 64) */
-  --space-1: 0.25rem;  /* 4px */
-  --space-2: 0.5rem;   /* 8px */
-  --space-3: 0.75rem;  /* 12px */
-  --space-4: 1rem;     /* 16px */
-  --space-5: 1.25rem;  /* 20px */
-  --space-6: 1.5rem;   /* 24px */
-  --space-8: 2rem;     /* 32px */
-  --space-10: 2.5rem;  /* 40px */
-  --space-12: 3rem;    /* 48px */
-  --space-16: 4rem;    /* 64px */
-
-  /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-
-  /* Radius */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-full: 9999px;
-
-  /* Layout Dimensions */
-  --header-height: 64px;
-  --sidebar-collapsed-width: 70px;
-  --sidebar-expanded-width: 260px;
-  --drawer-width: 440px;
-  --content-max-width: 1200px;
-
-  /* Centralized Motion Tokens (Section 41) */
-  --motion-fast: 120ms;
-  --motion-normal: 180ms;
-  --motion-slow: 280ms;
-
-  --duration-instant: 50ms;
-  --duration-fast: 120ms;
-  --duration-normal: 180ms;
-  --duration-slow: 280ms;
-
-  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-
-  --transition-fast: var(--motion-fast) var(--ease-standard);
-  --transition-normal: var(--motion-normal) var(--ease-standard);
-  --transition-slow: var(--motion-slow) var(--ease-emphasized);
+  --color-accent-700: #0E7490;
+  --color-accent-600: #0891B2;
+  --color-accent-500: var(--color-accent-base);
+  --color-accent-400: #22D3EE;
+  --color-accent-200: #A5F3FC;
+  --color-accent-100: var(--color-accent-subtle);
+  --color-accent-50: var(--color-accent-subtle);
 }
 
-/* --------------------------------------------------------------------------
-   DARK THEME
-   Deep, balanced, accessible contrast without pure black wash
-   Layered dark surfaces with high-contrast text and controlled accents
-   -------------------------------------------------------------------------- */
+/* ==========================================================================
+   COLOR TOKENS - DARK THEME OVERRIDES - Section 2.4 & Section 20
+   Deep, balanced, accessible contrast with sub-pixel border luminescence
+   ========================================================================== */
 [data-theme="dark"],
 .dark {
-  /* Layered Semantic Surfaces in Dark Mode */
-  --color-bg-base: #0B1120;        /* Deepest base navy */
-  --color-bg-sidebar: #070B14;     /* Distinct dark authority sidebar */
-  --color-bg-header: #0F172A;      /* Distinct elevated header */
-  --color-bg-surface: #131D33;     /* Main card surface */
-  --color-bg-elevated: #1A2642;    /* Floating popover/modal surface */
-  --color-bg-subtle: #0F172A;      /* Inputs, secondary panels */
-  --color-surface-hover: rgba(255, 255, 255, 0.06);
-  --color-surface-selected: rgba(37, 99, 235, 0.2);
+  --color-bg-canvas: #090D16;
+  --color-bg-subtle: #0E1424;
+  --color-surface-base: #131B2E;
+  --color-surface-elevated: #18223B;
+  --color-surface-overlay: #1E2B4A;
+  --color-surface-sunken: #0B101C;
 
-  /* Semantic Typography in Dark Mode */
-  --color-text-main: #F8FAFC;
-  --color-text-primary: #F8FAFC;   /* Crisp white for all headings/titles */
-  --color-text-secondary: #CBD5E1; /* High-contrast light slate */
-  --color-text-muted: #94A3B8;     /* Readable supporting text */
-  --color-text-subtle: #64748B;    /* Helper text/labels */
-  --color-text-inverse: #0B1120;
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-border-default: rgba(255, 255, 255, 0.14);
+  --color-border-hover: rgba(255, 255, 255, 0.26);
+  --color-border-strong: rgba(255, 255, 255, 0.42);
+
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #CBD5E1;
+  --color-text-muted: #94A3B8;
   --color-text-disabled: #475569;
+  --color-text-inverse: #090D16;
 
-  /* Semantic Borders in Dark Mode */
-  --color-border: #1E293B;
-  --color-border-subtle: #162032;
-  --color-border-strong: #334155;
-  --color-border-focus: #F59E0B;
+  --color-primary-base: #6366F1;
+  --color-primary-hover: #818CF8;
+  --color-primary-active: #4F46E5;
+  --color-primary-subtle: rgba(99, 102, 241, 0.12);
+  --color-primary-border: rgba(99, 102, 241, 0.35);
 
-  /* Accent - Warm Amber Gold in Dark Mode */
-  --color-accent-700: #D97706;
-  --color-accent-600: #F59E0B;
-  --color-accent-500: #FBBF24;
-  --color-accent-400: #FDE68A;
-  --color-accent-200: #78350F;
-  --color-accent-100: #451A03;
-  --color-accent-50: #291A03;
+  --color-secondary-base: #1E293B;
+  --color-secondary-hover: #334155;
+  --color-secondary-active: #475569;
 
-  /* Semantic Navigation in Dark Mode (NEVER A WHITE TILE!) */
+  --color-accent-base: #22D3EE;
+  --color-accent-subtle: rgba(34, 211, 238, 0.10);
+
+  --color-success-base: #4ADE80;
+  --color-success-subtle: rgba(74, 222, 128, 0.12);
+  --color-success-border: rgba(74, 222, 128, 0.30);
+
+  --color-warning-base: #FBBF24;
+  --color-warning-subtle: rgba(251, 191, 36, 0.12);
+  --color-warning-border: rgba(251, 191, 36, 0.30);
+
+  --color-error-base: #F87171;
+  --color-error-subtle: rgba(248, 113, 113, 0.12);
+  --color-error-border: rgba(248, 113, 113, 0.30);
+
+  --color-info-base: #60A5FA;
+  --color-info-subtle: rgba(96, 165, 250, 0.12);
+  --color-info-border: rgba(96, 165, 250, 0.30);
+
+  --color-overlay: rgba(2, 6, 14, 0.75);
+  --color-focus-ring: rgba(99, 102, 241, 0.50);
+
+  /* Shadows in Dark Mode with Subtle Sub-Pixel Border Illumination */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.50), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.40), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.55), 0 2px 4px -2px rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.10);
+  --shadow-lg: 0 12px 20px -4px rgba(0, 0, 0, 0.65), 0 4px 6px -2px rgba(0, 0, 0, 0.50), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  --shadow-xl: 0 20px 30px -6px rgba(0, 0, 0, 0.75), 0 8px 12px -4px rgba(0, 0, 0, 0.60), inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+  --shadow-2xl: 0 30px 60px -15px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(255, 255, 255, 0.16);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.60);
+  --shadow-drawer: -6px 0 30px rgba(0, 0, 0, 0.75);
+
+  /* Semantic Compatibility Bridges in Dark Mode */
+  --color-bg-base: var(--color-bg-canvas);
+  --color-bg-surface: var(--color-surface-base);
+  --color-bg-elevated: var(--color-surface-elevated);
+  --color-bg-header: var(--color-surface-base);
+  --color-bg-sidebar: #070B14;
+  --color-surface-hover: rgba(255, 255, 255, 0.06);
+  --color-surface-selected: var(--color-primary-subtle);
+
+  --color-text-main: var(--color-text-primary);
+  --color-text-subtle: var(--color-text-muted);
+
+  --color-border: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-default);
+  --color-border-focus: var(--color-primary-base);
+
+  /* Semantic Buttons in Dark Mode */
+  --color-btn-primary-bg: var(--color-primary-base);
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-primary-hover: var(--color-primary-hover);
+  --color-btn-secondary-bg: var(--color-secondary-base);
+  --color-btn-secondary-text: #F8FAFC;
+  --color-btn-secondary-border: var(--color-border-default);
+  --color-btn-secondary-hover: var(--color-secondary-hover);
+  --color-btn-disabled-bg: #162032;
+  --color-btn-disabled-text: var(--color-text-disabled);
+  --color-btn-disabled-border: rgba(255, 255, 255, 0.08);
+
+  /* Semantic Tabs in Dark Mode */
+  --color-tab-text: var(--color-text-muted);
+  --color-tab-hover-bg: rgba(255, 255, 255, 0.05);
+  --color-tab-hover-text: #F8FAFC;
+  --color-tab-active-bg: var(--color-primary-subtle);
+  --color-tab-active-text: #818CF8;
+  --color-tab-active-border: var(--color-primary-base);
+
+  /* Semantic Navigation in Dark Mode */
   --color-nav-text: #94A3B8;
   --color-nav-hover-bg: rgba(255, 255, 255, 0.06);
   --color-nav-hover-text: #F8FAFC;
-  --color-nav-active-bg: rgba(245, 158, 11, 0.16);
+  --color-nav-active-bg: rgba(99, 102, 241, 0.20);
   --color-nav-active-text: #F8FAFC;
-  --color-nav-active-border: #F59E0B;
-  --color-nav-active-icon: #FBBF24;
+  --color-nav-active-border: var(--color-primary-base);
+  --color-nav-active-icon: #818CF8;
 
-  /* Semantic Buttons in Dark Mode */
-  --color-btn-primary-bg: #2563EB;
-  --color-btn-primary-text: #FFFFFF;
-  --color-btn-primary-hover: #1D4ED8;
-  --color-btn-secondary-bg: #1E293B;
-  --color-btn-secondary-text: #F8FAFC;
-  --color-btn-secondary-border: #334155;
-  --color-btn-secondary-hover: #29384E;
-  --color-btn-disabled-bg: #162032;
-  --color-btn-disabled-text: #64748B;
-  --color-btn-disabled-border: #24334D;
-
-  /* Semantic Tabs in Dark Mode (NEVER A WHITE TAB!) */
-  --color-tab-text: #94A3B8;
-  --color-tab-hover-bg: rgba(255, 255, 255, 0.05);
-  --color-tab-hover-text: #F8FAFC;
-  --color-tab-active-bg: rgba(37, 99, 235, 0.22);
-  --color-tab-active-text: #93C5FD;
-  --color-tab-active-border: #3B82F6;
-
-  /* Safety background scale: Dark navy backgrounds, prevents accidental white inversion */
+  /* Legacy Scale References in Dark Mode */
   --color-primary-950: #0B1120;
   --color-primary-900: #1E293B;
   --color-primary-800: #1E2E4A;
   --color-primary-700: #1A2642;
   --color-primary-600: #334155;
-  --color-primary-500: #3B82F6;
-  --color-primary-200: #1E3A8A;
-  --color-primary-100: #1E293B;
-  --color-primary-50: #132035;
+  --color-primary-500: var(--color-primary-base);
+  --color-primary-200: rgba(99, 102, 241, 0.40);
+  --color-primary-100: var(--color-primary-subtle);
+  --color-primary-50: var(--color-primary-subtle);
 
-  /* Status Colors in Dark Mode */
-  --status-success-bg: rgba(6, 78, 59, 0.4);
-  --status-success-text: #6EE7B7;
-  --status-success-border: #059669;
-  --status-warning-bg: rgba(69, 26, 3, 0.4);
-  --status-warning-text: #FDE68A;
-  --status-warning-border: #D97706;
-  --status-error-bg: rgba(69, 10, 10, 0.4);
-  --status-error-text: #FCA5A5;
-  --status-error-border: #DC2626;
-  --status-info-bg: rgba(23, 37, 84, 0.4);
-  --status-info-text: #93C5FD;
-  --status-info-border: #2563EB;
-
-  /* Shadows */
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
-  --shadow-drawer: -6px 0 30px rgba(0, 0, 0, 0.65);
+  --color-accent-700: #0E7490;
+  --color-accent-600: #0891B2;
+  --color-accent-500: var(--color-accent-base);
+  --color-accent-400: #22D3EE;
+  --color-accent-200: rgba(34, 211, 238, 0.35);
+  --color-accent-100: var(--color-accent-subtle);
+  --color-accent-50: var(--color-accent-subtle);
 }
 
-/* --------------------------------------------------------------------------
-   Reduced Motion Accessibility Preference
-   -------------------------------------------------------------------------- */
+/* ==========================================================================
+   REDUCED MOTION ACCESSIBILITY - Section 17.1
+   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -281,5 +471,13 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .bis-page-transition,
+  .bis-tab-panel-enter,
+  .fade-transition,
+  [data-state="open"] {
+    transition: opacity var(--duration-fast) linear !important;
+    transform: none !important;
   }
 }

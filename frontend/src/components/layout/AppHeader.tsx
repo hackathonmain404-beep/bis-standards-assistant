@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Sun,
   Moon,
@@ -8,14 +9,21 @@ import {
   User,
   MoreHorizontal,
   X,
+  ShieldCheck,
+  LogOut,
   Lock,
-  CheckCircle2,
+  Loader2,
+  AlertCircle,
+  ExternalLink,
 } from 'lucide-react';
+import bisLogo from '../../assets/bis-logo.png';
 import { useAssistant } from '../../state/AssistantContext';
 import { useLanguage } from '../../state/LanguageContext';
 import { useTheme } from '../../state/ThemeContext';
+import { useAuth } from '../../state/AuthContext';
 
 export const AppHeader: React.FC = () => {
+  const navigate = useNavigate();
   const {
     newSession,
     isEvidenceDrawerOpen,
@@ -24,23 +32,35 @@ export const AppHeader: React.FC = () => {
   } = useAssistant();
   const { t } = useLanguage();
   const { resolvedTheme, toggleTheme } = useTheme();
+  const { user, isAuthenticated, login, logout } = useAuth();
 
   const [isOverflowOpen, setIsOverflowOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [modalError, setModalError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const overflowRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const loginModalRef = useRef<HTMLDivElement>(null);
 
-  // Close overflow menu and login modal on outside click or Escape
+  // Close menus on outside click or Escape
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (overflowRef.current && !overflowRef.current.contains(e.target as Node)) {
         setIsOverflowOpen(false);
       }
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
     };
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setIsOverflowOpen(false);
+        setIsUserMenuOpen(false);
         setIsLoginModalOpen(false);
       }
     };
@@ -55,19 +75,7 @@ export const AppHeader: React.FC = () => {
   }, []);
 
   const handleOpenEvidence = () => {
-    if (activeEvidence) {
-      openEvidence(activeEvidence);
-    } else {
-      openEvidence({
-        index: 1,
-        standard_id: 'IS 17526:2021',
-        document_title: 'Stainless Steel Vacuum Flasks and Insulated Bottles',
-        section: 'Section 1',
-        clause: 'Clause 1.1',
-        snippet:
-          'Click any citation marker [N] or source card to view exact verified clause texts.',
-      });
-    }
+    openEvidence(activeEvidence);
     setIsOverflowOpen(false);
   };
 
@@ -76,27 +84,79 @@ export const AppHeader: React.FC = () => {
     setIsOverflowOpen(false);
   };
 
+  const handleLoginClick = () => {
+    if (isAuthenticated) {
+      setIsUserMenuOpen(!isUserMenuOpen);
+    } else {
+      setModalError(null);
+      setIsLoginModalOpen(true);
+    }
+  };
+
+  const handleModalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!emailInput.trim() || !passwordInput) {
+      setModalError('Please enter both your email and password.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setModalError(null);
+
+    const res = await login(emailInput.trim(), passwordInput);
+    setIsSubmitting(false);
+
+    if (res.success) {
+      setIsLoginModalOpen(false);
+      setEmailInput('');
+      setPasswordInput('');
+    } else {
+      setModalError(res.error || 'Unable to sign in. Please check your credentials and try again.');
+    }
+  };
+
   return (
     <>
       <header className="bis-app-header" role="banner">
-        {/* LEFT: BIS Copilot Brand Identity (No Hamburger) */}
+        {/* LEFT: BIS Copilot Brand Identity */}
         <div className="bis-header-left">
-          <div className="bis-header-brand-wrap">
-            <div className="bis-header-badge" aria-hidden="true">BIS</div>
+          <div
+            className="bis-header-brand-wrap"
+            onClick={() => navigate('/assistant')}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                navigate('/assistant');
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="BIS Copilot Home"
+          >
+            <img
+              src={bisLogo}
+              alt="Bureau of Indian Standards"
+              className="bis-header-logo-img"
+            />
             <div className="bis-header-titles">
-              <span className="bis-header-title">Copilot</span>
+              <span className="bis-header-title">
+                <span className="bis-header-title-bis">BIS </span>Copilot
+              </span>
               <span className="bis-header-tagline">Compliance & Standards</span>
             </div>
           </div>
         </div>
 
-        {/* RIGHT: Utility Controls (Theme, Evidence, New Session, Login) */}
+        {/* RIGHT: Utility Controls */}
         <div className="bis-header-right">
-          {/* Theme Toggle (Compact Icon Control) */}
+          {/* Single-Thumb Moving Pill Theme Switch inspired by Reference Image */}
           <button
             type="button"
-            className="bis-header-action-btn bis-theme-toggle-btn"
+            className={`bis-pill-theme-switch ${
+              resolvedTheme === 'dark' ? 'bis-pill-theme-switch--dark' : 'bis-pill-theme-switch--light'
+            }`}
             onClick={toggleTheme}
+            role="switch"
+            aria-checked={resolvedTheme === 'dark'}
             aria-label={
               resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
             }
@@ -104,14 +164,36 @@ export const AppHeader: React.FC = () => {
               resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
             }
           >
-            {resolvedTheme === 'dark' ? (
-              <Sun size={17} className="bis-theme-icon-sun" />
-            ) : (
-              <Moon size={17} className="bis-theme-icon-moon" />
-            )}
+            {/* Ambient Track Icons (faint track background) */}
+            <span className="bis-pill-track-icons" aria-hidden="true">
+              <span className="bis-pill-track-icon bis-pill-track-icon--sun">
+                <Sun size={13} strokeWidth={2.4} />
+              </span>
+              <span className="bis-pill-track-icon bis-pill-track-icon--moon">
+                <Moon size={13} strokeWidth={2.4} />
+              </span>
+            </span>
+
+            {/* Sliding Circular Thumb with active crisp white icon inside */}
+            <span className="bis-pill-thumb" aria-hidden="true">
+              <span
+                className={`bis-pill-thumb-icon bis-pill-thumb-icon--sun ${
+                  resolvedTheme !== 'dark' ? 'is-active' : ''
+                }`}
+              >
+                <Sun size={13} strokeWidth={2.4} />
+              </span>
+              <span
+                className={`bis-pill-thumb-icon bis-pill-thumb-icon--moon ${
+                  resolvedTheme === 'dark' ? 'is-active' : ''
+                }`}
+              >
+                <Moon size={13} strokeWidth={2.4} />
+              </span>
+            </span>
           </button>
 
-          {/* Evidence Drawer Toggle (Secondary Action, Desktop) */}
+          {/* Evidence Drawer Toggle */}
           <button
             type="button"
             className={`bis-header-action-btn bis-header-evidence-desktop ${
@@ -126,7 +208,7 @@ export const AppHeader: React.FC = () => {
             <span className="bis-btn-label-desktop">{t.header.evidencePanel || 'Evidence Panel'}</span>
           </button>
 
-          {/* New Session Button (Secondary Action, Desktop) */}
+          {/* New Session Button */}
           <button
             type="button"
             className="bis-header-action-btn bis-header-new-desktop"
@@ -139,29 +221,60 @@ export const AppHeader: React.FC = () => {
             <span className="bis-btn-label-desktop">{t.header.newSession || 'New Session'}</span>
           </button>
 
-          {/* Primary Action: Login Button */}
-          <button
-            type="button"
-            className={`bis-header-login-btn ${isLoggedIn ? 'bis-header-login-btn--active' : ''}`}
-            id="bis-header-login-btn"
-            onClick={() => setIsLoginModalOpen(true)}
-            aria-label={isLoggedIn ? 'Logged in as BIS Officer' : 'Login to BIS Copilot'}
-            title={isLoggedIn ? 'Officer Account' : 'Login to BIS Copilot'}
-          >
-            {isLoggedIn ? (
-              <>
-                <User size={15} className="bis-login-icon" />
-                <span>Officer</span>
-              </>
-            ) : (
-              <>
-                <LogIn size={15} className="bis-login-icon" />
-                <span>Login</span>
-              </>
-            )}
-          </button>
+          {/* Primary Action: Login / User Account */}
+          <div className="bis-header-auth-wrap" ref={userMenuRef}>
+            <button
+              type="button"
+              className={`bis-header-login-btn ${isAuthenticated ? 'bis-header-login-btn--active' : ''}`}
+              id="bis-header-login-btn"
+              onClick={handleLoginClick}
+              aria-label={isAuthenticated ? `Logged in as ${user?.name || 'Officer'}` : 'Login to BIS Copilot'}
+              title={isAuthenticated ? 'Account Menu' : 'Login to BIS Copilot'}
+            >
+              {isAuthenticated ? (
+                <>
+                  <User size={15} className="bis-login-icon" />
+                  <span>{user?.role || 'Officer'}</span>
+                </>
+              ) : (
+                <>
+                  <LogIn size={15} className="bis-login-icon" />
+                  <span>Login</span>
+                </>
+              )}
+            </button>
 
-          {/* Responsive Overflow "⋯ More" Menu for Mobile (< 768px) */}
+            {/* Authenticated User Dropdown Menu */}
+            {isAuthenticated && isUserMenuOpen && user && (
+              <div className="bis-header-user-dropdown" role="menu">
+                <div className="bis-user-dropdown-header">
+                  <div className="bis-user-dropdown-avatar">
+                    <ShieldCheck size={18} />
+                  </div>
+                  <div className="bis-user-dropdown-info">
+                    <strong className="bis-user-dropdown-name">{user.name}</strong>
+                    <span className="bis-user-dropdown-email">{user.email}</span>
+                    <span className="bis-user-dropdown-role">{user.role}</span>
+                  </div>
+                </div>
+                <div className="bis-user-dropdown-divider" />
+                <button
+                  type="button"
+                  className="bis-user-dropdown-item bis-user-dropdown-item--danger"
+                  onClick={() => {
+                    logout();
+                    setIsUserMenuOpen(false);
+                  }}
+                  role="menuitem"
+                >
+                  <LogOut size={15} />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Responsive Overflow "⋯ More" Menu for Mobile */}
           <div className="bis-header-overflow-wrap" ref={overflowRef}>
             <button
               type="button"
@@ -199,6 +312,20 @@ export const AppHeader: React.FC = () => {
                     <Plus size={16} />
                     <span>{t.header.newSession || 'New Session'}</span>
                   </button>
+                  {!isAuthenticated && (
+                    <button
+                      type="button"
+                      className="bis-overflow-menu-item"
+                      onClick={() => {
+                        setIsOverflowOpen(false);
+                        navigate('/login');
+                      }}
+                      role="menuitem"
+                    >
+                      <LogIn size={16} />
+                      <span>Full Login Page</span>
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -245,103 +372,93 @@ export const AppHeader: React.FC = () => {
               </button>
             </div>
 
-            {isLoggedIn ? (
-              <div className="bis-login-modal-content">
-                <div className="bis-login-officer-card">
-                  <CheckCircle2 size={24} className="bis-login-check-icon" />
-                  <div className="bis-login-officer-info">
-                    <span className="bis-login-officer-name">BIS Compliance Officer</span>
-                    <span className="bis-login-officer-dept">Central Quality & Standards Wing</span>
-                    <span className="bis-login-officer-id">ID: BIS-NDLS-2026-8841</span>
-                  </div>
+            <form className="bis-login-modal-content" onSubmit={handleModalSubmit}>
+              {modalError && (
+                <div className="bis-login-alert-error" role="alert">
+                  <AlertCircle size={16} />
+                  <span>{modalError}</span>
                 </div>
-                <div className="bis-login-modal-actions">
-                  <button
-                    type="button"
-                    className="bis-login-btn-secondary"
-                    onClick={() => {
-                      setIsLoggedIn(false);
-                      setIsLoginModalOpen(false);
-                    }}
-                  >
-                    Log Out
-                  </button>
-                  <button
-                    type="button"
-                    className="bis-login-btn-primary"
-                    onClick={() => setIsLoginModalOpen(false)}
-                  >
-                    Continue Session
-                  </button>
-                </div>
+              )}
+
+              <div className="bis-login-field-group">
+                <label htmlFor="bis-login-input-user" className="bis-login-field-label">
+                  BIS ID or Official Email
+                </label>
+                <input
+                  id="bis-login-input-user"
+                  type="email"
+                  className="bis-login-text-input"
+                  placeholder="name@organization.gov.in"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  required
+                  autoFocus
+                  disabled={isSubmitting}
+                />
               </div>
-            ) : (
-              <form
-                className="bis-login-modal-content"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setIsLoggedIn(true);
-                  setIsLoginModalOpen(false);
-                }}
-              >
-                <div className="bis-login-field-group">
-                  <label htmlFor="bis-login-input-user" className="bis-login-field-label">
-                    BIS ID or Official Email
-                  </label>
-                  <input
-                    id="bis-login-input-user"
-                    type="text"
-                    className="bis-login-text-input"
-                    placeholder="officer.hq@bis.gov.in"
-                    defaultValue="officer.hq@bis.gov.in"
-                    required
-                    autoFocus
-                  />
-                </div>
 
-                <div className="bis-login-field-group">
-                  <label htmlFor="bis-login-input-pass" className="bis-login-field-label">
-                    Security Credentials
-                  </label>
-                  <input
-                    id="bis-login-input-pass"
-                    type="password"
-                    className="bis-login-text-input"
-                    placeholder="••••••••••••"
-                    defaultValue="password123"
-                    required
-                  />
-                </div>
+              <div className="bis-login-field-group">
+                <label htmlFor="bis-login-input-pass" className="bis-login-field-label">
+                  Security Credentials
+                </label>
+                <input
+                  id="bis-login-input-pass"
+                  type="password"
+                  className="bis-login-text-input"
+                  placeholder="Enter your security password"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  required
+                  disabled={isSubmitting}
+                />
+              </div>
 
-                <div className="bis-login-remember-row">
-                  <label className="bis-login-checkbox-label">
-                    <input type="checkbox" defaultChecked />
-                    <span>Remember credentials on this workstation</span>
-                  </label>
-                </div>
+              <div className="bis-login-remember-row">
+                <label className="bis-login-checkbox-label">
+                  <input type="checkbox" defaultChecked />
+                  <span>Remember credentials on this workstation</span>
+                </label>
+                <button
+                  type="button"
+                  className="bis-forgot-link"
+                  onClick={() => {
+                    setIsLoginModalOpen(false);
+                    navigate('/login');
+                  }}
+                >
+                  Full page →
+                </button>
+              </div>
 
-                <div className="bis-login-modal-actions">
-                  <button
-                    type="button"
-                    className="bis-login-btn-secondary"
-                    onClick={() => setIsLoginModalOpen(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bis-login-btn-primary"
-                    id="bis-modal-login-submit"
-                  >
-                    Log in
-                  </button>
-                </div>
-              </form>
-            )}
+              <div className="bis-login-modal-actions">
+                <button
+                  type="button"
+                  className="bis-login-btn-secondary"
+                  onClick={() => setIsLoginModalOpen(false)}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bis-login-btn-primary"
+                  id="bis-modal-login-submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <span className="bis-btn-loading-content">
+                      <Loader2 size={15} className="bis-spin-icon" />
+                      <span>Logging in...</span>
+                    </span>
+                  ) : (
+                    <span>Log in</span>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
     </>
   );
 };
-

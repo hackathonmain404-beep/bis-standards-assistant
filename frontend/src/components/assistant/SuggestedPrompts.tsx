@@ -9,11 +9,10 @@ export const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({ onSelectProm
   const { t } = useLanguage();
 
   const prompts = [
-    'I manufacture stainless steel water bottles for household use. Which BIS standards apply?',
-    'What BIS certification and testing are required for electric steam irons?',
-    'I want to get a BIS mark for my electric heater.',
-    'What is IS 14543:2016 for packaged drinking water?',
-    'What is the BIS standard for quantum computing cryogenic dilution refrigerators?',
+    'Find the applicable BIS standard for my product',
+    'Check mandatory QCO requirements for electrical appliances',
+    'Inspect certification schemes (ISI vs CRS) and testing guidelines',
+    'Locate BIS recognized laboratories and accredited testing facilities',
   ];
 
   return (

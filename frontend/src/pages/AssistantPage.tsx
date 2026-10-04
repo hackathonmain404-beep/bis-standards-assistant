@@ -45,10 +45,10 @@ export const AssistantPage: React.FC = () => {
               title="BIS Intelligent Assistant"
               description="Ask natural-language questions regarding Indian Standards, mandatory Quality Control Orders (QCOs), testing protocols, or describe your product to discover applicable standards."
               suggestions={[
-                'I manufacture stainless steel water bottles for household use. Which BIS standards apply?',
-                'What BIS certification is required for electric steam irons?',
-                'I want to get a BIS mark for my electric heater.',
-                'What is IS 14543:2016 for packaged drinking water?',
+                'Find the applicable BIS standard for my product',
+                'Check mandatory QCO requirements for electrical appliances',
+                'Inspect certification schemes (ISI vs CRS) and testing guidelines',
+                'Locate BIS recognized laboratories and accredited testing facilities',
               ]}
               onSelectSuggestion={(q) => sendMessage(q)}
             />
