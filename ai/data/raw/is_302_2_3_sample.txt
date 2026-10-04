@@ -1,0 +1,23 @@
+IS 302 (Part 2/Sec 3):2007
+SAFETY OF HOUSEHOLD AND SIMILAR ELECTRICAL APPLIANCES
+PART 2: PARTICULAR REQUIREMENTS — SECTION 3: ELECTRIC IRONS
+
+1. SCOPE
+1.1 This standard deals with the safety of electric dry irons and steam irons, including those with a separate water reservoir or boiler having a capacity not exceeding 5 litres, for household and similar purposes.
+1.2 The rated voltage is not more than 250 V for single-phase appliances and 480 V for other appliances.
+1.3 Appliances not intended for normal household use, but which nevertheless may be a source of danger to the public, such as appliances intended to be used by laymen in shops, in light industry and on farms, are within the scope of this standard.
+
+3. DEFINITIONS
+3.1 Steam Iron — An electric iron having means for producing and supplying steam to the textile while ironing.
+3.2 Cordless Iron — An iron that is placed on a base during heating and removed from the base during ironing.
+
+4. GENERAL REQUIREMENT
+4.1 Appliances shall be constructed so that in normal use they function safely so as to cause no danger to persons or surroundings, even in the event of careless operation.
+
+8. PROTECTION AGAINST ACCESS TO LIVE PARTS
+8.1 Appliances shall be constructed and enclosed so that there is adequate protection against accidental contact with live parts.
+8.2 Openings in live parts shall be designed so that testing finger probes conforming to IS 1401 cannot touch live electrical conductors.
+
+11. HEATING
+11.1 Appliances and their surroundings shall not attain excessive temperature in normal use.
+11.2 For electric irons, the soleplate temperature shall be controlled by a reliable thermostat conforming to IS 302-1.

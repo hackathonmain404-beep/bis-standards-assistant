@@ -1,0 +1,29 @@
+IS 14543:2016
+PACKAGED DRINKING WATER (OTHER THAN PACKAGED NATURAL MINERAL WATER) — SPECIFICATION
+(Second Revision)
+
+1. SCOPE
+1.1 This standard prescribes the requirements and methods of sampling and test for packaged drinking water (other than packaged natural mineral water) offered for sale in hermetically sealed containers of various descriptions.
+1.2 Packaged drinking water shall be derived from surface water or underground water or potable water and treated using processes such as filtration, reverse osmosis, demineralization, and disinfection.
+
+2. REFERENCES
+2.1 The standards listed in Annex A contain provisions which through reference in this text constitute provisions of this standard.
+
+3. TERMINOLOGY
+3.1 Packaged Drinking Water — Water from any source which has been treated and packaged in hermetically sealed containers of various sizes, intended for direct consumption.
+
+4. REQUIREMENTS
+4.1 Hygienic Conditions: Packaged drinking water shall be prepared, processed, and packed under strict hygienic conditions in premises conforming to the guidelines in Annex B.
+4.2 Physical and Chemical Requirements: The water shall be clear and free from undesirable odor, taste, and color. It shall conform to the chemical limits prescribed: pH value shall be between 6.5 and 8.5. Total dissolved solids (TDS) shall not exceed 500 mg/l.
+4.3 Microbiological Requirements: The water shall be completely free from microorganisms like Escherichia coli, coliform bacteria, Salmonella, and Pseudomonas aeruginosa in 250 ml of sample.
+4.4 Disinfection: Water shall be subjected to disinfection processes such as ozonation or UV irradiation to ensure microbiological safety before filling into containers.
+
+5. PACKING AND MARKING
+5.1 Packing: Packaged drinking water shall be filled in clean, hygienic, colorless, transparent, or food-grade tamper-proof containers conforming to IS 15410 or IS 12252.
+5.2 Marking: Each container shall be clearly and indelibly marked with the following:
+a) Name of the product: 'Packaged Drinking Water';
+b) Net volume in metric units;
+c) Name and complete address of the manufacturer with licence number;
+d) Batch or code number;
+e) Date of manufacture and expiry date;
+f) The Standard Mark (ISI mark) as licensed by the Bureau of Indian Standards (BIS).
