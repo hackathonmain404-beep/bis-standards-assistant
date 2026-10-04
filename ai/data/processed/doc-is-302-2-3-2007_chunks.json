@@ -1,0 +1,232 @@
+{
+  "document": {
+    "document_id": "doc-is-302-2-3-2007",
+    "title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+    "standard_number": "IS 302 (Part 2/Sec 3):2007",
+    "standard_part": null,
+    "document_type": "indian_standard",
+    "year": "2007",
+    "revision": null,
+    "status": "current",
+    "subject_area": null,
+    "product_categories": [
+      "electrical_appliances"
+    ],
+    "source": "Bureau of Indian Standards",
+    "source_url": null,
+    "ingestion_date": "2026-10-04T16:51:58.954877Z",
+    "total_sections": null,
+    "total_chunks": 11
+  },
+  "chunks": [
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-0_0-000",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "0.0",
+      "content": "IS 302 (Part 2/Sec 3):2007\nSAFETY OF HOUSEHOLD AND SIMILAR ELECTRICAL APPLIANCES\nPART 2: PARTICULAR REQUIREMENTS - SECTION 3: ELECTRIC IRONS",
+      "content_type": "text",
+      "char_count": 140,
+      "token_count": null,
+      "chunk_index": 0,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "General"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-1_1-001",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.1",
+      "content": "1.1 This standard deals with the safety of electric dry irons and steam irons, including those with a separate water reservoir or boiler having a capacity not exceeding 5 litres, for household and similar purposes.",
+      "content_type": "text",
+      "char_count": 214,
+      "token_count": null,
+      "chunk_index": 1,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "1. SCOPE"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-1_2-002",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.2",
+      "content": "1.2 The rated voltage is not more than 250 V for single-phase appliances and 480 V for other appliances.",
+      "content_type": "text",
+      "char_count": 104,
+      "token_count": null,
+      "chunk_index": 2,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "1. SCOPE"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-1_3-003",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "1.3",
+      "content": "1.3 Appliances not intended for normal household use, but which nevertheless may be a source of danger to the public, such as appliances intended to be used by laymen in shops, in light industry and on farms, are within the scope of this standard.",
+      "content_type": "text",
+      "char_count": 247,
+      "token_count": null,
+      "chunk_index": 3,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "1. SCOPE"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-3_1-004",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "3.1",
+      "content": "3.1 Steam Iron - An electric iron having means for producing and supplying steam to the textile while ironing.",
+      "content_type": "text",
+      "char_count": 110,
+      "token_count": null,
+      "chunk_index": 4,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "3. DEFINITIONS"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-3_2-005",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "3.2",
+      "content": "3.2 Cordless Iron - An iron that is placed on a base during heating and removed from the base during ironing.",
+      "content_type": "text",
+      "char_count": 109,
+      "token_count": null,
+      "chunk_index": 5,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "3. DEFINITIONS"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-4_1-006",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "4.1",
+      "content": "4.1 Appliances shall be constructed so that in normal use they function safely so as to cause no danger to persons or surroundings, even in the event of careless operation.",
+      "content_type": "text",
+      "char_count": 172,
+      "token_count": null,
+      "chunk_index": 6,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "4. GENERAL REQUIREMENT"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-8_1-007",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "8.1",
+      "content": "8.1 Appliances shall be constructed and enclosed so that there is adequate protection against accidental contact with live parts.",
+      "content_type": "text",
+      "char_count": 129,
+      "token_count": null,
+      "chunk_index": 7,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "8. PROTECTION AGAINST ACCESS TO LIVE PARTS"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-8_2-008",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "8.2",
+      "content": "8.2 Openings in live parts shall be designed so that testing finger probes conforming to IS 1401 cannot touch live electrical conductors.",
+      "content_type": "text",
+      "char_count": 137,
+      "token_count": null,
+      "chunk_index": 8,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "8. PROTECTION AGAINST ACCESS TO LIVE PARTS"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-11_1-009",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "11.1",
+      "content": "11.1 Appliances and their surroundings shall not attain excessive temperature in normal use.",
+      "content_type": "text",
+      "char_count": 92,
+      "token_count": null,
+      "chunk_index": 9,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "11. HEATING"
+    },
+    {
+      "chunk_id": "chk-doc-is-302-2-3-2007-11_2-010",
+      "document_id": "doc-is-302-2-3-2007",
+      "section_id": null,
+      "clause_id": null,
+      "clause": "11.2",
+      "content": "11.2 For electric irons, the soleplate temperature shall be controlled by a reliable thermostat conforming to IS 302-1.",
+      "content_type": "text",
+      "char_count": 119,
+      "token_count": null,
+      "chunk_index": 10,
+      "standard_number": "IS 302 (Part 2/Sec 3):2007",
+      "document_title": "Safety of Household and Similar Electrical Appliances — Particular Requirements: Electric Irons",
+      "document_type": "indian_standard",
+      "product_categories": [
+        "electrical_appliances"
+      ],
+      "section_title": "11. HEATING"
+    }
+  ]
+}
