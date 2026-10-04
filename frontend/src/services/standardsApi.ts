@@ -1,0 +1,91 @@
+import { StandardDetail, StandardFilter } from '../types/standards';
+import { MOCK_STANDARDS } from '../mocks/mockStandardsData';
+import { apiConfig, isMockMode } from './apiConfig';
+
+export const standardsApi = {
+  async getStandards(filter?: StandardFilter): Promise<StandardDetail[]> {
+    if (isMockMode()) {
+      await new Promise((res) => setTimeout(res, 200));
+      let results = [...MOCK_STANDARDS];
+
+      if (filter?.query) {
+        const q = filter.query.toLowerCase();
+        results = results.filter(
+          (s) =>
+            s.standard_number.toLowerCase().includes(q) ||
+            s.title.toLowerCase().includes(q) ||
+            s.overview.toLowerCase().includes(q)
+        );
+      }
+
+      if (filter?.category && filter.category !== 'All') {
+        results = results.filter((s) => s.category.toLowerCase().includes(filter.category!.toLowerCase()));
+      }
+
+      if (filter?.department && filter.department !== 'All') {
+        results = results.filter((s) => s.department.toLowerCase().includes(filter.department!.toLowerCase()));
+      }
+
+      if (filter?.status && filter.status !== 'All') {
+        results = results.filter((s) => s.status.toLowerCase() === filter.status!.toLowerCase());
+      }
+
+      if (filter?.mandatoryOnly) {
+        results = results.filter((s) => s.is_mandatory);
+      }
+
+      if (filter?.scheme && filter.scheme !== 'All') {
+        results = results.filter((s) =>
+          s.certification_schemes.some((sc) => sc.toLowerCase().includes(filter.scheme!.toLowerCase()))
+        );
+      }
+
+      if (filter?.sort) {
+        if (filter.sort === 'number-asc') {
+          results.sort((a, b) => a.standard_number.localeCompare(b.standard_number));
+        } else if (filter.sort === 'number-desc') {
+          results.sort((a, b) => b.standard_number.localeCompare(a.standard_number));
+        } else if (filter.sort === 'year-desc') {
+          results.sort((a, b) => Number(b.publication_year) - Number(a.publication_year));
+        } else if (filter.sort === 'title-asc') {
+          results.sort((a, b) => a.title.localeCompare(b.title));
+        }
+      }
+
+      return results;
+    }
+
+    const queryParams = new URLSearchParams();
+    if (filter?.query) queryParams.append('q', filter.query);
+    if (filter?.category) queryParams.append('category', filter.category);
+    if (filter?.department) queryParams.append('department', filter.department);
+    if (filter?.status) queryParams.append('status', filter.status);
+    if (filter?.mandatoryOnly) queryParams.append('mandatoryOnly', 'true');
+    if (filter?.scheme) queryParams.append('scheme', filter.scheme);
+    if (filter?.sort) queryParams.append('sort', filter.sort);
+
+    const response = await fetch(`${apiConfig.baseUrl}/standards?${queryParams.toString()}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch standards: ${response.statusText}`);
+    }
+    return await response.json();
+  },
+
+  async getStandardById(id: string): Promise<StandardDetail | null> {
+    if (isMockMode()) {
+      await new Promise((res) => setTimeout(res, 150));
+      const cleanId = decodeURIComponent(id).toLowerCase().replace(/\s+/g, '');
+      const found = MOCK_STANDARDS.find(
+        (s) => s.standard_number.toLowerCase().replace(/\s+/g, '') === cleanId
+      );
+      return found || MOCK_STANDARDS[0];
+    }
+
+    const response = await fetch(`${apiConfig.baseUrl}/standards/${encodeURIComponent(id)}`);
+    if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error(`Failed to fetch standard ${id}`);
+    }
+    return await response.json();
+  },
+};

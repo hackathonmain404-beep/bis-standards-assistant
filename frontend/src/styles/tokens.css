@@ -1,0 +1,285 @@
+:root {
+  /* --------------------------------------------------------------------------
+     LIGHT THEME (Default)
+     Government Authority, National Standards Trust, Crisp Precision
+     -------------------------------------------------------------------------- */
+  /* Primary Authority Scale */
+  --color-primary-950: #060E1A;
+  --color-primary-900: #0B192C;
+  --color-primary-800: #1E3E62;
+  --color-primary-700: #183B56;
+  --color-primary-600: #1A5276;
+  --color-primary-500: #2563EB;
+  --color-primary-200: #BFDBFE;
+  --color-primary-100: #EBF3FA;
+  --color-primary-50: #F4F8FC;
+
+  /* Accent - Indian Standards Saffron / Amber Gold */
+  --color-accent-700: #B45309;
+  --color-accent-600: #D97706;
+  --color-accent-500: #F59E0B;
+  --color-accent-400: #FBBF24;
+  --color-accent-200: #FDE68A;
+  --color-accent-100: #FEF3C7;
+  --color-accent-50: #FFFBEB;
+
+  /* Layered Semantic Surfaces in Light Mode */
+  --color-bg-base: #F8FAFC;        /* Soft cool off-white page background */
+  --color-bg-sidebar: #0B192C;     /* Deep navy authority sidebar */
+  --color-bg-header: #FFFFFF;      /* Clean pure white header */
+  --color-bg-surface: #FFFFFF;     /* Crisp pure white cards & panels */
+  --color-bg-elevated: #FFFFFF;    /* Clean white elevated dropdowns/modals */
+  --color-bg-subtle: #F1F5F9;      /* Subtle cool gray for secondary inputs/pills */
+  --color-surface-hover: #F8FAFC;  /* Clean light hover surface */
+  --color-surface-selected: #EFF6FF; /* Pale blue selected surface */
+
+  /* Semantic Typography */
+  --color-text-main: #0B192C;      /* Deep navy primary text */
+  --color-text-primary: #0B192C;   /* Deep navy headings & card titles */
+  --color-text-secondary: #334155; /* Slate blue-gray secondary text */
+  --color-text-muted: #475569;     /* Soft slate readable text */
+  --color-text-subtle: #64748B;    /* Helper labels */
+  --color-text-inverse: #FFFFFF;
+  --color-text-disabled: #94A3B8;
+
+  /* Semantic Borders */
+  --color-border: #E2E8F0;         /* Very light cool gray */
+  --color-border-subtle: #F1F5F9;  /* Ultra subtle divider */
+  --color-border-strong: #CBD5E1;  /* Clear outline border */
+  --color-border-focus: #2563EB;   /* Restrained blue focus ring */
+
+  /* FRONTEND_ARCHITECTURE.md Section 19 Semantic Token Aliases */
+  --bg-page: var(--color-bg-base);
+  --bg-sidebar: var(--color-bg-sidebar);
+  --bg-header: var(--color-bg-header);
+  --surface: var(--color-bg-surface);
+  --surface-elevated: var(--color-bg-elevated);
+  --surface-hover: var(--color-surface-hover);
+  --surface-selected: var(--color-surface-selected);
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-muted: var(--color-text-muted);
+  --border: var(--color-border);
+  --border-subtle: var(--color-border-subtle);
+  --accent-primary: var(--color-primary-500);
+  --accent-secondary: var(--color-accent-500);
+  --success: var(--status-success-text);
+  --warning: var(--status-warning-text);
+  --error: var(--status-error-text);
+  --info: var(--status-info-text);
+
+  /* Semantic Navigation (Sidebar in Light Mode: Pale blue highlight + blue accent) */
+  --color-nav-text: #CBD5E1;
+  --color-nav-hover-bg: rgba(255, 255, 255, 0.08);
+  --color-nav-hover-text: #FFFFFF;
+  --color-nav-active-bg: rgba(37, 99, 235, 0.18);
+  --color-nav-active-text: #FFFFFF;
+  --color-nav-active-border: #3B82F6;
+  --color-nav-active-icon: #60A5FA;
+
+  /* Semantic Buttons in Light Mode */
+  --color-btn-primary-bg: #1E3E62;
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-primary-hover: #0B192C;
+  --color-btn-secondary-bg: #FFFFFF;
+  --color-btn-secondary-text: #0B192C;
+  --color-btn-secondary-border: #E2E8F0;
+  --color-btn-secondary-hover: #F8FAFC;
+  --color-btn-disabled-bg: #F1F5F9;
+  --color-btn-disabled-text: #94A3B8;
+  --color-btn-disabled-border: #E2E8F0;
+
+  /* Semantic Tabs in Light Mode */
+  --color-tab-text: #475569;
+  --color-tab-hover-bg: #F8FAFC;
+  --color-tab-hover-text: #0B192C;
+  --color-tab-active-bg: #EFF6FF;
+  --color-tab-active-text: #1E3E62;
+  --color-tab-active-border: #3B82F6;
+
+  /* Status Colors */
+  --status-success-bg: #ECFDF5;
+  --status-success-text: #065F46;
+  --status-success-border: #A7F3D0;
+  --status-warning-bg: #FFFBEB;
+  --status-warning-text: #92400E;
+  --status-warning-border: #FDE68A;
+  --status-error-bg: #FEF2F2;
+  --status-error-text: #991B1B;
+  --status-error-border: #FECACA;
+  --status-info-bg: #EFF6FF;
+  --status-info-text: #1E40AF;
+  --status-info-border: #BFDBFE;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-drawer: -4px 0 24px rgba(15, 23, 42, 0.15);
+
+  /* Spacing Scale (4, 8, 12, 16, 20, 24, 32, 40, 48, 64) */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  /* Layout Dimensions */
+  --header-height: 64px;
+  --sidebar-collapsed-width: 70px;
+  --sidebar-expanded-width: 260px;
+  --drawer-width: 440px;
+  --content-max-width: 1200px;
+
+  /* Centralized Motion Tokens (Section 41) */
+  --motion-fast: 120ms;
+  --motion-normal: 180ms;
+  --motion-slow: 280ms;
+
+  --duration-instant: 50ms;
+  --duration-fast: 120ms;
+  --duration-normal: 180ms;
+  --duration-slow: 280ms;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --transition-fast: var(--motion-fast) var(--ease-standard);
+  --transition-normal: var(--motion-normal) var(--ease-standard);
+  --transition-slow: var(--motion-slow) var(--ease-emphasized);
+}
+
+/* --------------------------------------------------------------------------
+   DARK THEME
+   Deep, balanced, accessible contrast without pure black wash
+   Layered dark surfaces with high-contrast text and controlled accents
+   -------------------------------------------------------------------------- */
+[data-theme="dark"],
+.dark {
+  /* Layered Semantic Surfaces in Dark Mode */
+  --color-bg-base: #0B1120;        /* Deepest base navy */
+  --color-bg-sidebar: #070B14;     /* Distinct dark authority sidebar */
+  --color-bg-header: #0F172A;      /* Distinct elevated header */
+  --color-bg-surface: #131D33;     /* Main card surface */
+  --color-bg-elevated: #1A2642;    /* Floating popover/modal surface */
+  --color-bg-subtle: #0F172A;      /* Inputs, secondary panels */
+  --color-surface-hover: rgba(255, 255, 255, 0.06);
+  --color-surface-selected: rgba(37, 99, 235, 0.2);
+
+  /* Semantic Typography in Dark Mode */
+  --color-text-main: #F8FAFC;
+  --color-text-primary: #F8FAFC;   /* Crisp white for all headings/titles */
+  --color-text-secondary: #CBD5E1; /* High-contrast light slate */
+  --color-text-muted: #94A3B8;     /* Readable supporting text */
+  --color-text-subtle: #64748B;    /* Helper text/labels */
+  --color-text-inverse: #0B1120;
+  --color-text-disabled: #475569;
+
+  /* Semantic Borders in Dark Mode */
+  --color-border: #1E293B;
+  --color-border-subtle: #162032;
+  --color-border-strong: #334155;
+  --color-border-focus: #F59E0B;
+
+  /* Accent - Warm Amber Gold in Dark Mode */
+  --color-accent-700: #D97706;
+  --color-accent-600: #F59E0B;
+  --color-accent-500: #FBBF24;
+  --color-accent-400: #FDE68A;
+  --color-accent-200: #78350F;
+  --color-accent-100: #451A03;
+  --color-accent-50: #291A03;
+
+  /* Semantic Navigation in Dark Mode (NEVER A WHITE TILE!) */
+  --color-nav-text: #94A3B8;
+  --color-nav-hover-bg: rgba(255, 255, 255, 0.06);
+  --color-nav-hover-text: #F8FAFC;
+  --color-nav-active-bg: rgba(245, 158, 11, 0.16);
+  --color-nav-active-text: #F8FAFC;
+  --color-nav-active-border: #F59E0B;
+  --color-nav-active-icon: #FBBF24;
+
+  /* Semantic Buttons in Dark Mode */
+  --color-btn-primary-bg: #2563EB;
+  --color-btn-primary-text: #FFFFFF;
+  --color-btn-primary-hover: #1D4ED8;
+  --color-btn-secondary-bg: #1E293B;
+  --color-btn-secondary-text: #F8FAFC;
+  --color-btn-secondary-border: #334155;
+  --color-btn-secondary-hover: #29384E;
+  --color-btn-disabled-bg: #162032;
+  --color-btn-disabled-text: #64748B;
+  --color-btn-disabled-border: #24334D;
+
+  /* Semantic Tabs in Dark Mode (NEVER A WHITE TAB!) */
+  --color-tab-text: #94A3B8;
+  --color-tab-hover-bg: rgba(255, 255, 255, 0.05);
+  --color-tab-hover-text: #F8FAFC;
+  --color-tab-active-bg: rgba(37, 99, 235, 0.22);
+  --color-tab-active-text: #93C5FD;
+  --color-tab-active-border: #3B82F6;
+
+  /* Safety background scale: Dark navy backgrounds, prevents accidental white inversion */
+  --color-primary-950: #0B1120;
+  --color-primary-900: #1E293B;
+  --color-primary-800: #1E2E4A;
+  --color-primary-700: #1A2642;
+  --color-primary-600: #334155;
+  --color-primary-500: #3B82F6;
+  --color-primary-200: #1E3A8A;
+  --color-primary-100: #1E293B;
+  --color-primary-50: #132035;
+
+  /* Status Colors in Dark Mode */
+  --status-success-bg: rgba(6, 78, 59, 0.4);
+  --status-success-text: #6EE7B7;
+  --status-success-border: #059669;
+  --status-warning-bg: rgba(69, 26, 3, 0.4);
+  --status-warning-text: #FDE68A;
+  --status-warning-border: #D97706;
+  --status-error-bg: rgba(69, 10, 10, 0.4);
+  --status-error-text: #FCA5A5;
+  --status-error-border: #DC2626;
+  --status-info-bg: rgba(23, 37, 84, 0.4);
+  --status-info-text: #93C5FD;
+  --status-info-border: #2563EB;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-drawer: -6px 0 30px rgba(0, 0, 0, 0.65);
+}
+
+/* --------------------------------------------------------------------------
+   Reduced Motion Accessibility Preference
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
