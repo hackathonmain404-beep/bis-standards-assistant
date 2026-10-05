@@ -17,9 +17,13 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // Desktop collapsed preference (default to compact as required in Section 5)
   const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('bis_sidebar_collapsed');
-      if (saved !== null) {
-        return saved === 'true';
+      try {
+        const saved = localStorage.getItem('bis_sidebar_collapsed');
+        if (saved !== null) {
+          return saved === 'true';
+        }
+      } catch {
+        // storage disabled or blocked
       }
     }
     return true; // Default compact

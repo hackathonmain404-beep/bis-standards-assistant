@@ -19,7 +19,11 @@ export const apiConfig: ApiConfig = {
 export function setMockMode(enabled: boolean): void {
   apiConfig.useMock = enabled;
   if (typeof window !== 'undefined') {
-    localStorage.setItem('bis_use_mock_api', String(enabled));
+    try {
+      localStorage.setItem('bis_use_mock_api', String(enabled));
+    } catch {
+      // storage unavailable
+    }
   }
 }
 
@@ -29,9 +33,13 @@ export function isMockMode(): boolean {
     return apiConfig.useMock;
   }
   if (typeof window !== 'undefined') {
-    const stored = localStorage.getItem('bis_use_mock_api');
-    if (stored !== null) {
-      return stored === 'true';
+    try {
+      const stored = localStorage.getItem('bis_use_mock_api');
+      if (stored !== null) {
+        return stored === 'true';
+      }
+    } catch {
+      // storage unavailable
     }
   }
   return apiConfig.useMock;

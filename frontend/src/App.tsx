@@ -15,6 +15,7 @@ import { LaboratoriesPage } from './pages/LaboratoriesPage';
 import { HallmarkingPage } from './pages/HallmarkingPage';
 import { SavedJourneyPage } from './pages/SavedJourneyPage';
 import { LoginPage } from './pages/LoginPage';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import './styles/index.css';
 import './styles/components.css';
 
@@ -66,21 +67,23 @@ const AppRoutes: React.FC = () => {
 
 export const App: React.FC = () => {
   return (
-    <ThemeProvider>
-      <SidebarProvider>
-        <LanguageProvider>
-          <ComplianceProvider>
-            <AssistantProvider>
-              <AuthProvider>
-                <BrowserRouter>
-                  <AppRoutes />
-                </BrowserRouter>
-              </AuthProvider>
-            </AssistantProvider>
-          </ComplianceProvider>
-        </LanguageProvider>
-      </SidebarProvider>
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <SidebarProvider>
+          <LanguageProvider>
+            <ComplianceProvider>
+              <AssistantProvider>
+                <AuthProvider>
+                  <BrowserRouter>
+                    <AppRoutes />
+                  </BrowserRouter>
+                </AuthProvider>
+              </AssistantProvider>
+            </ComplianceProvider>
+          </LanguageProvider>
+        </SidebarProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 };
 

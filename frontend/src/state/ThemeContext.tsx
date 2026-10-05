@@ -14,9 +14,13 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('bis_theme') as Theme;
-      if (saved && ['light', 'dark', 'system'].includes(saved)) {
-        return saved;
+      try {
+        const saved = localStorage.getItem('bis_theme') as Theme;
+        if (saved && ['light', 'dark', 'system'].includes(saved)) {
+          return saved;
+        }
+      } catch {
+        // storage disabled or blocked
       }
     }
     return 'light';
