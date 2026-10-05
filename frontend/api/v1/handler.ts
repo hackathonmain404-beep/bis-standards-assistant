@@ -3,6 +3,10 @@
  * Connects Frontend, Backend, and AI (Gemini + Domain BIS Knowledge Base)
  */
 
+declare const process: {
+  env: Record<string, string | undefined>;
+};
+
 export interface BISStandard {
   standard_number: string;
   title: string;
