@@ -24,6 +24,9 @@ export function setMockMode(enabled: boolean): void {
 }
 
 export function isMockMode(): boolean {
+  if (import.meta.env.VITE_USE_MOCK_API === 'false') {
+    return false;
+  }
   if (typeof window !== 'undefined') {
     const stored = localStorage.getItem('bis_use_mock_api');
     if (stored !== null) {
