@@ -88,7 +88,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       const demo = getDemoUser(email);
-      const isGov = email.toLowerCase().endsWith('.gov.in') || email.toLowerCase().includes('officer');
+      const isGov = (email || '').toLowerCase().endsWith('.gov.in') || (email || '').toLowerCase().includes('officer');
       const authedUser: AuthUser = {
         email,
         name: demo?.name || (isGov ? 'BIS Officer' : email.split('@')[0]),

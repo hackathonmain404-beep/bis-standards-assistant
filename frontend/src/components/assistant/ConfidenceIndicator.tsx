@@ -19,7 +19,7 @@ export const ConfidenceIndicator: React.FC<ConfidenceIndicatorProps> = ({
   label,
   size = 'md',
 }) => {
-  const normLevel = level.toLowerCase();
+  const normLevel = (level || '').toLowerCase();
 
   let config = {
     text: label || 'High Relevance',

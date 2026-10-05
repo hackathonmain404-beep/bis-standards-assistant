@@ -73,7 +73,7 @@ const AIResponseViewInner: React.FC<AIResponseViewInnerProps> = ({
 
   const isInsufficient = data.evidence_status === 'insufficient_evidence';
   const hasStandards = data.standards && data.standards.length > 0;
-  const isNoMatch = !hasStandards && !data.needs_clarification && !isInsufficient && data.answer.toLowerCase().includes('no reliable standard');
+  const isNoMatch = !hasStandards && !data.needs_clarification && !isInsufficient && (data.answer || '').toLowerCase().includes('no reliable standard');
 
   // Check if primary standard has QCO
   const primaryStandard = data.standards?.[0];

@@ -9,13 +9,13 @@ export interface ProductUnderstandingCardProps {
 export const ProductUnderstandingCard: React.FC<ProductUnderstandingCardProps> = ({ product }) => {
   // Extract key attributes
   const materialAttr = product.attributes?.find(
-    (a) => a.key.toLowerCase().includes('material') || a.key.toLowerCase().includes('steel')
+    (a) => (a.key || '').toLowerCase().includes('material') || (a.key || '').toLowerCase().includes('steel')
   );
   const capacityAttr = product.attributes?.find(
-    (a) => a.key.toLowerCase().includes('capacity') || a.key.toLowerCase().includes('volume') || a.key.toLowerCase().includes('size')
+    (a) => (a.key || '').toLowerCase().includes('capacity') || (a.key || '').toLowerCase().includes('volume') || (a.key || '').toLowerCase().includes('size')
   );
   const typeAttr = product.attributes?.find(
-    (a) => a.key.toLowerCase().includes('type') || a.key.toLowerCase().includes('application')
+    (a) => (a.key || '').toLowerCase().includes('type') || (a.key || '').toLowerCase().includes('application')
   );
 
   // Other remaining attributes

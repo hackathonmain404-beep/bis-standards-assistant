@@ -9,25 +9,28 @@ export const standardsApi = {
       let results = [...MOCK_STANDARDS];
 
       if (filter?.query) {
-        const q = filter.query.toLowerCase();
+        const q = (filter.query || '').toLowerCase();
         results = results.filter(
           (s) =>
-            s.standard_number.toLowerCase().includes(q) ||
-            s.title.toLowerCase().includes(q) ||
-            s.overview.toLowerCase().includes(q)
+            (s.standard_number || '').toLowerCase().includes(q) ||
+            (s.title || '').toLowerCase().includes(q) ||
+            (s.overview || '').toLowerCase().includes(q)
         );
       }
 
       if (filter?.category && filter.category !== 'All') {
-        results = results.filter((s) => s.category.toLowerCase().includes(filter.category!.toLowerCase()));
+        const cat = (filter.category || '').toLowerCase();
+        results = results.filter((s) => (s.category || '').toLowerCase().includes(cat));
       }
 
       if (filter?.department && filter.department !== 'All') {
-        results = results.filter((s) => s.department.toLowerCase().includes(filter.department!.toLowerCase()));
+        const dept = (filter.department || '').toLowerCase();
+        results = results.filter((s) => (s.department || '').toLowerCase().includes(dept));
       }
 
       if (filter?.status && filter.status !== 'All') {
-        results = results.filter((s) => s.status.toLowerCase() === filter.status!.toLowerCase());
+        const st = (filter.status || '').toLowerCase();
+        results = results.filter((s) => (s.status || '').toLowerCase() === st);
       }
 
       if (filter?.mandatoryOnly) {
@@ -35,8 +38,9 @@ export const standardsApi = {
       }
 
       if (filter?.scheme && filter.scheme !== 'All') {
+        const sch = (filter.scheme || '').toLowerCase();
         results = results.filter((s) =>
-          s.certification_schemes.some((sc) => sc.toLowerCase().includes(filter.scheme!.toLowerCase()))
+          s.certification_schemes?.some((sc) => (sc || '').toLowerCase().includes(sch))
         );
       }
 
@@ -78,9 +82,9 @@ export const standardsApi = {
   async getStandardById(id: string): Promise<StandardDetail | null> {
     if (isMockMode()) {
       await new Promise((res) => setTimeout(res, 150));
-      const cleanId = decodeURIComponent(id).toLowerCase().replace(/\s+/g, '');
+      const cleanId = decodeURIComponent(id || '').toLowerCase().replace(/\s+/g, '');
       const found = MOCK_STANDARDS.find(
-        (s) => s.standard_number.toLowerCase().replace(/\s+/g, '') === cleanId
+        (s) => (s.standard_number || '').toLowerCase().replace(/\s+/g, '') === cleanId
       );
       return found || MOCK_STANDARDS[0];
     }
@@ -93,9 +97,9 @@ export const standardsApi = {
     } catch (err) {
       console.warn('Live standard detail API unreachable, using local catalog:', err);
     }
-    const cleanId = decodeURIComponent(id).toLowerCase().replace(/\s+/g, '');
+    const cleanId = decodeURIComponent(id || '').toLowerCase().replace(/\s+/g, '');
     const found = MOCK_STANDARDS.find(
-      (s) => s.standard_number.toLowerCase().replace(/\s+/g, '') === cleanId
+      (s) => (s.standard_number || '').toLowerCase().replace(/\s+/g, '') === cleanId
     );
     return found || MOCK_STANDARDS[0];
   },

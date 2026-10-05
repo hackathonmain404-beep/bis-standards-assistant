@@ -9,23 +9,24 @@ export const laboratoryApi = {
       let results = [...MOCK_LABORATORIES];
 
       if (filter?.query) {
-        const q = filter.query.toLowerCase();
+        const q = (filter.query || '').toLowerCase();
         results = results.filter(
           (l) =>
-            l.name.toLowerCase().includes(q) ||
-            l.location.city.toLowerCase().includes(q) ||
-            l.location.state.toLowerCase().includes(q) ||
-            l.capabilities.some((c) => c.toLowerCase().includes(q))
+            (l.name || '').toLowerCase().includes(q) ||
+            (l.location?.city || '').toLowerCase().includes(q) ||
+            (l.location?.state || '').toLowerCase().includes(q) ||
+            l.capabilities?.some((c) => (c || '').toLowerCase().includes(q))
         );
       }
 
       if (filter?.state && filter.state !== 'All') {
-        results = results.filter((l) => l.location.state.toLowerCase() === filter.state!.toLowerCase());
+        const targetState = (filter.state || '').toLowerCase();
+        results = results.filter((l) => (l.location?.state || '').toLowerCase() === targetState);
       }
 
       if (filter?.standard_id) {
-        const sid = filter.standard_id.toLowerCase();
-        results = results.filter((l) => l.tested_standards.some((s) => s.toLowerCase().includes(sid)));
+        const sid = (filter.standard_id || '').toLowerCase();
+        results = results.filter((l) => l.tested_standards?.some((s) => (s || '').toLowerCase().includes(sid)));
       }
 
       if (filter?.recognition_status && filter.recognition_status !== 'All') {

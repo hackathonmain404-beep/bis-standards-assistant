@@ -35,7 +35,7 @@ export class ErrorBoundary extends Component<Props, State> {
     } catch {
       // storage unavailable
     }
-    window.location.href = '/assistant';
+    window.location.href = window.location.pathname + '?nocache=' + Date.now();
   };
 
   public render() {
@@ -73,15 +73,15 @@ export class ErrorBoundary extends Component<Props, State> {
               Something unexpected happened
             </h3>
             <p style={{ fontSize: '14px', color: '#52637A', marginBottom: '24px', lineHeight: 1.5 }}>
-              The application encountered an issue while loading. This can happen due to a stale
-              cached version or browser extension conflict.
+              The application encountered an issue while loading. Click below to clear stored local state
+              and restart fresh.
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Button variant="primary" size="md" onClick={this.handleReload}>
-                Reload Page
-              </Button>
-              <Button variant="outline" size="md" onClick={this.handleClearAndReload}>
+              <Button variant="primary" size="md" onClick={this.handleClearAndReload}>
                 Clear Cache & Restart
+              </Button>
+              <Button variant="outline" size="md" onClick={this.handleReload}>
+                Reload Page
               </Button>
             </div>
             {this.state.error && (
@@ -95,9 +95,10 @@ export class ErrorBoundary extends Component<Props, State> {
                     overflowX: 'auto',
                     whiteSpace: 'pre-wrap',
                     wordBreak: 'break-all',
+                    maxHeight: '200px',
                   }}
                 >
-                  {this.state.error.message}
+                  {this.state.error.stack || this.state.error.message}
                 </pre>
               </details>
             )}

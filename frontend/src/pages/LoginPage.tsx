@@ -586,13 +586,13 @@ export const LoginPage: React.FC = () => {
             <div className="bis-demo-users-list">
               {DEMO_USERS.filter((u) => {
                 const matchesRole = demoRoleFilter === 'All' || u.role === demoRoleFilter;
-                const q = demoSearch.toLowerCase().trim();
+                const q = (demoSearch || '').toLowerCase().trim();
                 const matchesSearch =
                   !q ||
-                  u.name.toLowerCase().includes(q) ||
-                  u.email.toLowerCase().includes(q) ||
-                  u.organization.toLowerCase().includes(q) ||
-                  u.sampleQuery.toLowerCase().includes(q);
+                  (u.name || '').toLowerCase().includes(q) ||
+                  (u.email || '').toLowerCase().includes(q) ||
+                  (u.organization || '').toLowerCase().includes(q) ||
+                  (u.sampleQuery || '').toLowerCase().includes(q);
                 return matchesRole && matchesSearch;
               }).map((u) => (
                 <div key={u.id} className="bis-demo-user-card">

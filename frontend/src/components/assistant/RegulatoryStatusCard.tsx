@@ -16,7 +16,7 @@ export const RegulatoryStatusCard: React.FC<RegulatoryStatusCardProps> = ({
   certificationScheme = 'Scheme I (ISI Mark)',
   mandatorySince,
 }) => {
-  const isApplicable = qcoStatus.toLowerCase().includes('applicable');
+  const isApplicable = (qcoStatus || '').toLowerCase().includes('applicable');
 
   return (
     <div className="bis-regulatory-status-card" role="region" aria-label="Regulatory and QCO Status">

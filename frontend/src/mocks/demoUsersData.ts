@@ -120,7 +120,8 @@ export const DEMO_USERS: DemoUser[] = [
   { id: 'usr-100', name: 'Dr. Anand Ramanujan', email: 'anand.raman@iisc.ac.in', role: 'Auditor', organization: 'Indian Institute of Science (IISc Bengaluru)', category: 'Academic', primaryStage: 'Standards Research', sampleQuery: 'What role do Bureau of Indian Standards play in national safety and international trade?' }
 ];
 
-export function getDemoUser(idOrEmail: string): DemoUser | undefined {
-  const q = idOrEmail.toLowerCase().trim();
-  return DEMO_USERS.find(u => u.id.toLowerCase() === q || u.email.toLowerCase() === q);
+export function getDemoUser(idOrEmail?: string): DemoUser | undefined {
+  if (!idOrEmail) return undefined;
+  const q = String(idOrEmail).toLowerCase().trim();
+  return DEMO_USERS.find(u => (u.id || '').toLowerCase() === q || (u.email || '').toLowerCase() === q);
 }
