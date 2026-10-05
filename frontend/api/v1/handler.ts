@@ -296,19 +296,51 @@ export async function handleApiRequest(req: any, res: any) {
       // Check for live Gemini generation first
       const geminiText = await callGeminiIfAvailable(query, language);
 
+      // Check for greeting first
+      if (qLower === 'hello' || qLower === 'hi' || qLower.startsWith('hello ') || qLower.startsWith('hi ') || qLower === 'help') {
+        const welcomeText = 'Welcome to the Bureau of Indian Standards (BIS) Intelligent Assistant Copilot!\n\n' +
+          'I provide regulatory guidance on Indian Standards, mandatory Quality Control Orders (QCOs), lab testing methods, and ISI mark certification (Scheme-I).\n\n' +
+          'You can ask me about:\n' +
+          '• **Product Standards**: e.g., Packaged Drinking Water (IS 14543), Electric Irons (IS 302-2-3), Electric Geysers (IS 2082), Stainless Steel Flasks (IS 17526), Plugs & Sockets (IS 1293)\n' +
+          '• **Testing & Clauses**: e.g., Thermal insulation, drop resistance, dielectric withstand tests\n' +
+          '• **Recognized Laboratories**: e.g., BIS Central Laboratory Sahibabad, Western Regional Lab Mumbai';
+
+        return res.status(200).json({
+          session_id: sessionId,
+          message_id: 'msg-' + Date.now(),
+          response: {
+            text: geminiText || welcomeText,
+            intent: 'GREETING',
+            citations: [],
+            needs_clarification: false,
+            clarification_questions: [],
+            follow_up_suggestions: [
+              'What BIS standard applies to packaged drinking water?',
+              'Which standard applies to stainless steel water bottles (IS 17526)?',
+              'What testing is required for electric storage water heaters (IS 2082)?'
+            ]
+          },
+          metadata: {
+            processing_time_ms: 60,
+            ai_engine: geminiText ? 'gemini-2.0-flash' : 'bis-copilot-welcome',
+            created_at: new Date().toISOString()
+          }
+        });
+      }
+
       // Match against domain standards
       let matchedStandard: BISStandard | null = null;
       let intent = 'PRODUCT_DISCOVERY';
 
-      if (qLower.includes('water') || qLower.includes('drinking') || qLower.includes('bottle') && !qLower.includes('steel')) {
+      if (qLower.includes('water') || qLower.includes('drinking') || qLower.includes('14543') || (qLower.includes('bottle') && !qLower.includes('steel'))) {
         matchedStandard = BIS_STANDARDS[0]; // IS 14543
-      } else if (qLower.includes('iron') || qLower.includes('steam')) {
+      } else if (qLower.includes('iron') || qLower.includes('steam') || qLower.includes('302')) {
         matchedStandard = BIS_STANDARDS[1]; // IS 302-2-3
-      } else if (qLower.includes('heater') || qLower.includes('geyser')) {
+      } else if (qLower.includes('heater') || qLower.includes('geyser') || qLower.includes('2082')) {
         matchedStandard = BIS_STANDARDS[2]; // IS 2082
-      } else if (qLower.includes('steel') || qLower.includes('flask') || qLower.includes('vacuum')) {
+      } else if (qLower.includes('steel') || qLower.includes('flask') || qLower.includes('vacuum') || qLower.includes('17526')) {
         matchedStandard = BIS_STANDARDS[3]; // IS 17526
-      } else if (qLower.includes('plug') || qLower.includes('socket')) {
+      } else if (qLower.includes('plug') || qLower.includes('socket') || qLower.includes('1293')) {
         matchedStandard = BIS_STANDARDS[4]; // IS 1293
       } else {
         matchedStandard = BIS_STANDARDS[0]; // Default helpful reference

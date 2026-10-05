@@ -19,6 +19,30 @@ export const assistantApi = {
 
       const queryLower = request.message.toLowerCase();
 
+      // Greeting flow
+      if (queryLower === 'hello' || queryLower === 'hi' || queryLower.startsWith('hello ') || queryLower.startsWith('hi ') || queryLower === 'help') {
+        return {
+          session_id: request.session_id || 'mock-session-greeting-001',
+          message_id: 'msg-' + Date.now(),
+          response: {
+            text: 'Welcome to the Bureau of Indian Standards (BIS) Intelligent Assistant Copilot! I can guide you through Indian Standards (IS), mandatory Quality Control Orders (QCOs), testing requirements, and Scheme-I (ISI Mark) certification. What product or standard can I assist you with today?',
+            intent: 'GREETING',
+            needs_clarification: false,
+            clarification_questions: [],
+            follow_up_suggestions: [
+              'What BIS standard applies to packaged drinking water?',
+              'Which standard applies to stainless steel water bottles?',
+              'What safety testing is required for domestic electric irons?'
+            ],
+            structured_copilot: undefined,
+          },
+          metadata: {
+            processing_time_ms: 120,
+            created_at: new Date().toISOString(),
+          },
+        };
+      }
+
       // Case 5: Explicit test command or error simulation
       if (queryLower.includes('simulate error') || queryLower.includes('test error')) {
         throw new Error('AI_SERVICE_UNAVAILABLE: The BIS AI retrieval service is temporarily unavailable.');
@@ -141,6 +165,30 @@ export const assistantApi = {
     }
 
     // Graceful fallback
+    const qLower = request.message.toLowerCase();
+    if (qLower === 'hello' || qLower === 'hi' || qLower.startsWith('hello ') || qLower.startsWith('hi ') || qLower === 'help') {
+      return {
+        session_id: request.session_id || 'session-greeting-' + Date.now(),
+        message_id: 'msg-' + Date.now(),
+        response: {
+          text: 'Welcome to the Bureau of Indian Standards (BIS) Intelligent Assistant Copilot! I can guide you through Indian Standards (IS), mandatory Quality Control Orders (QCOs), testing requirements, and Scheme-I (ISI Mark) certification. What product or standard can I assist you with today?',
+          intent: 'GREETING',
+          citations: [],
+          needs_clarification: false,
+          clarification_questions: [],
+          follow_up_suggestions: [
+            'What BIS standard applies to packaged drinking water?',
+            'Which standard applies to stainless steel water bottles?',
+            'What safety testing is required for domestic electric irons?'
+          ]
+        },
+        metadata: {
+          processing_time_ms: 50,
+          created_at: new Date().toISOString(),
+        }
+      };
+    }
+
     const dynamicResp: StructuredAIResponse = {
       ...MOCK_CASE_1_RECOMMENDATION,
       query: request.message,
