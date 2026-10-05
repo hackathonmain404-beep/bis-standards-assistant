@@ -11,11 +11,15 @@ import {
   CheckCircle2,
   Shield,
   HelpCircle,
+  Sparkles,
+  Search,
+  UserCheck,
 } from 'lucide-react';
 import bisLogo from '../assets/bis-logo.png';
 import { useAuth } from '../state/AuthContext';
 import { useTheme } from '../state/ThemeContext';
 import { Button } from '../components/common/Button';
+import { DEMO_USERS, DemoUser } from '../mocks/demoUsersData';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -31,13 +35,32 @@ export const LoginPage: React.FC = () => {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
-  const [loadingProvider, setLoadingProvider] = useState<'email' | 'google' | 'github' | null>(null);
   const [showForgotNotice, setShowForgotNotice] = useState(false);
+  const [showDemoModal, setShowDemoModal] = useState(false);
+  const [demoSearch, setDemoSearch] = useState('');
+  const [demoRoleFilter, setDemoRoleFilter] = useState<'All' | 'Officer' | 'Industry Stakeholder' | 'Auditor'>('All');
+  const [loadingProvider, setLoadingProvider] = useState<'email' | 'google' | 'github' | null>(null);
 
   const isSubmitting = loadingProvider !== null;
 
   // Return to intended page or default to assistant
   const from = (location.state as any)?.from?.pathname || '/assistant';
+
+  const handleQuickDemoLogin = async (demoEmail: string) => {
+    setEmail(demoEmail);
+    setPassword('password123');
+    setLoadingProvider('email');
+    setFormError(null);
+    setShowDemoModal(false);
+
+    const result = await login(demoEmail, 'password123');
+    setLoadingProvider(null);
+    if (result.success) {
+      navigate(from, { replace: true });
+    } else {
+      setFormError(result.error || 'Authentication error');
+    }
+  };
 
   const validate = (): boolean => {
     let isValid = true;
@@ -429,6 +452,64 @@ export const LoginPage: React.FC = () => {
           </button>
         </form>
 
+        {/* Instant Demo Access — 100 Verified Profiles */}
+        <div className="bis-demo-profiles-container">
+          <div className="bis-demo-profiles-header">
+            <span className="bis-demo-badge">Instant Demo</span>
+            <span className="bis-demo-title">Test with 100 Verified Profiles</span>
+          </div>
+          <div className="bis-demo-quick-grid">
+            <button
+              type="button"
+              className="bis-demo-quick-btn"
+              onClick={() => handleQuickDemoLogin('rajesh.sharma@bis.gov.in')}
+              title="Log in as BIS QA Officer (HQ New Delhi)"
+            >
+              <span className="bis-demo-role-tag bis-role-officer">Officer</span>
+              <strong>Rajesh Sharma</strong>
+              <small>BIS HQ New Delhi</small>
+            </button>
+            <button
+              type="button"
+              className="bis-demo-quick-btn"
+              onClick={() => handleQuickDemoLogin('a.bansal@aquapurewaters.in')}
+              title="Log in as Packaged Water Manufacturer"
+            >
+              <span className="bis-demo-role-tag bis-role-industry">Industry</span>
+              <strong>Amitabh Bansal</strong>
+              <small>AquaPure Waters (IS 14543)</small>
+            </button>
+            <button
+              type="button"
+              className="bis-demo-quick-btn"
+              onClick={() => handleQuickDemoLogin('priya.patel@orientappliances.com')}
+              title="Log in as Electrical Appliances Manufacturer"
+            >
+              <span className="bis-demo-role-tag bis-role-industry">Industry</span>
+              <strong>Priya Patel</strong>
+              <small>Orient Appliances (IS 302)</small>
+            </button>
+            <button
+              type="button"
+              className="bis-demo-quick-btn"
+              onClick={() => handleQuickDemoLogin('ashok.pandey@nth.gov.in')}
+              title="Log in as Testing Laboratory Auditor"
+            >
+              <span className="bis-demo-role-tag bis-role-auditor">Auditor</span>
+              <strong>Dr. Ashok Pandey</strong>
+              <small>National Test House (Labs)</small>
+            </button>
+          </div>
+          <button
+            type="button"
+            className="bis-demo-browse-all-btn"
+            onClick={() => setShowDemoModal(true)}
+          >
+            <span>Browse All 100 Demo Accounts</span>
+            <span className="bis-demo-count-pill">100 Profiles</span>
+          </button>
+        </div>
+
         {/* Back to BIS Copilot link */}
         <div className="bis-login-bottom-back-wrap">
           <Link to="/assistant" className="bis-login-bottom-back-link">
@@ -461,6 +542,83 @@ export const LoginPage: React.FC = () => {
           </p>
         </div>
       </div>
+
+      {/* 100 Demo Profiles Modal */}
+      {showDemoModal && (
+        <div className="bis-demo-modal-overlay" onClick={() => setShowDemoModal(false)}>
+          <div className="bis-demo-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="bis-demo-modal-header">
+              <h3 className="bis-demo-modal-title">
+                <Sparkles size={18} color="#2563EB" />
+                <span>100 Verified BIS Demo Accounts</span>
+              </h3>
+              <button
+                type="button"
+                className="bis-demo-modal-close"
+                onClick={() => setShowDemoModal(false)}
+                aria-label="Close demo modal"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="bis-demo-modal-controls">
+              <input
+                type="text"
+                className="bis-demo-search-input"
+                placeholder="Search by name, organization, email, or standard (e.g. water, electric, IS 14543)..."
+                value={demoSearch}
+                onChange={(e) => setDemoSearch(e.target.value)}
+                autoFocus
+              />
+              <div className="bis-demo-role-tabs">
+                {(['All', 'Officer', 'Industry Stakeholder', 'Auditor'] as const).map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    className={`bis-demo-role-tab ${demoRoleFilter === r ? 'bis-demo-role-tab--active' : ''}`}
+                    onClick={() => setDemoRoleFilter(r)}
+                  >
+                    {r === 'All' ? 'All (100)' : r === 'Officer' ? 'Officers (25)' : r === 'Industry Stakeholder' ? 'Industry (50)' : 'Auditors (25)'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="bis-demo-users-list">
+              {DEMO_USERS.filter((u) => {
+                const matchesRole = demoRoleFilter === 'All' || u.role === demoRoleFilter;
+                const q = demoSearch.toLowerCase().trim();
+                const matchesSearch =
+                  !q ||
+                  u.name.toLowerCase().includes(q) ||
+                  u.email.toLowerCase().includes(q) ||
+                  u.organization.toLowerCase().includes(q) ||
+                  u.sampleQuery.toLowerCase().includes(q);
+                return matchesRole && matchesSearch;
+              }).map((u) => (
+                <div key={u.id} className="bis-demo-user-card">
+                  <div className="bis-demo-user-info">
+                    <div className="bis-demo-user-name-row">
+                      <span className="bis-demo-user-name">{u.name}</span>
+                      <span className={`bis-demo-role-tag ${u.role === 'Officer' ? 'bis-role-officer' : u.role === 'Industry Stakeholder' ? 'bis-role-industry' : 'bis-role-auditor'}`}>
+                        {u.role}
+                      </span>
+                    </div>
+                    <span className="bis-demo-user-org">{u.organization}</span>
+                    <span className="bis-demo-user-email">{u.email}</span>
+                  </div>
+                  <button
+                    type="button"
+                    className="bis-demo-select-btn"
+                    onClick={() => handleQuickDemoLogin(u.email)}
+                  >
+                    Log In
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

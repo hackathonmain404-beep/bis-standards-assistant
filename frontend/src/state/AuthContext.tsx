@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { apiConfig, isMockMode } from '../services/apiConfig';
+import { getDemoUser } from '../mocks/demoUsersData';
 
 export interface AuthUser {
   email: string;
@@ -82,12 +83,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
       }
 
+      const demo = getDemoUser(email);
       const isGov = email.toLowerCase().endsWith('.gov.in') || email.toLowerCase().includes('officer');
       const authedUser: AuthUser = {
         email,
-        name: isGov ? 'BIS Officer' : email.split('@')[0],
-        role: isGov ? 'Officer' : 'Industry Stakeholder',
-        organization: isGov ? 'Bureau of Indian Standards' : 'Verified Industry Partner',
+        name: demo?.name || (isGov ? 'BIS Officer' : email.split('@')[0]),
+        role: demo?.role || (isGov ? 'Officer' : 'Industry Stakeholder'),
+        organization: demo?.organization || (isGov ? 'Bureau of Indian Standards' : 'Verified Industry Partner'),
       };
 
       setUser(authedUser);
