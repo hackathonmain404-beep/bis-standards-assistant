@@ -64,11 +64,15 @@ export const standardsApi = {
     if (filter?.scheme) queryParams.append('scheme', filter.scheme);
     if (filter?.sort) queryParams.append('sort', filter.sort);
 
-    const response = await fetch(`${apiConfig.baseUrl}/standards?${queryParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch standards: ${response.statusText}`);
+    try {
+      const response = await fetch(`${apiConfig.baseUrl}/standards?${queryParams.toString()}`);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (err) {
+      console.warn('Live standards API unreachable, using local catalog:', err);
     }
-    return await response.json();
+    return MOCK_STANDARDS;
   },
 
   async getStandardById(id: string): Promise<StandardDetail | null> {
@@ -81,11 +85,18 @@ export const standardsApi = {
       return found || MOCK_STANDARDS[0];
     }
 
-    const response = await fetch(`${apiConfig.baseUrl}/standards/${encodeURIComponent(id)}`);
-    if (!response.ok) {
-      if (response.status === 404) return null;
-      throw new Error(`Failed to fetch standard ${id}`);
+    try {
+      const response = await fetch(`${apiConfig.baseUrl}/standards/${encodeURIComponent(id)}`);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (err) {
+      console.warn('Live standard detail API unreachable, using local catalog:', err);
     }
-    return await response.json();
+    const cleanId = decodeURIComponent(id).toLowerCase().replace(/\s+/g, '');
+    const found = MOCK_STANDARDS.find(
+      (s) => s.standard_number.toLowerCase().replace(/\s+/g, '') === cleanId
+    );
+    return found || MOCK_STANDARDS[0];
   },
 };

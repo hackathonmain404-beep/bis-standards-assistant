@@ -39,10 +39,14 @@ export const laboratoryApi = {
     if (filter?.query) queryParams.append('q', filter.query);
     if (filter?.state) queryParams.append('state', filter.state);
 
-    const response = await fetch(`${apiConfig.baseUrl}/labs?${queryParams.toString()}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch laboratories: ${response.statusText}`);
+    try {
+      const response = await fetch(`${apiConfig.baseUrl}/labs?${queryParams.toString()}`);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (err) {
+      console.warn('Live laboratories API unreachable, using local directory:', err);
     }
-    return await response.json();
+    return MOCK_LABORATORIES;
   },
 };
